@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CSharpFunctionalExtensions" Version="2.40.0" />
+		<PackageReference Include="System.Reactive" Version="6.0.0" />
+		<PackageReference Include="Zafiro.Core" Version="3.2.34" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Zafiro.FilesSystem.SeaweedFS.Filer.Client\Zafiro.FileSystem.SeaweedFS.Filer.Client.csproj" />
+	  <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
+	</ItemGroup>
+
+</Project>
