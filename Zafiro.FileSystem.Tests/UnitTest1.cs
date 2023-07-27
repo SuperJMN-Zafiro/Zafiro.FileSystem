@@ -8,9 +8,12 @@ namespace Zafiro.FileSystem.Tests
         [Fact]
         public async Task Test1()
         {
-            var sut = new Syncer(new ZafiroFileSystemComparer(), Maybe<ILogger>.None);
+            var sut = new Syncer(Maybe<ILogger>.None);
             sut.ReadTimeout = TimeSpan.FromSeconds(1);
-            var result = await sut.Sync(new TestSourceDirectory(), new TestDestinationDirectory());
+            IZafiroDirectory source = new TestSourceDirectory();
+            IZafiroDirectory destination = new TestDestinationDirectory();
+            var diffs = new[] { new Diff("/Sample.txt", FileDiffStatus.Both) };
+            var result = await sut.Sync(source, destination, diffs);
         }
     }
 

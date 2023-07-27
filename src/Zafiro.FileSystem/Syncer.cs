@@ -1,21 +1,21 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using JetBrains.Annotations;
 using Serilog;
+using Zafiro.Core.Mixins;
 
 namespace Zafiro.FileSystem;
 
 [PublicAPI]
 public class Syncer
 {
-    private readonly ZafiroFileSystemComparer comparer;
     private readonly Maybe<ILogger> logger;
     private readonly ISubject<RelativeProgress<int>> progress;
 
-    public Syncer(ZafiroFileSystemComparer systemComparer, Maybe<ILogger> logger)
+    public Syncer(Maybe<ILogger> logger)
     {
-        comparer = systemComparer;
         this.logger = logger;
         Operations = new Subject<CopyOperation>();
         progress = new Subject<RelativeProgress<int>>();
@@ -27,19 +27,18 @@ public class Syncer
 
     public IObservable<RelativeProgress<int>> Progress => progress;
 
-    public async Task<Result> Sync(IZafiroDirectory source, IZafiroDirectory destination)
+    public async Task<Result> Sync(IZafiroDirectory source, IZafiroDirectory destination, IEnumerable<Diff> diffs)
     {
-        var diffsResult = await comparer.Diff(source, destination).ConfigureAwait(false);
-        return await diffsResult.Bind(diffs => SyncItems(source, destination, diffs));
+        return await SyncItems(source, destination, diffs);
     }
 
-    private static async Task<Result> DeleteNonexistent(IZafiroFile file)
+    private static async Task<Result> DeleteNonexistent(IZafiroDirectory origin, ZafiroPath path)
     {
         //return await file.Delete();
         return Result.Failure("DeleteNonexistent: Not implemented, colleiga");
     }
 
-    private static async Task<Result> CopyOverExisting(IZafiroFile source, IZafiroFile destination)
+    private static async Task<Result> CopyOverExisting(IZafiroDirectory sourceDirectory, IZafiroDirectory destinationDirectory, ZafiroPath path)
     {
         var areSame = true;
         if (areSame)
@@ -47,10 +46,17 @@ public class Syncer
             return Result.Success();
         }
 
-        return await source.Copy(destination, Maybe<IObserver<double>>.None);
+        return await CopyNonexistent(sourceDirectory, destinationDirectory, path);
     }
 
-    private async Task<Result> SyncItems(IZafiroDirectory source, IZafiroDirectory destination, IEnumerable<ZafiroFileDiff> diffs)
+    private static IObservable<Result> CopyWithRetries(IZafiroFile sourceFile, IZafiroFile x)
+    {
+        return Observable
+            .FromAsync(() => x.Copy(sourceFile, Maybe<IObserver<double>>.None, readTimeout: TimeSpan.FromSeconds(15)))
+            .RetryWithBackoffStrategy();
+    }
+
+    private async Task<Result> SyncItems(IZafiroDirectory source, IZafiroDirectory destination, IEnumerable<Diff> diffs)
     {
         var list = diffs.ToList();
         var processed = 0;
@@ -63,21 +69,21 @@ public class Syncer
         return results.Combine();
     }
 
-    private async Task<Result> Sync(ZafiroFileDiff diff, IZafiroDirectory source, IZafiroDirectory destination)
+    private async Task<Result> Sync(Diff diff, IZafiroDirectory source, IZafiroDirectory destination)
     {
         switch (diff.Status)
         {
             case FileDiffStatus.RightOnly:
-                logger.Execute(l => l.Information("Deleting {File} {Status}", diff.Right.Value, "non-existent in origin"));
-                await DeleteNonexistent(diff.Right.Value).TapError(e => logger.Execute(l => l.Error(e)));
+                logger.Execute(l => l.Information("Deleting {File} {Status}", diff.Path, "non-existent in origin"));
+                await DeleteNonexistent(source, diff.Path).TapError(e => logger.Execute(l => l.Error(e)));
                 break;
             case FileDiffStatus.Both:
-                logger.Execute(l => l.Information("Copying {File} {Status}", diff.Left.Value, "existent in both"));
-                await CopyOverExisting(diff.Left.Value, diff.Right.Value).TapError(e => logger.Execute(l => l.Error(e)));
+                logger.Execute(l => l.Information("Copying {File} {Status}", diff.Path, "existent in both"));
+                await CopyOverExisting(source, destination, diff.Path).TapError(e => logger.Execute(l => l.Error(e)));
                 break;
             case FileDiffStatus.LeftOnly:
-                logger.Execute(l => l.Information("Copying {File} {Status}", diff.Left.Value, "non-existent in destination"));
-                await CopyNonexistent(source, destination, diff.Left.Value)
+                logger.Execute(l => l.Information("Copying {File} {Status}", diff.Path, "non-existent in destination"));
+                await CopyNonexistent(source, destination, diff.Path)
                     .TapError(e => logger.Execute(l => l.Error(e)));
                 break;
             default:
@@ -87,14 +93,13 @@ public class Syncer
         return Result.Success();
     }
 
-    private async Task<Result> CopyNonexistent(IZafiroDirectory sourceDirectory,
-        IZafiroDirectory destinationDirectory, IZafiroFile sourceFile)
+    private static async Task<Result> CopyNonexistent(IZafiroDirectory sourceDirectory, IZafiroDirectory destinationDirectory, ZafiroPath path)
     {
-        var destPath = destinationDirectory.Path.Combine(sourceFile.Path.MakeRelativeTo(sourceDirectory.Path));
-        var destination = await destinationDirectory.GetFile(destPath);
-        ISubject<double> partialProgress = new Subject<double>();
-        Operations.OnNext(new CopyOperation(sourceFile, partialProgress));
-        var result = await destination.Bind(f => sourceFile.Copy(f, Maybe<IObserver<double>>.From(partialProgress), ReadTimeout));
-        return result;
+        var sourceFile = await sourceDirectory.GetFile(sourceDirectory.Path.Combine(path));
+        var destination = await destinationDirectory.GetFile(destinationDirectory.Path.Combine(path));
+
+        return from s in sourceFile
+            from d in destination
+            select CopyWithRetries(s, d).ToTask();
     }
 }
