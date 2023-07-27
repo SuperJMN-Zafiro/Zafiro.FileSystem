@@ -1,45 +1,36 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
+using JetBrains.Annotations;
 using Serilog;
 
 namespace Zafiro.FileSystem;
 
+[PublicAPI]
 public class Syncer
 {
     private readonly ZafiroFileSystemComparer comparer;
     private readonly Maybe<ILogger> logger;
-    private readonly Subject<CopyOperation> copies;
     private readonly ISubject<RelativeProgress<int>> progress;
 
     public Syncer(ZafiroFileSystemComparer systemComparer, Maybe<ILogger> logger)
     {
         comparer = systemComparer;
         this.logger = logger;
-        copies = new Subject<CopyOperation>();
+        Operations = new Subject<CopyOperation>();
         progress = new Subject<RelativeProgress<int>>();
     }
 
-    public Subject<CopyOperation> Operations => copies;
+    public Subject<CopyOperation> Operations { get; }
+
+    public TimeSpan? ReadTimeout { get; set; }
+
     public IObservable<RelativeProgress<int>> Progress => progress;
 
     public async Task<Result> Sync(IZafiroDirectory source, IZafiroDirectory destination)
     {
         var diffsResult = await comparer.Diff(source, destination).ConfigureAwait(false);
         return await diffsResult.Bind(diffs => SyncItems(source, destination, diffs));
-    }
-
-    private async Task<Result> SyncItems(IZafiroDirectory source, IZafiroDirectory destination, IEnumerable<ZafiroFileDiff> diffs)
-    {
-        var list = diffs.ToList();
-        var processed = 0;
-        var results = await list.Select(diff => Observable.FromAsync(() => Sync(diff, source, destination)))
-            .Merge(3)
-            .Do(_ => processed++)
-            .Do(_ => progress.OnNext(new RelativeProgress<int>(list.Count, processed))  )
-            .ToList();
-
-        return results.Combine();
     }
 
     private static async Task<Result> DeleteNonexistent(IZafiroFile file)
@@ -57,6 +48,19 @@ public class Syncer
         }
 
         return await source.Copy(destination, Maybe<IObserver<double>>.None);
+    }
+
+    private async Task<Result> SyncItems(IZafiroDirectory source, IZafiroDirectory destination, IEnumerable<ZafiroFileDiff> diffs)
+    {
+        var list = diffs.ToList();
+        var processed = 0;
+        var results = await list.Select(diff => Observable.FromAsync(() => Sync(diff, source, destination)))
+            .Merge(3)
+            .Do(_ => processed++)
+            .Do(_ => progress.OnNext(new RelativeProgress<int>(list.Count, processed)))
+            .ToList();
+
+        return results.Combine();
     }
 
     private async Task<Result> Sync(ZafiroFileDiff diff, IZafiroDirectory source, IZafiroDirectory destination)
@@ -89,8 +93,8 @@ public class Syncer
         var destPath = destinationDirectory.Path.Combine(sourceFile.Path.MakeRelativeTo(sourceDirectory.Path));
         var destination = await destinationDirectory.GetFile(destPath);
         ISubject<double> partialProgress = new Subject<double>();
-        copies.OnNext(new CopyOperation(sourceFile, partialProgress));
-        var result = await destination.Bind(f => sourceFile.Copy(f, Maybe<IObserver<double>>.From(partialProgress)));
+        Operations.OnNext(new CopyOperation(sourceFile, partialProgress));
+        var result = await destination.Bind(f => sourceFile.Copy(f, Maybe<IObserver<double>>.From(partialProgress), ReadTimeout));
         return result;
     }
 }
