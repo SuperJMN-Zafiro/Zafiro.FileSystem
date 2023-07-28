@@ -1,7 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
-using Zafiro.Core.IO;
 
 namespace Zafiro.FileSystem;
 
@@ -13,11 +12,12 @@ public static class ZafiroFileExtensions
         var setContentsResult = await contentsResult.Bind(async stream =>
         {
             var obsStream = new ObservableStream(stream);
-            if (readTimeout.HasValue)
+
+            if (readTimeout.HasValue && obsStream.CanTimeout)
             {
-                obsStream.ReadTimeout = (int)readTimeout.Value.TotalMilliseconds;
+                //obsStream.ReadTimeout = (int)readTimeout.Value.TotalMilliseconds;
             }
-            
+
             var maybeSubscription = progress.Map(observer => obsStream.Positions.Select(l => (double)l / stream.Length).Subscribe(observer));
             var contents = await destination.SetContents(obsStream);
             maybeSubscription.Execute(x => x.Dispose());
