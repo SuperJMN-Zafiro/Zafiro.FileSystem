@@ -18,17 +18,7 @@ public class ReadTimeOutStream : Stream
 
     public override int Read(byte[] buffer, int offset, int count)
     {
-        return inner.Read(buffer, offset, count);
-    }
-
-    public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
-    {
-        return base.ReadAsync(buffer, offset, count, cancellationToken);
-    }
-
-    public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = new CancellationToken())
-    {
-        return base.ReadAsync(buffer, cancellationToken);
+        return Observable.Start(() => inner.Read(buffer, offset, count)).Timeout(TimeSpan.FromMilliseconds(ReadTimeout)).Wait();
     }
 
     public override long Seek(long offset, SeekOrigin origin)

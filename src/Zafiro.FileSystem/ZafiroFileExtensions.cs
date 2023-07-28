@@ -11,11 +11,11 @@ public static class ZafiroFileExtensions
         var contentsResult = await source.GetContents();
         var setContentsResult = await contentsResult.Bind(async stream =>
         {
-            var obsStream = new ObservableStream(stream);
+            var obsStream = new ObservableStream(new ReadTimeOutStream(stream));
 
             if (readTimeout.HasValue && obsStream.CanTimeout)
             {
-                //obsStream.ReadTimeout = (int)readTimeout.Value.TotalMilliseconds;
+                obsStream.ReadTimeout = (int)readTimeout.Value.TotalMilliseconds;
             }
 
             var maybeSubscription = progress.Map(observer => obsStream.Positions.Select(l => (double)l / stream.Length).Subscribe(observer));

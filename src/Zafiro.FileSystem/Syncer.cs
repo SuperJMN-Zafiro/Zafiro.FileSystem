@@ -53,7 +53,7 @@ public class Syncer
         Operations.OnNext(copyOp);
 
         var copyTask = Observable
-            .FromAsync(() => sourceFile.Copy(destination, observable, readTimeout: TimeSpan.FromSeconds(5)))
+            .FromAsync(() => sourceFile.Copy(destination, observable, readTimeout: TimeSpan.FromSeconds(0.5)))
             .RetryWithBackoffStrategy();
 
         var copyResult = await copyTask;
