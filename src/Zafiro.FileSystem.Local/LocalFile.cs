@@ -20,7 +20,11 @@ public class LocalFile : IZafiroFile
 
     public Task<Result> SetContents(Stream stream)
     {
-        return Result.Try(() => stream.CopyToAsync(File.OpenRead(Path)));
+        return Result.Try(async () =>
+        {
+            var fileStream = File.OpenWrite(Path);
+            await stream.CopyToAsync(fileStream);
+        });
     }
 
     public Task<Result> Delete()
