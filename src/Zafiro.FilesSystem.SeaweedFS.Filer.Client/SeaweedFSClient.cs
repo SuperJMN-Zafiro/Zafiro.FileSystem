@@ -2,6 +2,7 @@ using System.Reflection;
 using Refit;
 using System.Text.Json;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
@@ -19,8 +20,9 @@ public class SeaweedFSClient : ISeaweedFS
             {
                 Converters =
                 {
-                    new FileSystemEntryConverter()
-                }
+                    new EmptyListConverter(),
+                    new FileSystemEntryConverter(),
+                },
             }),
         });
     }
