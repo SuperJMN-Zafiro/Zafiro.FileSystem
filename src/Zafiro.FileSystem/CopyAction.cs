@@ -1,11 +1,15 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Reactive.Linq;
+using CSharpFunctionalExtensions;
+using Zafiro.Core.Mixins;
 
 namespace Zafiro.FileSystem;
 
-internal class CopyAction : ISyncAction
+public class CopyAction : ISyncAction
 {
-    public CopyAction(IZafiroDirectory source, ZafiroPath path, IZafiroDirectory destination)
+    public CopyAction(IZafiroFile source, IZafiroFile destination)
     {
+        Source = source;
+        Destination = destination;
     }
 
     public IZafiroFile Source { get; set; }
@@ -13,6 +17,10 @@ internal class CopyAction : ISyncAction
     public IObservable<RelativeProgress<int>> Progress { get; }
     public IObservable<Result> Sync()
     {
-        throw new NotImplementedException();
+        return Observable
+            .FromAsync(Source.GetContents)
+            .WhereSuccess()
+            .SelectMany(stream => Observable.Using(() => stream, x => Observable.FromAsync(() => Destination.SetContents(x))))
+            .FirstAsync();
     }
 }
