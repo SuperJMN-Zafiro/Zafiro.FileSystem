@@ -13,7 +13,7 @@ public class FileSystemComparer : IFileSystemComparer
     public async Task<Result<IEnumerable<Diff>>> Diff(IZafiroDirectory origin, IZafiroDirectory destination)
     {
         var originFiles = (await origin.GetFilesInTree()).Map(files => files.Select(file => GetKey(origin, file)));
-        var destinationFiles = (await destination.GetFilesInTree()).Map(files => files.Select(file => GetKey(origin, file)));
+        var destinationFiles = (await destination.GetFilesInTree()).Map(files => files.Select(file => GetKey(destination, file)));
 
         return from n in originFiles from q in destinationFiles select Join(n, q);
     }
@@ -31,22 +31,4 @@ public class FileSystemComparer : IFileSystemComparer
     {
         return f.Path.MakeRelativeTo(origin.Path);
     }
-
-    private class KeyedFile
-    {
-        public ZafiroPath Key { get; set; }
-        public IZafiroFile File { get; set; }
-    }
-}
-
-public class Diff
-{
-    public Diff(ZafiroPath path, FileDiffStatus status)
-    {
-        Path = path;
-        Status = status;
-    }
-
-    public ZafiroPath Path { get; set; }
-    public FileDiffStatus Status { get; set; }
 }
