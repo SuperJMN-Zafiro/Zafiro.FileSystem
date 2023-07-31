@@ -2,6 +2,7 @@
 using CSharpFunctionalExtensions;
 using JetBrains.Annotations;
 using Zafiro.Core.Mixins;
+using Zafiro.FileSystem.ZafiroCoreCandidates;
 
 namespace Zafiro.FileSystem;
 
@@ -33,12 +34,10 @@ public class ObsSyncer
 
     private static IObservable<ISyncAction> Return(Diff diff, IZafiroDirectory source, IZafiroDirectory destination)
     {
-        var r = from s in Observable.FromAsync(() => source.GetFile(source.Path.Combine(diff.Path)))
-            from n in Observable.FromAsync(() => destination.GetFile(destination.Path.Combine(diff.Path)))
-            select new{ s, n};
+        Func<Task<Result<IZafiroFile>>> getSource = () => source.GetFile(source.Path.Combine(diff.Path));
+        Func<Task<Result<IZafiroFile>>> getDestination = () => destination.GetFile(destination.Path.Combine(diff.Path));
 
-        var action = r.Select(arg => from n in arg.s from q in arg.n select new CopyAction(n, q));
-
-        return action.WhereSuccess();
+        return getSource.Combine(getDestination, (o, d) => new CopyAction(o, d))
+            .WhereSuccess();
     }
 }

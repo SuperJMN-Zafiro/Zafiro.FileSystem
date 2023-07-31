@@ -1,7 +1,9 @@
-﻿namespace Zafiro.FileSystem;
+﻿using CSharpFunctionalExtensions;
+
+namespace Zafiro.FileSystem;
 
 public interface IFileSystem
 {
-    Task<IZafiroDirectory> GetDirectory(ZafiroPath path);
-    Task<IZafiroFile> GetFile(ZafiroPath path);
+    Task<Result<IZafiroDirectory>> GetDirectory(ZafiroPath path);
+    Task<Result<IZafiroFile>> GetFile(ZafiroPath path);
 }

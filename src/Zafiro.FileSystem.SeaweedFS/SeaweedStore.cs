@@ -1,4 +1,5 @@
-﻿using Zafiro.FileSystem.SeaweedFS.Filer.Client;
+﻿using CSharpFunctionalExtensions;
+using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
 namespace Zafiro.FileSystem.SeaweedFS;
 
@@ -11,9 +12,9 @@ public class SeaweedStore : IFileSystem
         this.seaweedFSClient = seaweedFSClient;
     }
 
-    public Task<IZafiroDirectory> GetDirectory(ZafiroPath path)
+    public Task<Result<IZafiroDirectory>> GetDirectory(ZafiroPath path)
     {
-        return Task.FromResult((IZafiroDirectory)new SeaweedDirectory(path, seaweedFSClient));
+        return Task.FromResult(Result.Success<IZafiroDirectory>(new SeaweedDirectory(path, seaweedFSClient)));
     }
 
     //public async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path)
@@ -34,9 +35,9 @@ public class SeaweedStore : IFileSystem
     //        .Map(directoryItems => directoryItems.Select(item => (ZafiroPath) item.FullPath[1..]));
     //}
 
-    public Task<IZafiroFile> GetFile(ZafiroPath path)
+    public Task<Result<IZafiroFile>> GetFile(ZafiroPath path)
     {
-        return Task.FromResult((IZafiroFile)new SeaweedFile(path, seaweedFSClient));
+        return Task.FromResult(Result.Success<IZafiroFile>(new SeaweedFile(path, seaweedFSClient)));
     }
 
     //private async Task<Result<IZafiroFile>> GetFileCore(ZafiroPath path, Func<Task<Result>> checkIsValid)

@@ -1,14 +1,16 @@
-﻿namespace Zafiro.FileSystem.Local;
+﻿using CSharpFunctionalExtensions;
+
+namespace Zafiro.FileSystem.Local;
 
 public class LocalFileSystem : IFileSystem
 {
-    public Task<IZafiroDirectory> GetDirectory(ZafiroPath path)
+    public Task<Result<IZafiroDirectory>> GetDirectory(ZafiroPath path)
     {
-        return Task.FromResult((IZafiroDirectory)new LocalDirectory(new DirectoryInfo(path)));
+        return Task.FromResult(Result.Success<IZafiroDirectory>(new LocalDirectory(new DirectoryInfo(path))));
     }
 
-    public Task<IZafiroFile> GetFile(ZafiroPath path)
+    public Task<Result<IZafiroFile>> GetFile(ZafiroPath path)
     {
-        return Task.FromResult((IZafiroFile)new LocalFile(new FileInfo(path)));
+        return Task.FromResult(Result.Success<IZafiroFile>(new LocalFile(new FileInfo(path))));
     }
 }
