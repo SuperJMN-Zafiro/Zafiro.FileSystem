@@ -22,8 +22,8 @@ public class SeaweedDirectory : IZafiroDirectory
     public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
     {
         return Result
-            .Try(() => seaweedFS.CreateFolder(Path + "/"))
-            .Bind(() => Result.Try(() => seaweedFS.GetContents(Path + "/"), ExceptionHandler))
+            .Try(() => seaweedFS.CreateFolder(Path))
+            .Bind(() => Result.Try(() => seaweedFS.GetContents(Path), ExceptionHandler))
             .Map(GetDirectories);
     }
 
@@ -58,7 +58,7 @@ public class SeaweedDirectory : IZafiroDirectory
     {
         if (exception is ApiException { StatusCode: HttpStatusCode.NotFound } )
         {
-            return $"Path not found: /{Path}";
+            return $"Path not found: {Path}";
         }
 
         return exception.ToString();

@@ -28,6 +28,7 @@ public class ObsSyncer
             FileDiffStatus.RightOnly => Observable.Return<ISyncAction>(new DeleteAction(source, diff.Path)),
             FileDiffStatus.LeftOnly => Return(diff, source, destination),
             FileDiffStatus.Invalid => throw new ArgumentOutOfRangeException(),
+            FileDiffStatus.Both => Observable.Return(new NoopAction()),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -39,5 +40,16 @@ public class ObsSyncer
 
         return getSource.Combine(getDestination, (o, d) => new CopyAction(o, d))
             .WhereSuccess();
+    }
+}
+
+internal class NoopAction : ISyncAction
+{
+    public IZafiroFile Source { get; set; }
+    public IZafiroFile Destination { get; set; }
+    public IObservable<RelativeProgress<int>> Progress { get; }
+    public IObservable<Result> Sync()
+    {
+        return Observable.Return(Result.Success());
     }
 }

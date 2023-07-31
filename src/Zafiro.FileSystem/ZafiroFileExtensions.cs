@@ -10,17 +10,20 @@ public static class ZafiroFileExtensions
         var contentsResult = await source.GetContents();
         var setContentsResult = await contentsResult.Bind(async stream =>
         {
-            var obsStream = new ObservableStream(new ReadTimeOutStream(stream));
-
-            if (readTimeout.HasValue && obsStream.CanTimeout)
+            using (stream)
             {
-                obsStream.ReadTimeout = (int)readTimeout.Value.TotalMilliseconds;
-            }
+                var obsStream = new ObservableStream(new ReadTimeOutStream(stream));
 
-            var maybeSubscription = progress.Map(observer => obsStream.Positions.Select(l => (double)l / stream.Length).Subscribe(observer));
-            var contents = await destination.SetContents(obsStream);
-            maybeSubscription.Execute(x => x.Dispose());
-            return contents;
+                if (readTimeout.HasValue && obsStream.CanTimeout)
+                {
+                    obsStream.ReadTimeout = (int)readTimeout.Value.TotalMilliseconds;
+                }
+
+                var maybeSubscription = progress.Map(observer => obsStream.Positions.Select(l => (double)l / stream.Length).Subscribe(observer));
+                var contents = await destination.SetContents(obsStream);
+                maybeSubscription.Execute(x => x.Dispose());
+                return contents;
+            }
         });
         return setContentsResult;
     }

@@ -6,4 +6,9 @@ public static class Extensions
     {
         return windowsPath.Replace("\\", "/");
     }
+
+    public static string FromZafiroPath(this ZafiroPath zafiroPath)
+    {
+        return zafiroPath.Path.Replace("/", "\\");
+    }
 }
