@@ -3,11 +3,11 @@ using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
 namespace Zafiro.FileSystem.SeaweedFS;
 
-public class SeaweedStore : IFileSystem
+public class SeaweedFileSystem : IFileSystem
 {
     private readonly SeaweedFSClient seaweedFSClient;
 
-    public SeaweedStore(SeaweedFSClient seaweedFSClient)
+    public SeaweedFileSystem(SeaweedFSClient seaweedFSClient)
     {
         this.seaweedFSClient = seaweedFSClient;
     }

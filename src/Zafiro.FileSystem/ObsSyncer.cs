@@ -34,8 +34,8 @@ public class ObsSyncer
 
     private static IObservable<ISyncAction> Return(Diff diff, IZafiroDirectory source, IZafiroDirectory destination)
     {
-        Func<Task<Result<IZafiroFile>>> getSource = () => source.GetFile(source.Path.Combine(diff.Path));
-        Func<Task<Result<IZafiroFile>>> getDestination = () => destination.GetFile(destination.Path.Combine(diff.Path));
+        var getSource = () => source.GetFile(source.Path.Combine(diff.Path));
+        var getDestination = () => destination.GetFile(destination.Path.Combine(diff.Path));
 
         return getSource.Combine(getDestination, (o, d) => new CopyAction(o, d))
             .WhereSuccess();
