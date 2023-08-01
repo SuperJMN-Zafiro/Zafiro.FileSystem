@@ -30,7 +30,7 @@ public class CopyAction : ISyncAction
                 using (onNext.Subscribe(progressSubject))
                 {
                     var contents = await Destination.SetContents(obs);
-                    progressSubject.OnNext(new RelativeProgress<long>(1, 1));
+                    progressSubject.OnNext(new RelativeProgress<long>(obs.Length, obs.Length));
                     return contents;
                 }
             })))
