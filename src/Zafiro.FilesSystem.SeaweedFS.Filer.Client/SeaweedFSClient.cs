@@ -1,8 +1,5 @@
-using System.Reflection;
 using Refit;
 using System.Text.Json;
-using System.Text;
-using System.Text.Json.Serialization;
 
 namespace Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
@@ -20,7 +17,7 @@ public class SeaweedFSClient : ISeaweedFS
             {
                 Converters =
                 {
-                    new EmptyListConverter(),
+                    //new EmptyListConverter(),
                     new FileSystemEntryConverter(),
                 },
             }),
@@ -37,9 +34,9 @@ public class SeaweedFSClient : ISeaweedFS
         return inner.Upload(path, stream);
     }
 
-    public async Task CreateFolder(string directoryPath)
+    public Task CreateFolder(string directoryPath)
     {
-        await inner.CreateFolder(directoryPath);
+        return inner.CreateFolder(directoryPath);
     }
 
     public Task DeleteFolder(string directoryPath)

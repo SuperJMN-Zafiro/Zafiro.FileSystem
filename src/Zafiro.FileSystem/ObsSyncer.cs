@@ -25,15 +25,34 @@ public class ObsSyncer
     {
         return diff.Status switch
         {
-            FileDiffStatus.RightOnly => Observable.Return<ISyncAction>(new DeleteAction(source, diff.Path)),
-            FileDiffStatus.LeftOnly => Return(diff, source, destination),
+            FileDiffStatus.RightOnly => DeleteAction(diff, source),
+            FileDiffStatus.LeftOnly => CopyAction(diff, source, destination),
+            FileDiffStatus.Both => CopyAction(diff, source, destination),
             FileDiffStatus.Invalid => throw new ArgumentOutOfRangeException(),
-            FileDiffStatus.Both => Observable.Return(new NoopAction()),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
 
-    private static IObservable<ISyncAction> Return(Diff diff, IZafiroDirectory source, IZafiroDirectory destination)
+    public IObservable<ISyncAction> DeleteAction(Diff diff, IZafiroDirectory source)
+    {
+        var action = Observable
+            .FromAsync(() => source.GetFile(source.Path.Combine(diff.Path)))
+            .Select(result => result.Map(f => new DeleteAction(f)))
+            .WhereSuccess();
+
+        return action;
+    }
+
+    private static IObservable<ISyncAction> CopyAction(Diff diff, IZafiroDirectory source, IZafiroDirectory destination)
+    {
+        var getSource = () => source.GetFile(source.Path.Combine(diff.Path));
+        var getDestination = () => destination.GetFile(destination.Path.Combine(diff.Path));
+
+        return getSource.Combine(getDestination, (o, d) => new CopyAction(o, d))
+            .WhereSuccess();
+    }
+
+    private static IObservable<ISyncAction> DeleteAction(Diff diff, IZafiroDirectory source, IZafiroDirectory destination)
     {
         var getSource = () => source.GetFile(source.Path.Combine(diff.Path));
         var getDestination = () => destination.GetFile(destination.Path.Combine(diff.Path));

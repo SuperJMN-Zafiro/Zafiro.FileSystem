@@ -13,7 +13,7 @@ public static class FileExtensions
             {
                 var p = await dirs.ToObservable()
                     .Select(x => Observable.FromAsync(x.GetFilesInTree))
-                    .Merge(1)
+                    .Concat()
                     .ToList();
 
                 var results = p.Combine();

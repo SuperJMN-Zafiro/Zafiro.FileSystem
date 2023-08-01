@@ -5,8 +5,11 @@ namespace Zafiro.FileSystem;
 
 internal class DeleteAction : ISyncAction
 {
-    public DeleteAction(IZafiroDirectory source, ZafiroPath diffPath)
+    private readonly IZafiroFile file;
+
+    public DeleteAction(IZafiroFile file)
     {
+        this.file = file;
     }
 
     public IZafiroFile Source { get; set; }
@@ -14,6 +17,6 @@ internal class DeleteAction : ISyncAction
     public IObservable<RelativeProgress<long>> Progress => Observable.Return(new RelativeProgress<long>(1, 1));
     public IObservable<Result> Sync()
     {
-        throw new NotImplementedException();
+        return Observable.FromAsync(() => file.Delete());
     }
 }
