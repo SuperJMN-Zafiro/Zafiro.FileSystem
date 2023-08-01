@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
 using Zafiro.Core.Mixins;
 
@@ -6,6 +7,8 @@ namespace Zafiro.FileSystem;
 
 public class CopyAction : ISyncAction
 {
+    private readonly ISubject<RelativeProgress<long>> progressSubject = new Subject<RelativeProgress<long>>();
+
     public CopyAction(IZafiroFile source, IZafiroFile destination)
     {
         Source = source;
@@ -14,13 +17,23 @@ public class CopyAction : ISyncAction
 
     public IZafiroFile Source { get; set; }
     public IZafiroFile Destination { get; set; }
-    public IObservable<RelativeProgress<int>> Progress { get; }
+    public IObservable<RelativeProgress<long>> Progress => progressSubject.AsObservable();
+
     public IObservable<Result> Sync()
     {
         return Observable
             .FromAsync(Source.GetContents)
             .WhereSuccess()
-            .SelectMany(stream => Observable.Using(() => stream, x => Observable.FromAsync(() => Destination.SetContents(x))))
+            .SelectMany(stream => Observable.Using(() => new ObservableStream(stream), obs => Observable.FromAsync(async () =>
+            {
+                var onNext = obs.Positions.Select(l => new RelativeProgress<long>(obs.Length, l));
+                using (onNext.Subscribe(progressSubject))
+                {
+                    var contents = await Destination.SetContents(obs);
+                    progressSubject.OnNext(new RelativeProgress<long>(1, 1));
+                    return contents;
+                }
+            })))
             .FirstAsync();
     }
 }
