@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+	<Import Project="..\Common.props" />
+
   <ItemGroup>
     <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
   </ItemGroup>

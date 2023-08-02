@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+	<Import Project="..\Common.props" />
+
   <ItemGroup>
     <PackageReference Include="Refit" Version="7.0.0" />
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.40.0" />

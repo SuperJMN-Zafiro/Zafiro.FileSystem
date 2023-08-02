@@ -7,11 +7,11 @@
 	<PropertyGroup>
 		<PackageId>$(MSBuildProjectName)</PackageId>
 		<Authors>SuperJMN</Authors>
-		<Description>The Crema for AvaloniaUI</Description>
+		<Description>Turns your filesystem problems into a breadcrumb</Description>
 		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 		<PackageReleaseNotes>Crema all around</PackageReleaseNotes>
-		<PackageTags>XAML Cross-Platform Avalonia AvaloniaUI</PackageTags>
-		<Product>Zafiro</Product>
+		<PackageTags>Filesystem Abstractions IO</PackageTags>
+		<Product>Zafiro.FileSystem</Product>
 		<Company>José Manuel Nieto (@SuperJMN)</Company>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageIcon>icon.png</PackageIcon>
