@@ -3,6 +3,7 @@ using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
 using Zafiro.Functional;
 using Zafiro.IO;
+using Zafiro.ProgressReporting;
 
 namespace Zafiro.FileSystem;
 

@@ -4,6 +4,7 @@ using CSharpFunctionalExtensions;
 using JetBrains.Annotations;
 using Serilog;
 using Zafiro.Mixins;
+using Zafiro.ProgressReporting;
 
 namespace Zafiro.FileSystem;
 
