@@ -22,6 +22,8 @@ public sealed class ZafiroPath : ValueObject
 
     public IEnumerable<string> RouteFragments => Path.Split(ChuckSeparator);
 
+    public string Path { get; }
+
     public static implicit operator ZafiroPath(string[] chunks)
     {
         return new ZafiroPath(chunks);
@@ -46,6 +48,4 @@ public sealed class ZafiroPath : ValueObject
     {
         yield return Path;
     }
-
-    public string Path { get; }
 }
