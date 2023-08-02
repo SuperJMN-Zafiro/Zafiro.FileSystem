@@ -4,7 +4,7 @@ using Zafiro.ProgressReporting;
 
 namespace Zafiro.FileSystem;
 
-internal class DeleteAction : ISyncAction
+public class DeleteAction : ISyncAction
 {
     private readonly IZafiroFile file;
 
@@ -13,8 +13,7 @@ internal class DeleteAction : ISyncAction
         this.file = file;
     }
 
-    public IZafiroFile Source { get; set; }
-    public IZafiroFile Destination { get; set; }
+    public IZafiroFile Source => file;
     public IObservable<RelativeProgress<long>> Progress => Observable.Return(new RelativeProgress<long>(1, 1));
     public IObservable<Result> Sync()
     {

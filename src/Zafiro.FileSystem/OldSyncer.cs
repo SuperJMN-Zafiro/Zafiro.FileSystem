@@ -32,9 +32,9 @@ public class OldSyncer
         return SyncItems(source, destination, diffs);
     }
 
-    private static async Task<Result> DeleteNonexistent(IZafiroDirectory origin, ZafiroPath path)
+    private static Task<Result> DeleteNonexistent(IZafiroDirectory origin, ZafiroPath path)
     {
-        return Result.Failure("DeleteNonexistent: Not implemented, colleiga");
+        return Task.FromResult(Result.Failure("DeleteNonexistent: Not implemented, colleiga"));
     }
 
     private async Task<Result> CopyOverExisting(IZafiroDirectory sourceDirectory, IZafiroDirectory destinationDirectory, ZafiroPath path)
