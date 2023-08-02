@@ -1,8 +1,8 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
-using Zafiro.Zafiro.Functional;
-using Zafiro.Zafiro.IO;
+using Zafiro.Functional;
+using Zafiro.IO;
 
 namespace Zafiro.FileSystem;
 

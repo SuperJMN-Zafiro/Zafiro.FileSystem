@@ -1,6 +1,6 @@
 ﻿using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
-using Zafiro.Zafiro.IO;
+using Zafiro.IO;
 
 namespace Zafiro.FileSystem;
 
