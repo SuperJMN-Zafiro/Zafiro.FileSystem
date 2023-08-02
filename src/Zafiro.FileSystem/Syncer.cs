@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
 using JetBrains.Annotations;
 using Serilog;
-using Zafiro.Core.Mixins;
+using Zafiro.Zafiro.Mixins;
 
 namespace Zafiro.FileSystem;
 

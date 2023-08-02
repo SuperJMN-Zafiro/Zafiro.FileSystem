@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using System.IO.Abstractions;
 
 namespace Zafiro.FileSystem.Local;
 
