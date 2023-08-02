@@ -1,6 +1,8 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
+using Zafiro.Core.Functional;
+using Zafiro.Core.IO;
 using Zafiro.Core.Mixins;
 
 namespace Zafiro.FileSystem;
@@ -23,7 +25,7 @@ public class CopyAction : ISyncAction
     {
         return Observable
             .FromAsync(Source.GetContents)
-            .WhereSuccess()
+            .Successes()
             .SelectMany(stream => Observable.Using(() => new ObservableStream(stream), obs => Observable.FromAsync(async () =>
             {
                 var onNext = obs.Positions.Select(l => new RelativeProgress<long>(obs.Length, l));

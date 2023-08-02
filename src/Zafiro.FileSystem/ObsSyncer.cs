@@ -1,8 +1,8 @@
 ﻿using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using JetBrains.Annotations;
+using Zafiro.Core.Functional;
 using Zafiro.Core.Mixins;
-using Zafiro.FileSystem.ZafiroCoreCandidates;
 
 namespace Zafiro.FileSystem;
 
@@ -38,7 +38,7 @@ public class ObsSyncer
         var action = Observable
             .FromAsync(() => source.GetFile(source.Path.Combine(diff.Path)))
             .Select(result => result.Map(f => new DeleteAction(f)))
-            .WhereSuccess();
+            .Successes();
 
         return action;
     }
@@ -49,7 +49,7 @@ public class ObsSyncer
         var getDestination = () => destination.GetFile(destination.Path.Combine(diff.Path));
 
         return getSource.Combine(getDestination, (o, d) => new CopyAction(o, d))
-            .WhereSuccess();
+            .Successes();
     }
 
     private static IObservable<ISyncAction> DeleteAction(Diff diff, IZafiroDirectory source, IZafiroDirectory destination)
@@ -58,17 +58,6 @@ public class ObsSyncer
         var getDestination = () => destination.GetFile(destination.Path.Combine(diff.Path));
 
         return getSource.Combine(getDestination, (o, d) => new CopyAction(o, d))
-            .WhereSuccess();
-    }
-}
-
-internal class NoopAction : ISyncAction
-{
-    public IZafiroFile Source { get; set; }
-    public IZafiroFile Destination { get; set; }
-    public IObservable<RelativeProgress<long>> Progress => Observable.Return(new RelativeProgress<long>(1, 1));
-    public IObservable<Result> Sync()
-    {
-        return Observable.Return(Result.Success());
+            .Successes();
     }
 }
