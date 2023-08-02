@@ -22,23 +22,23 @@ public class SeaweedDirectory : IZafiroDirectory
     public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
     {
         return Result
-            .Try(() => seaweedFS.CreateFolder(Path + "/"))
-            .Bind(() => Result.Try(() => seaweedFS.GetContents(Path + "/"), ExceptionHandler))
+            .Try(() => seaweedFS.CreateFolder(Path))
+            .Bind(() => Result.Try(() => seaweedFS.GetContents(Path), ExceptionHandler))
             .Map(GetDirectories);
     }
 
     private IEnumerable<IZafiroDirectory> GetDirectories(RootDirectory folder)
     {
-        return folder.Entries
+        return folder.Entries?
             .OfType<Directory>()
-            .Select(f => new SeaweedDirectory(f.FullPath[1..], seaweedFS));
+            .Select(f => new SeaweedDirectory(f.FullPath[1..], seaweedFS))  ?? Enumerable.Empty<IZafiroDirectory>();;
     }
 
     private IEnumerable<IZafiroFile> GetFiles(RootDirectory folder)
     {
-        return folder.Entries
+        return folder.Entries?
             .OfType<File>()
-            .Select(f => new SeaweedFile(f.FullPath[1..], seaweedFS));
+            .Select(f => new SeaweedFile(f.FullPath[1..], seaweedFS)) ?? Enumerable.Empty<IZafiroFile>();
     }
 
     public Task<Result<IEnumerable<IZafiroFile>>> GetFiles()
@@ -58,7 +58,7 @@ public class SeaweedDirectory : IZafiroDirectory
     {
         if (exception is ApiException { StatusCode: HttpStatusCode.NotFound } )
         {
-            return $"Path not found: /{Path}";
+            return $"Path not found: {Path}";
         }
 
         return exception.ToString();

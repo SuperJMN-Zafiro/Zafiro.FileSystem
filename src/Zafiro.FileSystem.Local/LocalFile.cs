@@ -15,15 +15,23 @@ public class LocalFile : IZafiroFile
 
     public Task<Result<Stream>> GetContents()
     {
-        return Task.FromResult(Result.Try(() => (Stream) File.OpenRead(Path)));
+        return Task.FromResult(Result.Try(() =>
+        {
+            EnsureFileExists(Path.FromZafiroPath());
+            return (Stream)new DisposeAwareStream(Path, File.OpenRead(Path));
+        }));
     }
 
     public Task<Result> SetContents(Stream stream)
     {
         return Result.Try(async () =>
         {
-            var fileStream = File.OpenWrite(Path);
-            await stream.CopyToAsync(fileStream);
+            EnsureFileExists(Path.FromZafiroPath());
+            var fileStream = new DisposeAwareStream(Path, File.OpenWrite(Path));
+            {
+                await stream.CopyToAsync(fileStream);
+            }
+            await fileStream.DisposeAsync();
         });
     }
 
@@ -35,5 +43,20 @@ public class LocalFile : IZafiroFile
     public override string ToString()
     {
         return Path;
+    }
+
+    private void EnsureFileExists(string path)
+    {
+        var directoryName = System.IO.Path.GetDirectoryName(path);
+
+        if (directoryName != null && !Directory.Exists(directoryName))
+        {
+            Directory.CreateDirectory(directoryName);
+        }
+
+        if (!File.Exists(path))
+        {
+            using (File.Create(path)) { }
+        }
     }
 }

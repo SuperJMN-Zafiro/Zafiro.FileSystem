@@ -3,11 +3,6 @@ using MoreLinq;
 
 namespace Zafiro.FileSystem;
 
-public interface IFileSystemComparer
-{
-    Task<Result<IEnumerable<Diff>>> Diff(IZafiroDirectory origin, IZafiroDirectory destination);
-}
-
 public class FileSystemComparer : IFileSystemComparer
 {
     public async Task<Result<IEnumerable<Diff>>> Diff(IZafiroDirectory origin, IZafiroDirectory destination)
