@@ -3,9 +3,8 @@ using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
 using Zafiro.Functional;
 using Zafiro.IO;
-using Zafiro.Mixins;
 using Zafiro.ProgressReporting;
-using ObservableEx = System.Reactive.Linq.ObservableEx;
+using ObservableEx = Zafiro.Mixins.ObservableEx;
 
 namespace Zafiro.FileSystem;
 
@@ -19,8 +18,10 @@ public class CopyAction : ISyncAction
         Destination = destination;
     }
 
-    public IZafiroFile Source { get; set; }
-    public IZafiroFile Destination { get; set; }
+    public IZafiroFile Source { get; }
+
+    public IZafiroFile Destination { get; }
+
     public IObservable<RelativeProgress<long>> Progress => progressSubject.AsObservable();
 
     public IObservable<Result> Sync()
@@ -28,16 +29,17 @@ public class CopyAction : ISyncAction
         return Observable
             .FromAsync(Source.GetContents)
             .Successes()
-            .SelectMany(stream => Zafiro.Mixins.ObservableEx.Using(() => GetInputStream(Source, stream), obs => Observable.FromAsync(async () =>
-            {
-                var onNext = obs.Positions.Select(l => new RelativeProgress<long>(obs.Length, l));
-                using (onNext.Subscribe(progressSubject))
+            .SelectMany(stream => ObservableEx.Using(() => GetInputStream(Source, stream), obs =>
+                Observable.FromAsync(async () =>
                 {
-                    var contents = await Destination.SetContents(obs);
-                    progressSubject.OnNext(new RelativeProgress<long>(obs.Length, obs.Length));
-                    return contents;
-                }
-            })))
+                    var onNext = obs.Positions.Select(l => new RelativeProgress<long>(obs.Length, l));
+                    using (onNext.Subscribe(progressSubject))
+                    {
+                        var contents = await Destination.SetContents(obs);
+                        progressSubject.OnNext(new RelativeProgress<long>(obs.Length, obs.Length));
+                        return contents;
+                    }
+                })))
             .FirstAsync();
     }
 
