@@ -3,7 +3,9 @@ using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
 using Zafiro.Functional;
 using Zafiro.IO;
+using Zafiro.Mixins;
 using Zafiro.ProgressReporting;
+using ObservableEx = System.Reactive.Linq.ObservableEx;
 
 namespace Zafiro.FileSystem;
 
@@ -26,7 +28,7 @@ public class CopyAction : ISyncAction
         return Observable
             .FromAsync(Source.GetContents)
             .Successes()
-            .SelectMany(stream => Observable.Using(() => new ObservableStream(stream), obs => Observable.FromAsync(async () =>
+            .SelectMany(stream => Zafiro.Mixins.ObservableEx.Using(() => GetInputStream(Source, stream), obs => Observable.FromAsync(async () =>
             {
                 var onNext = obs.Positions.Select(l => new RelativeProgress<long>(obs.Length, l));
                 using (onNext.Subscribe(progressSubject))
@@ -37,5 +39,21 @@ public class CopyAction : ISyncAction
                 }
             })))
             .FirstAsync();
+    }
+
+    private static async Task<ObservableStream> GetInputStream(IZafiroFile zafiroFile, Stream stream)
+    {
+        Stream inner;
+        if (!stream.CanSeek)
+        {
+            var size = await zafiroFile.Size();
+            inner = new AlwaysForwardStream(stream, size);
+        }
+        else
+        {
+            inner = stream;
+        }
+
+        return new ObservableStream(inner);
     }
 }
