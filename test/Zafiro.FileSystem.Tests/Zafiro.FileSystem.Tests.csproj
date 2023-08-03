@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Zafiro.FileSystem.Sftp\Zafiro.FileSystem.Sftp.csproj" />
     <ProjectReference Include="..\..\src\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
   </ItemGroup>
 
