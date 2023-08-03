@@ -14,6 +14,11 @@ public class SftpFile : IZafiroFile
     }
 
     public ZafiroPath Path { get; }
+    public Task<long> Size()
+    {
+        return Task.FromResult(client.GetAttributes(Path).Size);
+    }
+
     public async Task<Result<Stream>> GetContents()
     {
         var memoryStream = new MemoryStream();

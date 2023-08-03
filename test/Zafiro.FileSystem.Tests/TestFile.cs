@@ -5,7 +5,12 @@ namespace Zafiro.FileSystem.Tests;
 public class TestFile : IZafiroFile
 {
     public ZafiroPath Path => "/home/Sample.txt";
-        
+
+    public Task<long> Size()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Result<Stream>> GetContents()
     {
         return Task.FromResult(Result.Success((Stream)new NeverEndingStream()));

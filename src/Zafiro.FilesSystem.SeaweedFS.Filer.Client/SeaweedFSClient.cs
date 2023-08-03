@@ -54,7 +54,7 @@ public class SeaweedFSClient : ISeaweedFS
         return inner.DeleteFile(filePath);
     }
 
-    public Task GetFileMetadata(string path)
+    public Task<File> GetFileMetadata(string path)
     {
         return inner.GetFileMetadata(path);
     }

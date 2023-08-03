@@ -4,14 +4,16 @@ namespace Zafiro.FileSystem.Local;
 
 public class LocalFile : IZafiroFile
 {
-    private readonly FileSystemInfo info;
+    private readonly FileInfo info;
 
-    public LocalFile(FileSystemInfo info)
+    public LocalFile(FileInfo info)
     {
         this.info = info;
     }
 
     public ZafiroPath Path => info.FullName.ToZafiroPath();
+
+    public Task<long> Size() => Task.FromResult(info.Length);
 
     public Task<Result<Stream>> GetContents()
     {
