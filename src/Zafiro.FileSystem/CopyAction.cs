@@ -1,10 +1,8 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
-using Zafiro.Functional;
 using Zafiro.IO;
 using Zafiro.ProgressReporting;
-using ObservableEx = Zafiro.Mixins.ObservableEx;
 
 namespace Zafiro.FileSystem;
 
@@ -28,34 +26,37 @@ public class CopyAction : ISyncAction
     {
         return Observable
             .FromAsync(Source.GetContents)
-            .Successes()
-            .SelectMany(stream => ObservableEx.Using(() => GetInputStream(Source, stream), obs =>
-                Observable.FromAsync(async () =>
-                {
-                    var onNext = obs.Positions.Select(l => new RelativeProgress<long>(obs.Length, l));
-                    using (onNext.Subscribe(progressSubject))
-                    {
-                        var contents = await Destination.SetContents(obs);
-                        progressSubject.OnNext(new RelativeProgress<long>(obs.Length, obs.Length));
-                        return contents;
-                    }
-                })))
-            .FirstAsync();
+            .MySelectMany(GetInputStream)
+            .MySelectMany(stream => Observable.Using(() => stream, Copy));
     }
 
-    private static async Task<ObservableStream> GetInputStream(IZafiroFile zafiroFile, Stream stream)
+    private IObservable<Result<ObservableStream>> GetInputStream(Stream stream)
     {
-        Stream inner;
+        return Observable.FromAsync(() => GetInputStream(Source, stream));
+    }
+
+    public IObservable<Result> Copy(ObservableStream obs)
+    {
+        return Observable.FromAsync(async () =>
+            {
+                var onNext = obs.Positions.Select(l => new RelativeProgress<long>(obs.Length, l));
+                using (onNext.Subscribe(progressSubject))
+                {
+                    var contents = await Destination.SetContents(obs);
+                    progressSubject.OnNext(new RelativeProgress<long>(obs.Length, obs.Length));
+                    return contents;
+                }
+            });
+    }
+
+    private static async Task<Result<ObservableStream>> GetInputStream(IZafiroFile zafiroFile, Stream stream)
+    {
         if (!stream.CanSeek)
         {
             var size = await zafiroFile.Size();
-            inner = new AlwaysForwardStream(stream, size);
-        }
-        else
-        {
-            inner = stream;
+            return size.Map(l => new ObservableStream(new AlwaysForwardStream(stream, l)));
         }
 
-        return new ObservableStream(inner);
+        return new ObservableStream(stream);
     }
 }
