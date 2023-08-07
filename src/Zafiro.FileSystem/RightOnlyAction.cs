@@ -4,11 +4,11 @@ using Zafiro.ProgressReporting;
 
 namespace Zafiro.FileSystem;
 
-public class DeleteAction : ISyncAction
+public class RightOnlyAction : ISyncAction
 {
     private readonly IZafiroFile file;
 
-    public DeleteAction(IZafiroFile file)
+    public RightOnlyAction(IZafiroFile file)
     {
         this.file = file;
     }

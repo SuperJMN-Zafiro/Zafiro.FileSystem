@@ -14,7 +14,7 @@ public class SeaweedFile : IZafiroFile
     }
 
     public ZafiroPath Path { get; }
-    public async Task<long> Size() => (await seaweedStore.GetFileMetadata(Path)).FileSize;
+    public async Task<Result<long>> Size() => (await seaweedStore.GetFileMetadata(Path)).FileSize;
 
     public Task<Result<Stream>> GetContents()
     {

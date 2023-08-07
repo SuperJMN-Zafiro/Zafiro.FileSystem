@@ -13,7 +13,7 @@ public class LocalFile : IZafiroFile
 
     public ZafiroPath Path => info.FullName.ToZafiroPath();
 
-    public Task<long> Size() => Task.FromResult(info.Length);
+    public Task<Result<long>> Size() => Task.FromResult(Result.Success(info.Length));
 
     public Task<Result<Stream>> GetContents()
     {

@@ -1,15 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-	<Import Project="..\Common.props" />
-
+  <Import Project="..\Common.props" />
   <ItemGroup>
     <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
   </ItemGroup>
-
 </Project>
