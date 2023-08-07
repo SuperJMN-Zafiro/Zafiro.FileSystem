@@ -6,7 +6,7 @@ public class TestFile : IZafiroFile
 {
     public ZafiroPath Path => "/home/Sample.txt";
 
-    public Task<long> Size()
+    public Task<Result<long>> Size()
     {
         throw new NotImplementedException();
     }
