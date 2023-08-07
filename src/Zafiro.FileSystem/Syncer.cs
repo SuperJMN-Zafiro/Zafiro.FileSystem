@@ -1,16 +1,34 @@
 ﻿using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using JetBrains.Annotations;
-using Zafiro.Functional;
+using Zafiro.CSharpFunctionalExtensions;
+using Zafiro.ProgressReporting;
 
 namespace Zafiro.FileSystem;
 
 [PublicAPI]
 public class Syncer
 {
+    public bool SkipIdential { get; set; }
+
     public IObservable<ISyncAction> Sync(IZafiroDirectory source, IZafiroDirectory destination, IEnumerable<Diff> diffs)
     {
         return SyncItems(source, destination, diffs);
+    }
+
+    public IObservable<ISyncAction> OnRightOnly(Diff diff, IZafiroDirectory source)
+    {
+        return Observable
+            .FromAsync(() => source.GetFile(source.Path.Combine(diff.Path)))
+            .Select(result => result.Map(f => new DeleteAction(f)))
+            .Successes();
+    }
+
+    private static Task<Result<FileEntryData>> GetFileEntryData(IZafiroDirectory dir, ZafiroPath path)
+    {
+        var file = dir.GetFile(path);
+        var size = file.Bind(zafiroFile => zafiroFile.Size());
+        return file.CombineAndMap(size, (f, s) => new FileEntryData(f, s));
     }
 
     private IObservable<ISyncAction> SyncItems(IZafiroDirectory source, IZafiroDirectory destination, IEnumerable<Diff> diffs)
@@ -25,65 +43,76 @@ public class Syncer
         return diff.Status switch
         {
             FileDiffStatus.RightOnly => OnRightOnly(diff, source),
-            FileDiffStatus.LeftOnly => OnLeftOnly(diff, source, destination),
-            FileDiffStatus.Both => OnBoth(diff, source, destination),
+            FileDiffStatus.LeftOnly => GetFileEntries(source, destination, diff.Path)
+                .Successes()
+                .SelectMany(GetCopyAction),
+            FileDiffStatus.Both => GetFileEntries(source, destination, diff.Path)
+                .Successes()
+                .SelectMany(GetCopyAction),
             FileDiffStatus.Invalid => throw new ArgumentOutOfRangeException(),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new ArgumentOutOfRangeException(nameof(diff.Status), "The diff status is not valid")
         };
     }
 
-    private IObservable<ISyncAction> OnBoth(Diff diff, IZafiroDirectory source, IZafiroDirectory destination)
+    private IObservable<Result<IZafiroFile>> GetFileEntry(IZafiroDirectory directory, ZafiroPath path)
     {
-        //TODO refactor this
-        //var srcObs = GetFileEntryData(diff, source);
-        //var dstObs = GetFileEntryData(diff, destination);
-        
-        var getSource = Observable.FromAsync(() => source.GetFile(source.Path.Combine(diff.Path)));
-        var getDestination = Observable.FromAsync(() => destination.GetFile(destination.Path.Combine(diff.Path)));
-
-        return getSource
-            .Zip(getDestination, (s, d) => s.Combine(d, (src, dst) => (ISyncAction)new CopyAction(src, dst)))
-            .SelectMany(result => result.IsSuccess ? Observable.Return(result.Value) : Observable.Empty<ISyncAction>());
+        return GetEntry(directory, path);
     }
 
-    private static IObservable<Result<FileEntryData>> GetFileEntryData(Diff diff, IZafiroDirectory source)
+    private IObservable<Result<(IZafiroFile, IZafiroFile)>> GetFileEntries(IZafiroDirectory directory, IZafiroDirectory destination, ZafiroPath path)
     {
-        return Observable.FromAsync(async () =>
+        return ReactiveResultMixin
+            .SelectMany(GetFileEntry(directory, path),
+                _ => GetFileEntry(destination, path),
+                (l, r) => (l, r));
+    }
+
+    private IObservable<ISyncAction> GetCopyAction((IZafiroFile, IZafiroFile) copyData)
+    {
+        return Observable.FromAsync(async () => await GetFinalCopyAction(copyData.Item1, copyData.Item2)).Successes();
+    }
+
+    private async Task<Result<ISyncAction>> GetFinalCopyAction(IZafiroFile source, IZafiroFile destination)
+    {
+        var r = await AreEqual(source, destination);
+        var result = r.Map<bool, ISyncAction>(b =>
         {
-            var file = await source.GetFile(source.Path.Combine(diff.Path));
-            var size = await file.Bind(zafiroFile => zafiroFile.Size());
-            return file.Combine(size, (a, b)=> new FileEntryData(a, b));
+            if (SkipIdential && b)
+            {
+                return new SkipFileAction(source, destination);
+            }
+
+            return new CopyAction(source, destination);
         });
+        return result;
     }
 
-    public IObservable<ISyncAction> OnRightOnly(Diff diff, IZafiroDirectory source)
+    private Task<Result<bool>> AreEqual(IZafiroFile left, IZafiroFile right)
     {
-        var action = Observable
-            .FromAsync(() => source.GetFile(source.Path.Combine(diff.Path)))
-            .Select(result => result.Map(f => new DeleteAction(f)))
-            .Successes();
-
-        return action;
+        return Async.Await(left.Size).CombineAndMap(Async.Await(right.Size), (sizeLeft, sizeRight) => sizeLeft == sizeRight);
     }
 
-    private static IObservable<ISyncAction> OnLeftOnly(Diff diff, IZafiroDirectory source, IZafiroDirectory destination)
+    private IObservable<Result<IZafiroFile>> GetEntry(IZafiroDirectory directory, ZafiroPath path)
     {
-        var getSource = () => source.GetFile(source.Path.Combine(diff.Path));
-        var getDestination = () => destination.GetFile(destination.Path.Combine(diff.Path));
-
-        return getSource.Combine(getDestination, (o, d) => new CopyAction(o, d))
-            .Successes();
+        return Observable.FromAsync(() => directory.GetFile(directory.Path.Combine(path)));
     }
 }
 
-internal class FileEntryData
+public class SkipFileAction : ISyncAction
 {
-    public IZafiroFile ZafiroFile { get; }
-    public long Size { get; }
-
-    public FileEntryData(IZafiroFile zafiroFile, long size)
+    public SkipFileAction(IZafiroFile source, IZafiroFile destination)
     {
-        ZafiroFile = zafiroFile;
-        Size = size;
+        Source = source;
+        Destination = destination;
+    }
+
+    public IZafiroFile Source { get; }
+    public IZafiroFile Destination { get; }
+
+    public IObservable<RelativeProgress<long>> Progress => Observable.Return(new RelativeProgress<long>(1, 1));
+
+    public Task<Result> Sync()
+    {
+        return Task.FromResult(Result.Success());
     }
 }

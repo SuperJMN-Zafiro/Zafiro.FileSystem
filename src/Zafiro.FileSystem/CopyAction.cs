@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Security.Cryptography;
 using CSharpFunctionalExtensions;
 using Zafiro.IO;
 using Zafiro.ProgressReporting;
@@ -22,12 +23,9 @@ public class CopyAction : ISyncAction
 
     public IObservable<RelativeProgress<long>> Progress => progressSubject.AsObservable();
 
-    public IObservable<Result> Sync()
+    public Task<Result> Sync()
     {
-        return Observable
-            .FromAsync(Source.GetContents)
-            .MySelectMany(GetInputStream)
-            .MySelectMany(stream => Observable.Using(() => stream, Copy));
+        return Source.Copy(Destination, Maybe<IObserver<RelativeProgress<long>>>.From(progressSubject));
     }
 
     private IObservable<Result<ObservableStream>> GetInputStream(Stream stream)
@@ -35,18 +33,15 @@ public class CopyAction : ISyncAction
         return Observable.FromAsync(() => GetInputStream(Source, stream));
     }
 
-    public IObservable<Result> Copy(ObservableStream obs)
+    public async Task<Result> Copy(ObservableStream obs)
     {
-        return Observable.FromAsync(async () =>
-            {
-                var onNext = obs.Positions.Select(l => new RelativeProgress<long>(obs.Length, l));
-                using (onNext.Subscribe(progressSubject))
-                {
-                    var contents = await Destination.SetContents(obs);
-                    progressSubject.OnNext(new RelativeProgress<long>(obs.Length, obs.Length));
-                    return contents;
-                }
-            });
+        var onNext = obs.Positions.Select(l => new RelativeProgress<long>(obs.Length, l));
+        using (onNext.Subscribe(progressSubject))
+        {
+            var contents = await Destination.SetContents(obs);
+            progressSubject.OnNext(new RelativeProgress<long>(obs.Length, obs.Length));
+            return contents;
+        }
     }
 
     private static async Task<Result<ObservableStream>> GetInputStream(IZafiroFile zafiroFile, Stream stream)

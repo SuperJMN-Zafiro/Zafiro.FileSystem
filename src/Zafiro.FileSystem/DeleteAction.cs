@@ -15,8 +15,8 @@ public class DeleteAction : ISyncAction
 
     public IZafiroFile Source => file;
     public IObservable<RelativeProgress<long>> Progress => Observable.Return(new RelativeProgress<long>(1, 1));
-    public IObservable<Result> Sync()
+    public Task<Result> Sync()
     {
-        return Observable.FromAsync(() => file.Delete());
+        return file.Delete();
     }
 }
