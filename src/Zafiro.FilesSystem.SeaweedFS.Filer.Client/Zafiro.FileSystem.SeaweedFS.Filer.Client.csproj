@@ -13,4 +13,8 @@
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.40.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
+  </ItemGroup>
+
 </Project>
