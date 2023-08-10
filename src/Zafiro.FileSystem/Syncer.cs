@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using JetBrains.Annotations;
+using Serilog;
 using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.ProgressReporting;
 
@@ -9,7 +10,13 @@ namespace Zafiro.FileSystem;
 [PublicAPI]
 public class Syncer
 {
-    public bool SkipIdential { get; set; }
+    public Maybe<ILogger> Logger { get; }
+    public bool SkipIdentical { get; set; }
+
+    public Syncer(Maybe<ILogger> logger)
+    {
+        Logger = logger;
+    }
 
     public IObservable<ISyncAction> Sync(IZafiroDirectory source, IZafiroDirectory destination, IEnumerable<Diff> diffs)
     {
@@ -22,13 +29,6 @@ public class Syncer
             .FromAsync(() => source.GetFile(source.Path.Combine(diff.Path)))
             .Select(result => result.Map(f => new DeleteAction(f)))
             .Successes();
-    }
-
-    private static Task<Result<FileEntryData>> GetFileEntryData(IZafiroDirectory dir, ZafiroPath path)
-    {
-        var file = dir.GetFile(path);
-        var size = file.Bind(zafiroFile => zafiroFile.Size());
-        return file.CombineAndMap(size, (f, s) => new FileEntryData(f, s));
     }
 
     private IObservable<ISyncAction> SyncItems(IZafiroDirectory source, IZafiroDirectory destination, IEnumerable<Diff> diffs)
@@ -77,7 +77,7 @@ public class Syncer
         var r = await AreEqual(source, destination);
         var result = r.Map<bool, ISyncAction>(b =>
         {
-            if (SkipIdential && b)
+            if (SkipIdentical && b)
             {
                 return new SkipFileAction(source, destination);
             }
@@ -89,7 +89,17 @@ public class Syncer
 
     private Task<Result<bool>> AreEqual(IZafiroFile left, IZafiroFile right)
     {
-        return Async.Await(left.Size).CombineAndMap(Async.Await(right.Size), (sizeLeft, sizeRight) => sizeLeft == sizeRight);
+        var leftSize = GetSize(left);
+        var rightSize = GetSize(right);
+        
+        return leftSize.CombineAndMap(rightSize, (sizeLeft, sizeRight) => sizeLeft != -1 && sizeRight != -1 && sizeLeft == sizeRight);
+    }
+
+    private Task<Result<long>> GetSize(IZafiroFile file)
+    {
+        return Async.Await(file.Size)
+            .TapError(msg => Logger.Execute(l => l.Warning(msg)))
+            .Compensate(_ => Result.Success<long>(-1));
     }
 
     private IObservable<Result<IZafiroFile>> GetEntry(IZafiroDirectory directory, ZafiroPath path)

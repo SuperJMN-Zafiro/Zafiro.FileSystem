@@ -1,19 +1,22 @@
 ﻿using CSharpFunctionalExtensions;
+using Serilog;
 
 namespace Zafiro.FileSystem.Local;
 
 public class LocalFile : IZafiroFile
 {
     private readonly FileInfo info;
+    private readonly Maybe<ILogger> logger;
 
-    public LocalFile(FileInfo info)
+    public LocalFile(FileInfo info, Maybe<ILogger> logger)
     {
         this.info = info;
+        this.logger = logger;
     }
 
     public ZafiroPath Path => info.FullName.ToZafiroPath();
 
-    public Task<Result<long>> Size() => Task.FromResult(Result.Success(info.Length));
+    public Task<Result<long>> Size() => Result.Try(() => Task.FromResult(info.Length));
 
     public Task<Result<Stream>> GetContents()
     {
@@ -21,7 +24,7 @@ public class LocalFile : IZafiroFile
         {
             EnsureFileExists(Path.FromZafiroPath());
             return (Stream)new DisposeAwareStream(Path, File.OpenRead(Path));
-        }));
+        }, ex => ExceptionHandler.HandlePathAccessError(Path, ex, logger)));
     }
 
     public Task<Result> SetContents(Stream stream)

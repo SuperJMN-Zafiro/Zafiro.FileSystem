@@ -18,7 +18,7 @@ public class SftpDirectory : IZafiroDirectory
     public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
     {
         return Result
-            .Try(() => client.ListDirectoryAsync(Path))
+            .Try(() => client.ListDirectoryAsync(Path), ex => ErrorHandler(Path, ex))
             .Map(files => files
                 .Where(s => s.IsDirectory)
                 .Where(file => new[] { ".", ".." }.All(x => x != file.Name))
@@ -28,10 +28,15 @@ public class SftpDirectory : IZafiroDirectory
     public Task<Result<IEnumerable<IZafiroFile>>> GetFiles()
     {
         return Result
-            .Try(() => client.ListDirectoryAsync(Path))
+            .Try(() => client.ListDirectoryAsync(Path), exception => ErrorHandler(Path, exception))
             .Map(files => files
                 .Where(s => !s.IsDirectory)
                 .Select(file => (IZafiroFile)new SftpFile(file.FullName, client)));
+    }
+
+    private string ErrorHandler(ZafiroPath zafiroPath, Exception exception)
+    {
+        return $"{exception.Message} for path '{zafiroPath}'";
     }
 
     public Task<Result<IZafiroFile>> GetFile(ZafiroPath destPath)
