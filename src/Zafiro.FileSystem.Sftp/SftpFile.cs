@@ -19,12 +19,9 @@ public class SftpFile : IZafiroFile
         return Task.FromResult(Result.Success(client.GetAttributes(Path).Size));
     }
 
-    public async Task<Result<Stream>> GetContents()
+    public Task<Result<Stream>> GetContents()
     {
-        var memoryStream = new MemoryStream();
-        await client.DownloadFileAsync(Path, memoryStream);
-        memoryStream.Seek(0, SeekOrigin.Begin);
-        return memoryStream;
+        return Result.Try(() => Task.FromResult<Stream>(client.OpenRead(Path)));
     }
 
     public Task<Result> SetContents(Stream stream)

@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using Zafiro.IO;
+using Zafiro.Mixins;
 using Zafiro.ProgressReporting;
 
 namespace Zafiro.FileSystem;
@@ -10,7 +11,7 @@ public static class ZafiroFileExtensions
     public static Task<Result> Copy(this IZafiroFile source, IZafiroFile destination, Maybe<IObserver<RelativeProgress<long>>> progress, TimeSpan? readTimeout = default)
     {
         return GetStream(source)
-            .Bind(stream => CopyToStream(destination, stream, progress));
+            .Bind(async stream => await Observable.FromAsync(() => CopyToStream(destination, stream, progress)).RetryWithBackoffStrategy());
     }
 
     private static async Task<Result> CopyToStream(IZafiroFile destination, ObservableStream stream, Maybe<IObserver<RelativeProgress<long>>> progress)
@@ -25,15 +26,17 @@ public static class ZafiroFileExtensions
     {
         var streamResult = zafiroFile.GetContents();
 
-        return streamResult.Bind(async stream =>
-        {
-            if (stream.CanSeek)
+        return streamResult
+            .Map(stream => new ReadTimeOutStream(stream) { ReadTimeout = (int)TimeSpan.FromSeconds(15).TotalMilliseconds })
+            .Bind(async stream =>
             {
-                return new ObservableStream(stream);
-            }
+                if (stream.CanSeek)
+                {
+                    return new ObservableStream(stream);
+                }
 
-            var size = await zafiroFile.Size();
-            return size.Map(l => new ObservableStream(new AlwaysForwardStream(stream, l)));
-        });
+                var size = await zafiroFile.Size();
+                return size.Map(l => new ObservableStream(new AlwaysForwardStream(stream, l)));
+            });
     }
 }

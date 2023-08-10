@@ -17,7 +17,6 @@ public class SeaweedFSClient : ISeaweedFS
             {
                 Converters =
                 {
-                    //new EmptyListConverter(),
                     new FileSystemEntryConverter(),
                 },
             }),
