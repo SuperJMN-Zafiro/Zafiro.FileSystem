@@ -18,6 +18,11 @@ public class ReadTimeOutStream : Stream
 
     public override int Read(byte[] buffer, int offset, int count)
     {
+        if (ReadTimeout == 0)
+        {
+            return inner.Read(buffer, offset, count);
+        }
+
         return Observable.Start(() => inner.Read(buffer, offset, count)).Timeout(TimeSpan.FromMilliseconds(ReadTimeout)).Wait();
     }
 

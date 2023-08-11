@@ -34,13 +34,12 @@ public static class ZafiroFileExtensions
         var timeoutAfter = readTimeout ?? TimeSpan.FromDays(1);
 
         return streamResult
-            .Map(stream => new ReadTimeOutStream(stream) { ReadTimeout = (int)timeoutAfter.TotalMilliseconds })
-            .Bind(stream => GetCompatibleStream(zafiroFile, stream));
+            .Bind(stream => GetCompatibleStream(zafiroFile, stream, timeoutAfter));
     }
 
-    private static async Task<Result<ObservableStream>> GetCompatibleStream(IZafiroFile zafiroFile, Stream stream)
+    private static async Task<Result<ObservableStream>> GetCompatibleStream(IZafiroFile zafiroFile, Stream stream, TimeSpan timeoutAfter)
     {
-        var timingOutStream = new ReadTimeOutStream(stream);
+        var timingOutStream = new ReadTimeOutStream(stream){ ReadTimeout = (int) timeoutAfter.TotalMilliseconds};
 
         if (timingOutStream.CanSeek)
         {
