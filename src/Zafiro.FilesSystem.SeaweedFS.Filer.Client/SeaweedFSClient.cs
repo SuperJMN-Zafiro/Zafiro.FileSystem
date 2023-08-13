@@ -23,38 +23,38 @@ public class SeaweedFSClient : ISeaweedFS
         });
     }
 
-    public Task<RootDirectory> GetContents(string directoryPath)
+    public Task<RootDirectory> GetContents(string directoryPath, CancellationToken cancellationToken = default)
     {
-        return inner.GetContents(directoryPath);
+        return inner.GetContents(directoryPath, cancellationToken);
     }
 
-    public Task Upload(string path, Stream stream)
+    public Task Upload(string path, Stream stream, CancellationToken cancellationToken = default)
     {
-        return inner.Upload(path, stream);
+        return inner.Upload(path, stream, cancellationToken);
     }
 
-    public Task CreateFolder(string directoryPath)
+    public Task CreateFolder(string directoryPath, CancellationToken cancellationToken = default)
     {
-        return inner.CreateFolder(directoryPath);
+        return inner.CreateFolder(directoryPath, cancellationToken);
     }
 
-    public Task DeleteFolder(string directoryPath)
+    public Task DeleteFolder(string directoryPath, CancellationToken cancellationToken = default)
     {
-        return inner.DeleteFolder(directoryPath);
+        return inner.DeleteFolder(directoryPath, cancellationToken);
     }
 
-    public Task<Stream> GetFileContent(string filePath)
+    public Task<Stream> GetFileContent(string filePath, CancellationToken cancellationToken = default)
     {
-        return httpClient.GetStreamAsync(filePath);
+        return httpClient.GetStreamAsync(filePath, cancellationToken);
     }
 
-    public Task DeleteFile(string filePath)
+    public Task DeleteFile(string filePath, CancellationToken cancellationToken = default)
     {
-        return inner.DeleteFile(filePath);
+        return inner.DeleteFile(filePath, cancellationToken);
     }
 
-    public Task<File> GetFileMetadata(string path)
+    public Task<File> GetFileMetadata(string path, CancellationToken cancellationToken = default)
     {
-        return inner.GetFileMetadata(path);
+        return inner.GetFileMetadata(path, cancellationToken);
     }
 }

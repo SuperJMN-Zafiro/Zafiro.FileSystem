@@ -27,14 +27,14 @@ public class LocalFile : IZafiroFile
         }, ex => ExceptionHandler.HandlePathAccessError(Path, ex, logger)));
     }
 
-    public Task<Result> SetContents(Stream stream)
+    public Task<Result> SetContents(Stream stream, CancellationToken cancellationToken)
     {
         return Result.Try(async () =>
         {
             EnsureFileExists(Path.FromZafiroPath());
             var fileStream = new DisposeAwareStream(Path, File.OpenWrite(Path));
             {
-                await stream.CopyToAsync(fileStream);
+                await stream.CopyToAsync(fileStream, cancellationToken);
             }
             await fileStream.DisposeAsync();
         });

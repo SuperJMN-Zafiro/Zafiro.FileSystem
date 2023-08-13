@@ -1,6 +1,4 @@
-﻿using System.Net;
-using CSharpFunctionalExtensions;
-using Refit;
+﻿using CSharpFunctionalExtensions;
 using Serilog;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 using Directory = Zafiro.FileSystem.SeaweedFS.Filer.Client.Directory;
@@ -34,7 +32,7 @@ public class SeaweedDirectory : IZafiroDirectory
     {
         return folder.Entries?
             .OfType<Directory>()
-            .Select(f => new SeaweedDirectory(f.FullPath[1..], seaweedFS, logger))  ?? Enumerable.Empty<IZafiroDirectory>();;
+            .Select(f => new SeaweedDirectory(f.FullPath[1..], seaweedFS, logger))  ?? Enumerable.Empty<IZafiroDirectory>();
     }
 
     private IEnumerable<IZafiroFile> GetFiles(RootDirectory folder)

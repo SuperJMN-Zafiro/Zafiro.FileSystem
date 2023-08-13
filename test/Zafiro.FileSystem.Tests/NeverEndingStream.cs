@@ -13,7 +13,6 @@ public class NeverEndingStream : Stream
     public override int Read(byte[] buffer, int offset, int count)
     {
         throw new TimeoutException();
-        return 0;
     }
 
     public override long Seek(long offset, SeekOrigin origin)
@@ -33,8 +32,8 @@ public class NeverEndingStream : Stream
 
     public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = new CancellationToken())
     {
-        await Task.Delay(10000);
-        return await ReadAsync(buffer, cancellationToken);
+        await Task.Delay(10000, cancellationToken);
+        return await base.ReadAsync(buffer, cancellationToken);
     }
 
     public override bool CanRead => true;

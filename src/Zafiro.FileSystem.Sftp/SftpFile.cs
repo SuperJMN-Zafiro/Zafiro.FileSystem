@@ -24,7 +24,7 @@ public class SftpFile : IZafiroFile
         return Result.Try(() => Task.FromResult<Stream>(client.OpenRead(Path)));
     }
 
-    public Task<Result> SetContents(Stream stream)
+    public Task<Result> SetContents(Stream stream, CancellationToken cancellationToken)
     {
         return Result.Try(async () =>
         {

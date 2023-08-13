@@ -38,7 +38,7 @@ public class ZafiroFileSystemComparer
 
     private class KeyedFile
     {
-        public ZafiroPath Key { get; set; }
-        public IZafiroFile File { get; set; }
+        public required ZafiroPath Key { get; init; }
+        public required IZafiroFile File { get; init; }
     }
 }

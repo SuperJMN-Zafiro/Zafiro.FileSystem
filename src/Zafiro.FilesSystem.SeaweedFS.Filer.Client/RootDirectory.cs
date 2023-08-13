@@ -1,5 +1,8 @@
+using JetBrains.Annotations;
+
 namespace Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
+[PublicAPI]
 public class RootDirectory
 {
     public string Path { get; set; }

@@ -121,7 +121,7 @@ public class SkipFileAction : ISyncAction
 
     public IObservable<RelativeProgress<long>> Progress => Observable.Return(new RelativeProgress<long>(1, 1));
 
-    public Task<Result> Sync()
+    public Task<Result> Sync(CancellationToken cancellationToken)
     {
         return Task.FromResult(Result.Success());
     }

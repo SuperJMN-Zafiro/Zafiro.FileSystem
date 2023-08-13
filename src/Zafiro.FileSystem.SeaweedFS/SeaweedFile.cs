@@ -28,9 +28,9 @@ public class SeaweedFile : IZafiroFile
         return Result.Try(() => seaweedStore.GetFileContent(Path), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger));
     }
 
-    public Task<Result> SetContents(Stream stream)
+    public Task<Result> SetContents(Stream stream, CancellationToken cancellationToken)
     {
-        return Result.Try(() => seaweedStore.Upload(Path, stream), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger));
+        return Result.Try(() => seaweedStore.Upload(Path, stream, cancellationToken), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger));
     }
 
     public Task<Result> Delete()

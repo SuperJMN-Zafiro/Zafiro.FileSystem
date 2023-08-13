@@ -1,5 +1,8 @@
+using JetBrains.Annotations;
+
 namespace Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
+[PublicAPI]
 public class Chunk
 {
     public string file_id { get; set; }

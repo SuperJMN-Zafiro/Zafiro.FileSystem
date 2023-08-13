@@ -16,7 +16,7 @@ public class TestFile : IZafiroFile
         return Task.FromResult(Result.Success((Stream)new NeverEndingStream()));
     }
 
-    public async Task<Result> SetContents(Stream stream)
+    public async Task<Result> SetContents(Stream stream, CancellationToken cancellationToken = default)
     {
         return await Result.Try(async () =>
         {

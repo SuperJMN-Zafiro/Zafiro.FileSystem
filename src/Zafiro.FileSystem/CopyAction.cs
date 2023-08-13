@@ -21,8 +21,8 @@ public class CopyAction : ISyncAction
 
     public IObservable<RelativeProgress<long>> Progress => progressSubject.AsObservable();
 
-    public Task<Result> Sync()
+    public Task<Result> Sync(CancellationToken cancellationToken)
     {
-        return Source.Copy(Destination, Maybe<IObserver<RelativeProgress<long>>>.From(progressSubject));
+        return Source.Copy(Destination, Maybe<IObserver<RelativeProgress<long>>>.From(progressSubject), cancellationToken: cancellationToken);
     }
 }

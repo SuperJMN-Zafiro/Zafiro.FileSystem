@@ -50,11 +50,13 @@ public class DisposeAwareStream : Stream
         set => inner.Position = value;
     }
 
+    // ReSharper disable once RedundantOverriddenMember
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
     }
 
+    // ReSharper disable once RedundantOverriddenMember
     public override ValueTask DisposeAsync()
     {
         return base.DisposeAsync();
