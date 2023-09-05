@@ -23,7 +23,7 @@ public class SeaweedDirectory : IZafiroDirectory
     public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
     {
         return Result
-            .Try(() => seaweedFS.CreateFolder(Path))
+            .Try(() => seaweedFS.CreateFolder(Path), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger))
             .Bind(() => Result.Try(() => seaweedFS.GetContents(Path), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger)))
             .Map(GetDirectories);
     }
