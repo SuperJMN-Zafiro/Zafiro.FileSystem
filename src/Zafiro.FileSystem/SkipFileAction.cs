@@ -4,19 +4,21 @@ using Zafiro.ProgressReporting;
 
 namespace Zafiro.FileSystem;
 
-public class RightOnlyAction : ISyncAction
+public class SkipFileAction : ISyncAction
 {
-    private readonly IZafiroFile file;
-
-    public RightOnlyAction(IZafiroFile file)
+    public SkipFileAction(IZafiroFile source, Maybe<IZafiroFile> destination)
     {
-        this.file = file;
+        Source = source;
+        Destination = destination;
     }
 
-    public IZafiroFile Source => file;
+    public IZafiroFile Source { get; }
+    public Maybe<IZafiroFile> Destination { get; }
+
     public IObservable<RelativeProgress<long>> Progress => Observable.Return(new RelativeProgress<long>(1, 1));
+
     public Task<Result> Sync(CancellationToken cancellationToken)
     {
-        return file.Delete();
+        return Task.FromResult(Result.Success());
     }
 }
