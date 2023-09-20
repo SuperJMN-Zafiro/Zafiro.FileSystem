@@ -1,6 +1,6 @@
 ﻿using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
-using Zafiro.ProgressReporting;
+using Zafiro.Actions;
 
 namespace Zafiro.FileSystem;
 
@@ -15,7 +15,7 @@ public class SkipFileAction : ISyncAction
     public IZafiroFile Source { get; }
     public Maybe<IZafiroFile> Destination { get; }
 
-    public IObservable<RelativeProgress<long>> Progress => Observable.Return(new RelativeProgress<long>(1, 1));
+    public IObservable<IProportionProgress> Progress => Observable.Return(new ProportionProgress());
 
     public Task<Result> Sync(CancellationToken cancellationToken)
     {
