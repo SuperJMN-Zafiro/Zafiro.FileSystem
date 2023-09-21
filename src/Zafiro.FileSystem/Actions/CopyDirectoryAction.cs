@@ -6,10 +6,10 @@ using Zafiro.CSharpFunctionalExtensions;
 
 namespace Zafiro.FileSystem.Actions;
 
-public class CopyDirectoryAction : IAction
+public class CopyDirectoryAction : IAction<LongProgress>
 {
     private readonly IZafiroDirectory destination;
-    private readonly BehaviorSubject<IProportionProgress> progress = new(new ProportionProgress());
+    private readonly BehaviorSubject<LongProgress> progress = new(new LongProgress());
     private readonly IZafiroDirectory source;
 
     public CopyDirectoryAction(IZafiroDirectory source, IZafiroDirectory destination)
@@ -18,7 +18,7 @@ public class CopyDirectoryAction : IAction
         this.destination = destination;
     }
 
-    public IObservable<IProportionProgress> Progress => progress.AsObservable();
+    public IObservable<LongProgress> Progress => progress.AsObservable();
 
     public async Task<Result> Execute(CancellationToken ct)
     {
@@ -32,7 +32,7 @@ public class CopyDirectoryAction : IAction
             .ToObservable()
             .SelectMany(src => GetDestinationFile(src).Map(dest => (src, dest)))
             .Successes()
-            .Select(file => (IAction) new CopyFileAction(file.src, file.dest))
+            .Select(file => (IAction<LongProgress>) new CopyFileAction(file.src, file.dest))
             .ToList()
             .Select(list => new CompositeAction(list))
             .FirstAsync();

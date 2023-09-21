@@ -14,7 +14,7 @@ public class DeleteAction : ISyncAction
     }
 
     public IZafiroFile Source => file;
-    public IObservable<IProportionProgress> Progress => Observable.Return(new ProportionProgress());
+    public IObservable<IProgress> Progress => Observable.Return(new Progress());
     public Task<Result> Sync(CancellationToken cancellationToken)
     {
         return file.Delete();

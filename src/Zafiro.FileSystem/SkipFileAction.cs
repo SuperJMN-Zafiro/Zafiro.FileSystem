@@ -15,7 +15,7 @@ public class SkipFileAction : ISyncAction
     public IZafiroFile Source { get; }
     public Maybe<IZafiroFile> Destination { get; }
 
-    public IObservable<IProportionProgress> Progress => Observable.Return(new ProportionProgress());
+    public IObservable<IProgress> Progress => Observable.Return(new Progress());
 
     public Task<Result> Sync(CancellationToken cancellationToken)
     {

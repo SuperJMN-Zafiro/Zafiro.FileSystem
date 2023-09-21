@@ -5,6 +5,6 @@ namespace Zafiro.FileSystem;
 
 public interface ISyncAction
 {
-    public IObservable<IProportionProgress> Progress { get; }
+    public IObservable<IProgress> Progress { get; }
     public Task<Result> Sync(CancellationToken cancellationToken);
 }

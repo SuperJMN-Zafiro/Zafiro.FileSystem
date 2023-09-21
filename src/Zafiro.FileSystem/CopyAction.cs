@@ -7,7 +7,7 @@ namespace Zafiro.FileSystem;
 
 public class CopyAction : ISyncAction
 {
-    private readonly BehaviorSubject<IProportionProgress> progressSubject = new(new ProportionProgress());
+    private readonly BehaviorSubject<IProgress> progressSubject = new(new Progress());
 
     public CopyAction(IZafiroFile source, IZafiroFile destination)
     {
@@ -19,10 +19,10 @@ public class CopyAction : ISyncAction
 
     public IZafiroFile Destination { get; }
 
-    public IObservable<IProportionProgress> Progress => progressSubject.AsObservable();
+    public IObservable<IProgress> Progress => progressSubject.AsObservable();
 
     public Task<Result> Sync(CancellationToken cancellationToken)
     {
-        return Source.Copy(Destination, Maybe<IObserver<IProportionProgress>>.From(progressSubject), cancellationToken: cancellationToken);
+        return Source.Copy(Destination, Maybe<IObserver<LongProgress>>.From(progressSubject), cancellationToken: cancellationToken);
     }
 }

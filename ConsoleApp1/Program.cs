@@ -13,7 +13,7 @@ var action = from src in fs.GetDirectory("D:\\5 - Unimportant\\Temp\\One")
 
 var result = await action.Bind(async directoryAction =>
 {
-    directoryAction.Progress.Subscribe(progress => Console.WriteLine(progress.Proportion));
+    directoryAction.Progress.Subscribe(progress => Console.WriteLine(progress.Value));
     var execute = await directoryAction.Execute(CancellationToken.None);
     return execute;
 });
