@@ -10,7 +10,12 @@ public static class ZafiroFileExtensions
 {
     public static Task<Result> Copy(this IZafiroFile source, IZafiroFile destination, Maybe<IObserver<LongProgress>> progress, TimeSpan? readTimeout = default, CancellationToken cancellationToken = default)
     {
-        return GetStream(source, readTimeout).Bind(sourceStream => CopyWithRetries(sourceStream, destination, progress, cancellationToken));
+        return GetStream(source, readTimeout).Bind(async sourceStream =>
+        {
+            var copyWithRetries = await CopyWithRetries(sourceStream, destination, progress, cancellationToken);
+            await sourceStream.DisposeAsync();
+            return copyWithRetries;
+        });
     }
 
     private static async Task<Result> CopyWithRetries(ObservableStream sourceStream, IZafiroFile destination, Maybe<IObserver<LongProgress>> progress, CancellationToken cancellationToken)

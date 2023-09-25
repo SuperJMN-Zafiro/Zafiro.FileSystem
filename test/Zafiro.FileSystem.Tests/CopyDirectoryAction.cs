@@ -27,7 +27,8 @@ public class CopyDirectoryTests
         var fs = new LocalFileSystem(logger: Maybe<ILogger>.None);
         var action = from src in fs.GetDirectory("D:\\5 - Unimportant\\Temp\\One")
             from dst in fs.GetDirectory("D:\\5 - Unimportant\\Temp\\Two")
-            select new CopyDirectoryAction(src, dst);
+            from ca in CopyDirectoryAction.Create(src, dst)
+            select ca;
 
         var result = await action.Bind(async directoryAction =>
         {

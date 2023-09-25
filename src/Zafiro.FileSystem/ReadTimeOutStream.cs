@@ -11,6 +11,24 @@ public class ReadTimeOutStream : Stream
         inner = stream;
     }
 
+    public override int ReadTimeout { get; set; }
+
+    public override bool CanTimeout => true;
+
+    public override bool CanRead => inner.CanRead;
+
+    public override bool CanSeek => inner.CanSeek;
+
+    public override bool CanWrite => inner.CanWrite;
+
+    public override long Length => inner.Length;
+
+    public override long Position
+    {
+        get => inner.Position;
+        set => inner.Position = value;
+    }
+
     public override void Flush()
     {
         inner.Flush();
@@ -41,21 +59,15 @@ public class ReadTimeOutStream : Stream
         inner.Write(buffer, offset, count);
     }
 
-    public override int ReadTimeout { get; set; }
-
-    public override bool CanTimeout => true;
-
-    public override bool CanRead => inner.CanRead;
-
-    public override bool CanSeek => inner.CanSeek;
-
-    public override bool CanWrite => inner.CanWrite;
-
-    public override long Length => inner.Length;
-
-    public override long Position
+    protected override void Dispose(bool disposing)
     {
-        get => inner.Position;
-        set => inner.Position = value;
+        inner.Dispose();
+        base.Dispose(disposing);
+    }
+
+    public override ValueTask DisposeAsync()
+    {
+        GC.SuppressFinalize(this);
+        return inner.DisposeAsync();
     }
 }

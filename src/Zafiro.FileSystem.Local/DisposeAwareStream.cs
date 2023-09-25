@@ -1,14 +1,20 @@
-﻿namespace Zafiro.FileSystem.Local;
+﻿using CSharpFunctionalExtensions;
+using Serilog;
+using Serilog.Core;
+
+namespace Zafiro.FileSystem.Local;
 
 public class DisposeAwareStream : Stream
 {
     public string Name { get; }
-    private Stream inner;
+    private readonly Stream inner;
+    private readonly Maybe<ILogger> logger;
 
-    public DisposeAwareStream(string name, FileStream inner)
+    public DisposeAwareStream(string name, Stream inner, Maybe<ILogger> logger)
     {
         Name = name;
         this.inner = inner;
+        this.logger = logger;
     }
 
     public override void Flush()
@@ -53,12 +59,18 @@ public class DisposeAwareStream : Stream
     // ReSharper disable once RedundantOverriddenMember
     protected override void Dispose(bool disposing)
     {
+        logger.Execute(l => l.Debug("Disposing stream {Name}", Name));
+        inner.Dispose();
         base.Dispose(disposing);
+        logger.Execute(l => l.Debug("Disposed stream {Name}", Name));
     }
 
     // ReSharper disable once RedundantOverriddenMember
-    public override ValueTask DisposeAsync()
+    public override async ValueTask DisposeAsync()
     {
-        return base.DisposeAsync();
+        logger.Execute(l => l.Debug("Disposing stream {Name}", Name));
+        await inner.DisposeAsync();
+        await base.DisposeAsync();
+        logger.Execute(l => l.Debug("Disposed stream {Name}", Name));
     }
 }
