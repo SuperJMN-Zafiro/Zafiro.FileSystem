@@ -1,6 +1,6 @@
-﻿using CSharpFunctionalExtensions;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using CSharpFunctionalExtensions;
 using Zafiro.Actions;
 
 namespace Zafiro.FileSystem.Actions;

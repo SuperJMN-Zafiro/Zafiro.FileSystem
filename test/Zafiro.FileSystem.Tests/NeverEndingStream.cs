@@ -32,8 +32,8 @@ public class NeverEndingStream : Stream
 
     public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = new CancellationToken())
     {
-        await Task.Delay(10000, cancellationToken);
-        return await base.ReadAsync(buffer, cancellationToken);
+        await Task.Delay(10000, cancellationToken).ConfigureAwait(false);
+        return await base.ReadAsync(buffer, cancellationToken).ConfigureAwait(false);
     }
 
     public override bool CanRead => true;

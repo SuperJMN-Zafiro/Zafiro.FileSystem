@@ -14,10 +14,8 @@ public class FileSystemEntryConverter : JsonConverter<BaseEntry>
             {
                 return JsonSerializer.Deserialize<File>(root.GetRawText(), options);
             }
-            else
-            {
-                return JsonSerializer.Deserialize<Directory>(root.GetRawText(), options);
-            }
+
+            return JsonSerializer.Deserialize<Directory>(root.GetRawText(), options);
         }
     }
 

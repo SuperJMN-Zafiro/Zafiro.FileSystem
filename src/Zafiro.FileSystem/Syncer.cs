@@ -76,7 +76,7 @@ public class Syncer
 
     private IObservable<ISyncAction> Both((IZafiroFile, IZafiroFile) copyData)
     {
-        return Observable.FromAsync(async () => await GetFinalCopyAction(copyData.Item1, copyData.Item2)).Successes();
+        return Observable.FromAsync(async () => await GetFinalCopyAction(copyData.Item1, copyData.Item2).ConfigureAwait(false)).Successes();
     }
 
     private async Task<Result<ISyncAction>> GetFinalCopyAction(IZafiroFile source, IZafiroFile destination)
@@ -86,7 +86,7 @@ public class Syncer
             return new SkipFileAction(source, Maybe.From(destination));
         }
 
-        var r = await AreEqual(source, destination);
+        var r = await AreEqual(source, destination).ConfigureAwait(false);
         var result = r.Map<bool, ISyncAction>(areEqual =>
         {
             if (SkipIdentical && areEqual)

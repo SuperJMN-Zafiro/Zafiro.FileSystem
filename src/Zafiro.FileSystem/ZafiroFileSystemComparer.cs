@@ -7,13 +7,13 @@ public class ZafiroFileSystemComparer
 {
     public async Task<Result<IEnumerable<ZafiroFileDiff>>> Diff(IZafiroDirectory origin, IZafiroDirectory destination)
     {
-        var originFiles = (await origin.GetFilesInTree()).Map(files => files.Select(file => new KeyedFile
+        var originFiles = (await origin.GetFilesInTree().ConfigureAwait(false)).Map(files => files.Select(file => new KeyedFile
         {
             Key = GetKey(origin, file),
             File = file
         }).ToList());
 
-        var destinationFiles = (await destination.GetFilesInTree()).Map(files => files.Select(file => new KeyedFile
+        var destinationFiles = (await destination.GetFilesInTree().ConfigureAwait(false)).Map(files => files.Select(file => new KeyedFile
         {
             Key = GetKey(destination, file),
             File = file

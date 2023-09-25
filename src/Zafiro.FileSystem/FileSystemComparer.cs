@@ -7,8 +7,8 @@ public class FileSystemComparer : IFileSystemComparer
 {
     public async Task<Result<IEnumerable<Diff>>> Diff(IZafiroDirectory origin, IZafiroDirectory destination)
     {
-        var originFiles = (await origin.GetFilesInTree()).Map(files => files.Select(file => GetKey(origin, file)));
-        var destinationFiles = (await destination.GetFilesInTree()).Map(files => files.Select(file => GetKey(destination, file)));
+        var originFiles = (await origin.GetFilesInTree().ConfigureAwait(false)).Map(files => files.Select(file => GetKey(origin, file)));
+        var destinationFiles = (await destination.GetFilesInTree().ConfigureAwait(false)).Map(files => files.Select(file => GetKey(destination, file)));
 
         return from n in originFiles from q in destinationFiles select Join(n, q);
     }

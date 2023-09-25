@@ -12,8 +12,8 @@ public static class ZafiroFileExtensions
     {
         return GetStream(source, readTimeout).Bind(async sourceStream =>
         {
-            var copyWithRetries = await CopyWithRetries(sourceStream, destination, progress, cancellationToken);
-            await sourceStream.DisposeAsync();
+            var copyWithRetries = await CopyWithRetries(sourceStream, destination, progress, cancellationToken).ConfigureAwait(false);
+            await sourceStream.DisposeAsync().ConfigureAwait(false);
             return copyWithRetries;
         });
     }
@@ -28,7 +28,7 @@ public static class ZafiroFileExtensions
     private static async Task<Result> CopyStreamToFile(ObservableStream sourceStream, IZafiroFile destinationFile, Maybe<IObserver<LongProgress>> progress, CancellationToken cancellationToken)
     {
         var maybeSubscription = progress.Map(observer => GetProgressObservable(sourceStream).Subscribe(observer));
-        var result = await destinationFile.SetContents(sourceStream, cancellationToken);
+        var result = await destinationFile.SetContents(sourceStream, cancellationToken).ConfigureAwait(false);
         maybeSubscription.Execute(x => x.Dispose());
         return result;
     }
@@ -63,7 +63,7 @@ public static class ZafiroFileExtensions
             return new ObservableStream(timingOutStream);
         }
 
-        var size = await zafiroFile.Size();
+        var size = await zafiroFile.Size().ConfigureAwait(false);
         return size.Map(l => new ObservableStream(new AlwaysForwardStream(timingOutStream, l)));
     }
 }

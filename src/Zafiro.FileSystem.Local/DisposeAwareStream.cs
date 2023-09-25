@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using Serilog;
-using Serilog.Core;
 
 namespace Zafiro.FileSystem.Local;
 
@@ -69,8 +68,8 @@ public class DisposeAwareStream : Stream
     public override async ValueTask DisposeAsync()
     {
         logger.Execute(l => l.Debug("Disposing stream {Name}", Name));
-        await inner.DisposeAsync();
-        await base.DisposeAsync();
+        await inner.DisposeAsync().ConfigureAwait(false);
+        await base.DisposeAsync().ConfigureAwait(false);
         logger.Execute(l => l.Debug("Disposed stream {Name}", Name));
     }
 }

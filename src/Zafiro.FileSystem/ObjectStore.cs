@@ -22,9 +22,9 @@ public class ObjectStore<T> where T : class
     {
         return Result.Try(async () =>
         {
-            await using (stream)
+            await using (stream.ConfigureAwait(false))
             {
-                await JsonSerializer.SerializeAsync(stream, dto);
+                await JsonSerializer.SerializeAsync(stream, dto).ConfigureAwait(false);
             }
         });
     }
@@ -33,9 +33,9 @@ public class ObjectStore<T> where T : class
     {
         return Result.Try(async () =>
         {
-            await using (stream)
+            await using (stream.ConfigureAwait(false))
             {
-                return await JsonSerializer.DeserializeAsync<T>(stream);
+                return await JsonSerializer.DeserializeAsync<T>(stream).ConfigureAwait(false);
             }
         }).EnsureNotNull("Could not load");
     }

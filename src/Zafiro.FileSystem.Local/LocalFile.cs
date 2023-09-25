@@ -23,7 +23,7 @@ public class LocalFile : IZafiroFile
         return Task.FromResult(Result.Try(() =>
         {
             EnsureFileExists(Path.FromZafiroPath());
-            return (Stream)new DisposeAwareStream(Path, File.OpenRead(Path), logger);
+            return (Stream)File.OpenRead(Path);
         }, ex => ExceptionHandler.HandlePathAccessError(Path, ex, logger)));
     }
 
@@ -32,12 +32,10 @@ public class LocalFile : IZafiroFile
         return Result.Try(async () =>
         {
             EnsureFileExists(Path.FromZafiroPath());
-            await using (var fileStream = new DisposeAwareStream(Path, File.OpenWrite(Path), logger))
+            var fileStream = File.OpenWrite(Path);
+            await using var _ = fileStream.ConfigureAwait(false);
             {
-                {
-                    await stream.CopyToAsync(fileStream, cancellationToken);
-                }
-                await fileStream.DisposeAsync();
+                await stream.CopyToAsync(fileStream, cancellationToken).ConfigureAwait(false);
             }
         });
     }

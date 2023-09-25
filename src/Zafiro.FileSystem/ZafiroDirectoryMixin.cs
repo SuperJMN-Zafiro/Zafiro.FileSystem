@@ -13,9 +13,9 @@ public static class ZafiroDirectoryMixin
         }
 
         // Recursive
-        var dirsResult = await directory.GetDirectories();
+        var dirsResult = await directory.GetDirectories().ConfigureAwait(false);
         var tryFindResult = dirsResult.Map(r => r.TryFirst(x => DoMatch(x, subDirectoryPath)).ToResult($"Directory not found: {subDirectoryPath}"));
-        var getDescendantResult = await tryFindResult.Bind(maybe => maybe.Bind(subDir => DescendantDirectory(subDir, NextPath(subDirectoryPath))));
+        var getDescendantResult = await tryFindResult.Bind(maybe => maybe.Bind(subDir => DescendantDirectory(subDir, NextPath(subDirectoryPath)))).ConfigureAwait(false);
         return getDescendantResult;
     }
 

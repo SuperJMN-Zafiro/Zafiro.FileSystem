@@ -40,13 +40,13 @@ public class CopyDirectoryAction : IAction<LongProgress>
 
     public static async Task<Result<CopyDirectoryAction>> Create(IZafiroDirectory source, IZafiroDirectory destination)
     {
-        var files = await source.GetFilesInTree();
+        var files = await source.GetFilesInTree().ConfigureAwait(false);
 
         var action = await files.Map(async zafiroFiles =>
         {
             var childrenTasks = await GetChildrenTasks(zafiroFiles, source, destination).ToList();
             return new CompositeAction(childrenTasks);
-        });
+        }).ConfigureAwait(false);
 
         return action.Map(compositeAction => new CopyDirectoryAction(compositeAction));
     }

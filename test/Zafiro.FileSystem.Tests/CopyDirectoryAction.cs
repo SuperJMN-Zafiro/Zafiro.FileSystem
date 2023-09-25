@@ -1,10 +1,6 @@
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
 using FluentAssertions.CSharpFunctionalExtensions;
 using Serilog;
-using Zafiro.Actions;
-using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Actions;
 using Zafiro.FileSystem.Local;
 
@@ -17,7 +13,7 @@ public class CopyDirectoryTests
     {
         var fs = new LocalFileSystem(logger: Maybe<ILogger>.None);
         var dir = await fs.GetDirectory("C:\\Users\\JMN\\Desktop")
-            .Bind(directory => directory.DescendantDirectory("Wild"));
+            .Bind(directory => directory.DescendantDirectory("Wild")).ConfigureAwait(false);
     }
 
 
@@ -33,9 +29,9 @@ public class CopyDirectoryTests
         var result = await action.Bind(async directoryAction =>
         {
             directoryAction.Progress.Subscribe(progress => { });
-            var execute = await directoryAction.Execute(CancellationToken.None);
+            var execute = await directoryAction.Execute(CancellationToken.None).ConfigureAwait(false);
             return execute;
-        });
+        }).ConfigureAwait(false);
         result.Should().BeSuccess();
     }
 }

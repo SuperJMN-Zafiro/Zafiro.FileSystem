@@ -5,7 +5,7 @@ using Serilog;
 using Zafiro.FileSystem.Actions;
 using Zafiro.FileSystem.Local;
 
-await CopyDir();
+await CopyDir().ConfigureAwait(false);
 //await CopyFile();
 
 Console.ReadLine();
@@ -21,9 +21,9 @@ async Task CopyFile()
     var result = await action.Bind(async directoryAction =>
     {
         directoryAction.Progress.Subscribe(progress => Console.WriteLine(progress.Value));
-        var execute = await directoryAction.Execute(CancellationToken.None);
+        var execute = await directoryAction.Execute(CancellationToken.None).ConfigureAwait(false);
         return execute;
-    });
+    }).ConfigureAwait(false);
 }
 
 async Task CopyDir()
@@ -37,7 +37,7 @@ async Task CopyDir()
     var result = await action.Bind(async directoryAction =>
     {
         directoryAction.Progress.Subscribe(progress => Console.WriteLine(progress.Value));
-        var execute = await directoryAction.Execute(CancellationToken.None);
+        var execute = await directoryAction.Execute(CancellationToken.None).ConfigureAwait(false);
         return execute;
-    });
+    }).ConfigureAwait(false);
 }

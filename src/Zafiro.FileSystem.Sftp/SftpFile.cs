@@ -29,7 +29,7 @@ public class SftpFile : IZafiroFile
         return Result.Try(async () =>
         {
             EnsureDirectoryExists(Path.Parent());
-            await client.UploadFileAsync(Path, stream);
+            await client.UploadFileAsync(Path, stream).ConfigureAwait(false);
         });
     }
 

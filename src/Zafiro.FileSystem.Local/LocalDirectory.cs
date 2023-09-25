@@ -20,7 +20,7 @@ public class LocalDirectory : IZafiroDirectory
 
     public async Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
     {
-        var fromResult = await Task.FromResult(Result.Try(() => directoryInfo.GetDirectories().Select(info => (IZafiroDirectory) new LocalDirectory(info, logger, FileSystem)), ex => ExceptionHandler.HandlePathAccessError(Path, ex, logger)));
+        var fromResult = await Task.FromResult(Result.Try(() => directoryInfo.GetDirectories().Select(info => (IZafiroDirectory) new LocalDirectory(info, logger, FileSystem)), ex => ExceptionHandler.HandlePathAccessError(Path, ex, logger))).ConfigureAwait(false);
         return fromResult;
     }
 
