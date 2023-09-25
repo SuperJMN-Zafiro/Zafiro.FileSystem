@@ -8,17 +8,20 @@ public class LocalDirectory : IZafiroDirectory
     private readonly DirectoryInfo directoryInfo;
     private readonly Maybe<ILogger> logger;
 
-    public LocalDirectory(DirectoryInfo directoryInfo, Maybe<ILogger> logger)
+    public LocalDirectory(DirectoryInfo directoryInfo, Maybe<ILogger> logger, IFileSystem fileSystem)
     {
         this.directoryInfo = directoryInfo;
         this.logger = logger;
+        FileSystem = fileSystem;
     }
 
     public ZafiroPath Path => directoryInfo.FullName.ToZafiroPath();
+    public IFileSystem FileSystem { get; }
 
-    public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
+    public async Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
     {
-        return Task.FromResult(Result.Try(() => directoryInfo.GetDirectories().Select(info => (IZafiroDirectory) new LocalDirectory(info, logger)), ex => ExceptionHandler.HandlePathAccessError(Path, ex, logger)));
+        var fromResult = await Task.FromResult(Result.Try(() => directoryInfo.GetDirectories().Select(info => (IZafiroDirectory) new LocalDirectory(info, logger, FileSystem)), ex => ExceptionHandler.HandlePathAccessError(Path, ex, logger))).ConfigureAwait(false);
+        return fromResult;
     }
 
     public Task<Result<IEnumerable<IZafiroFile>>> GetFiles()
@@ -26,9 +29,9 @@ public class LocalDirectory : IZafiroDirectory
         return Task.FromResult(Result.Try(() => directoryInfo.GetFiles().Select(info => (IZafiroFile) new LocalFile(info, logger)), ex => ExceptionHandler.HandlePathAccessError(Path, ex, logger)));
     }
 
-    public Task<Result<IZafiroFile>> GetFile(ZafiroPath destPath)
+    public Task<Result<IZafiroFile>> GetFile(string file)
     {
-        return Task.FromResult(Result.Try(() => (IZafiroFile)new LocalFile(new FileInfo(destPath), logger), ex => ExceptionHandler.HandlePathAccessError(destPath, ex, logger)));
+        return Task.FromResult(Result.Try(() => (IZafiroFile)new LocalFile(new FileInfo(Path.Combine(file)), logger), ex => ExceptionHandler.HandlePathAccessError(file, ex, logger)));
     }
 
     public override string ToString()

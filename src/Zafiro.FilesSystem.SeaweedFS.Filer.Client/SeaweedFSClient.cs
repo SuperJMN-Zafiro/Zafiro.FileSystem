@@ -1,5 +1,5 @@
-using Refit;
 using System.Text.Json;
+using Refit;
 
 namespace Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
@@ -11,9 +11,9 @@ public class SeaweedFSClient : ISeaweedFS
     public SeaweedFSClient(HttpClient httpClient)
     {
         this.httpClient = httpClient;
-        inner = RestService.For<ISeaweedApi>(httpClient, new RefitSettings()
+        inner = RestService.For<ISeaweedApi>(httpClient, new RefitSettings
         {
-            ContentSerializer = new SystemTextJsonContentSerializer(new JsonSerializerOptions()
+            ContentSerializer = new SystemTextJsonContentSerializer(new JsonSerializerOptions
             {
                 Converters =
                 {

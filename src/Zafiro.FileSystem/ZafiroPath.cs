@@ -6,23 +6,18 @@ public sealed class ZafiroPath : ValueObject
 {
     public const char ChuckSeparator = '/';
 
-    public ZafiroPath(string path)
-    {
-        Path = path;
-    }
-
-    public ZafiroPath(params string[] routeFragments)
-    {
-        Path = string.Join(ChuckSeparator, routeFragments);
-    }
-
-    public ZafiroPath(IEnumerable<string> relativePathChunks) : this(relativePathChunks.ToArray())
+    public ZafiroPath(string path) : this(path.Split(ChuckSeparator).ToArray())
     {
     }
 
-    public IEnumerable<string> RouteFragments => Path.Split(ChuckSeparator);
+    public ZafiroPath(IEnumerable<string> relativePathChunks)
+    {
+        RouteFragments = relativePathChunks;
+    }
 
-    public string Path { get; }
+    public IEnumerable<string> RouteFragments { get; }
+
+    public string Path => string.Join(ChuckSeparator, RouteFragments);
 
     public static implicit operator ZafiroPath(string[] chunks)
     {

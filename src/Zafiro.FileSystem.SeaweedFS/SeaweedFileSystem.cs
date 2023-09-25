@@ -17,7 +17,7 @@ public class SeaweedFileSystem : IFileSystem
 
     public Task<Result<IZafiroDirectory>> GetDirectory(ZafiroPath path)
     {
-        return Task.FromResult(Result.Success<IZafiroDirectory>(new SeaweedDirectory(path, seaweedFSClient, logger)));
+        return Task.FromResult(Result.Success<IZafiroDirectory>(new SeaweedDirectory(path, seaweedFSClient, logger, this)));
     }
 
     public Task<Result<IZafiroFile>> GetFile(ZafiroPath path)

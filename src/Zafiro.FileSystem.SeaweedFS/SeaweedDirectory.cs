@@ -11,14 +11,16 @@ public class SeaweedDirectory : IZafiroDirectory
     private readonly SeaweedFSClient seaweedFS;
     private readonly Maybe<ILogger> logger;
 
-    public SeaweedDirectory(ZafiroPath path, SeaweedFSClient seaweedFS, Maybe<ILogger> logger)
+    public SeaweedDirectory(ZafiroPath path, SeaweedFSClient seaweedFS, Maybe<ILogger> logger, IFileSystem fileSystem)
     {
         Path = path;
         this.seaweedFS = seaweedFS;
         this.logger = logger;
+        FileSystem = fileSystem;
     }
 
     public ZafiroPath Path { get; }
+    public IFileSystem FileSystem { get; }
 
     public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
     {
@@ -32,7 +34,7 @@ public class SeaweedDirectory : IZafiroDirectory
     {
         return folder.Entries?
             .OfType<Directory>()
-            .Select(f => new SeaweedDirectory(f.FullPath[1..], seaweedFS, logger))  ?? Enumerable.Empty<IZafiroDirectory>();
+            .Select(f => new SeaweedDirectory(f.FullPath[1..], seaweedFS, logger, FileSystem))  ?? Enumerable.Empty<IZafiroDirectory>();
     }
 
     private IEnumerable<IZafiroFile> GetFiles(RootDirectory folder)
@@ -50,9 +52,9 @@ public class SeaweedDirectory : IZafiroDirectory
             .Map(GetFiles);
     }
 
-    public Task<Result<IZafiroFile>> GetFile(ZafiroPath destPath)
+    public Task<Result<IZafiroFile>> GetFile(string destPath)
     {
-        return Task.FromResult(Result.Success((IZafiroFile)new SeaweedFile(destPath, seaweedFS, logger)));
+        return Task.FromResult(Result.Success((IZafiroFile)new SeaweedFile(Path.Combine(destPath), seaweedFS, logger)));
     }
 
     public override string ToString()

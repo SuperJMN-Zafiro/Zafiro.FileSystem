@@ -21,8 +21,8 @@ public class TestFile : IZafiroFile
         return await Result.Try(async () =>
         {
             using var memoryStream = new MemoryStream();
-            await stream.CopyToAsync(memoryStream);
-        });
+            await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
+        }).ConfigureAwait(false);
     }
 
     public Task<Result> Delete()

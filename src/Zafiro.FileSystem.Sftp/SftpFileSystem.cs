@@ -24,7 +24,7 @@ public class SftpFileSystem : IFileSystem, IDisposable
 
     public Task<Result<IZafiroDirectory>> GetDirectory(ZafiroPath path)
     {
-        return Task.FromResult(Result.Try<IZafiroDirectory>(() => new SftpDirectory(path, sftpClient)));
+        return Task.FromResult(Result.Try<IZafiroDirectory>(() => new SftpDirectory(path, sftpClient, this)));
     }
 
     public Task<Result<IZafiroFile>> GetFile(ZafiroPath path)

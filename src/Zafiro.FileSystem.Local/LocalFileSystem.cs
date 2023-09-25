@@ -14,7 +14,7 @@ public class LocalFileSystem : IFileSystem
 
     public Task<Result<IZafiroDirectory>> GetDirectory(ZafiroPath path)
     {
-        return Task.FromResult(Result.Try<IZafiroDirectory>(() => new LocalDirectory(new DirectoryInfo(path), logger), ex => ExceptionHandler.HandlePathAccessError(path, ex, logger)));
+        return Task.FromResult(Result.Try<IZafiroDirectory>(() => new LocalDirectory(new DirectoryInfo(path), logger, this), ex => ExceptionHandler.HandlePathAccessError(path, ex, logger)));
     }
 
     public Task<Result<IZafiroFile>> GetFile(ZafiroPath path)
