@@ -28,18 +28,18 @@ public class CopyDirectoryAction : IAction<LongProgress>
 
     private async Task<Result> CopyFiles(IEnumerable<IZafiroFile> sources, CancellationToken ct)
     {
-        var compositeAction = await sources
+        var results = await sources
             .ToObservable()
             .SelectMany(src => GetDestinationFile(src).Map(dest => (src, dest)))
             .Successes()
-            .Select(file => (IAction<LongProgress>) new CopyFileAction(file.src, file.dest))
-            .ToList()
-            .Select(list => new CompositeAction(list))
-            .FirstAsync();
+            .Select(copy =>
+            {
+                return Observable.FromAsync(() => CopyFileAction.Create(copy.src, copy.dest).Map(action => action.Execute(ct))).Successes();
+            })
+            .Merge(3)
+            .ToList();
 
-        using var _ = compositeAction.Progress.Subscribe(progress);
-        var executionResult = await compositeAction.Execute(ct);
-        return executionResult;
+        return results.Combine();
     }
 
     private Task<Result<IZafiroFile>> GetDestinationFile(IZafiroFile src)

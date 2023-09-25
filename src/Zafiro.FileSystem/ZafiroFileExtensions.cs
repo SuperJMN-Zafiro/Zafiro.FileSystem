@@ -22,10 +22,17 @@ public static class ZafiroFileExtensions
 
     private static async Task<Result> CopyStreamToFile(ObservableStream sourceStream, IZafiroFile destinationFile, Maybe<IObserver<LongProgress>> progress, CancellationToken cancellationToken)
     {
-        var maybeSubscription = progress.Map(observer => sourceStream.Positions.Select(processed => GetProgress(sourceStream, processed)).Subscribe(observer));
+        var maybeSubscription = progress.Map(observer => GetProgressObservable(sourceStream).Subscribe(observer));
         var result = await destinationFile.SetContents(sourceStream, cancellationToken);
         maybeSubscription.Execute(x => x.Dispose());
         return result;
+    }
+
+    private static IObservable<LongProgress> GetProgressObservable(ObservableStream sourceStream)
+    {
+        return sourceStream.Positions
+            .Select(processed => new LongProgress(processed, sourceStream.Length))
+            .StartWith(new LongProgress(0, sourceStream.Length));
     }
 
     private static LongProgress GetProgress(ObservableStream sourceStream, long processed)
