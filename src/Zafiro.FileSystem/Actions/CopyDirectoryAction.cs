@@ -7,10 +7,14 @@ namespace Zafiro.FileSystem.Actions;
 
 public class CopyDirectoryAction : IAction<LongProgress>
 {
+    public IZafiroDirectory Source { get; }
+    public IZafiroDirectory Destination { get; }
     private readonly CompositeAction compositeAction;
     
-    private CopyDirectoryAction(CompositeAction compositeAction)
+    private CopyDirectoryAction(IZafiroDirectory source, IZafiroDirectory destination, CompositeAction compositeAction)
     {
+        Source = source;
+        Destination = destination;
         this.compositeAction = compositeAction;
         Progress = compositeAction.Progress;    }
 
@@ -48,6 +52,6 @@ public class CopyDirectoryAction : IAction<LongProgress>
             return new CompositeAction(childrenTasks);
         }).ConfigureAwait(false);
 
-        return action.Map(compositeAction => new CopyDirectoryAction(compositeAction));
+        return action.Map(compositeAction => new CopyDirectoryAction(source, destination, compositeAction));
     }
 }
