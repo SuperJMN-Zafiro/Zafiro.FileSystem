@@ -1,16 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="SSH.NET" Version="2020.0.2" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
-	</ItemGroup>
-
-	<Import Project="..\Common.props" />
-
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SSH.NET" Version="2020.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
+    <ProjectReference Include="E:\Repos\SuperJMN-Zafiro\Zafiro.FileSystem\src\Zafiro.FileSystem\Zafiro.FileSystem.csproj">
+      <Temp>Zafiro.FileSystem</Temp>
+    </ProjectReference>
+    <ProjectReference Include="E:\Repos\SuperJMN-Zafiro\Zafiro\src\Zafiro\Zafiro.csproj">
+      <Temp>Zafiro</Temp>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\Common.props" />
 </Project>
