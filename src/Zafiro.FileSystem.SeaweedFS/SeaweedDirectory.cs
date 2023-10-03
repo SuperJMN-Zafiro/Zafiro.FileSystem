@@ -52,6 +52,12 @@ public class SeaweedDirectory : IZafiroDirectory
             .Map(GetFiles);
     }
 
+    public Task<Result> Delete()
+    {
+        return Result
+            .Try(() => seaweedFS.DeleteFolder(Path));
+    }
+
     public Task<Result<IZafiroFile>> GetFile(string destPath)
     {
         return Task.FromResult(Result.Success((IZafiroFile)new SeaweedFile(Path.Combine(destPath), seaweedFS, logger)));
