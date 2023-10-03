@@ -40,11 +40,6 @@ public static class ZafiroFileExtensions
             .StartWith(new LongProgress(0, sourceStream.Length));
     }
 
-    private static LongProgress GetProgress(ObservableStream sourceStream, long processed)
-    {
-        return new LongProgress(processed, sourceStream.Length);
-    }
-
     private static Task<Result<ObservableStream>> GetStream(IZafiroFile zafiroFile, TimeSpan? readTimeout = default)
     {
         var streamResult = zafiroFile.GetContents();
