@@ -29,6 +29,11 @@ public class LocalDirectory : IZafiroDirectory
         return Task.FromResult(Result.Try(() => directoryInfo.GetFiles().Select(info => (IZafiroFile) new LocalFile(info, logger)), ex => ExceptionHandler.HandlePathAccessError(Path, ex, logger)));
     }
 
+    public Task<Result> Delete()
+    {
+        return Task.FromResult(Result.Try(() => Directory.Delete(Path, true)));
+    }
+
     public Task<Result<IZafiroFile>> GetFile(string file)
     {
         return Task.FromResult(Result.Try(() => (IZafiroFile)new LocalFile(new FileInfo(Path.Combine(file)), logger), ex => ExceptionHandler.HandlePathAccessError(file, ex, logger)));

@@ -17,6 +17,11 @@ public class TestDestinationDirectory : IZafiroDirectory
         return Task.FromResult(Result.Success(Enumerable.Empty<IZafiroFile>()));
     }
 
+    public Task<Result> Delete()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Result<IZafiroFile>> GetFile(string destPath)
     {
         return Task.FromResult(Result.Success((IZafiroFile) new TestFile()));

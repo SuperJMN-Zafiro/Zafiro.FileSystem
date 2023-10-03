@@ -36,6 +36,11 @@ public class SftpDirectory : IZafiroDirectory
                 .Select(file => (IZafiroFile)new SftpFile(file.FullName, client)));
     }
 
+    public Task<Result> Delete()
+    {
+        return Task.FromResult(Result.Failure("Not supported"));
+    }
+
     private string ErrorHandler(ZafiroPath zafiroPath, Exception exception)
     {
         return $"{exception.Message} for path '{zafiroPath}'";
