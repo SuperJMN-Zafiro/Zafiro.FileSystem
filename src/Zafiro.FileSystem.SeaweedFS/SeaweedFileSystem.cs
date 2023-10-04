@@ -24,4 +24,9 @@ public class SeaweedFileSystem : IFileSystem
     {
         return Task.FromResult(Result.Success<IZafiroFile>(new SeaweedFile(path, seaweedFSClient, logger)));
     }
+
+    public ZafiroPath GetRoot()
+    {
+        return ZafiroPath.Empty;
+    }
 }

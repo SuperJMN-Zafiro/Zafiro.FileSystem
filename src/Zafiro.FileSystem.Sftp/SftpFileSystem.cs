@@ -32,6 +32,11 @@ public class SftpFileSystem : IFileSystem, IDisposable
         return Task.FromResult(Result.Try<IZafiroFile>(() => new SftpFile(path, sftpClient)));
     }
 
+    public ZafiroPath GetRoot()
+    {
+        return ZafiroPath.Empty;
+    }
+
     public static Task<Result<SftpFileSystem>> Create(string host, int port, string username, string password, Maybe<ILogger> logger)
     {
         return Task.FromResult(Result.Try(() =>

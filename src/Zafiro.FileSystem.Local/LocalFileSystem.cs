@@ -14,11 +14,17 @@ public class LocalFileSystem : IFileSystem
 
     public Task<Result<IZafiroDirectory>> GetDirectory(ZafiroPath path)
     {
-        return Task.FromResult(Result.Try<IZafiroDirectory>(() => new LocalDirectory(new DirectoryInfo(path), logger, this), ex => ExceptionHandler.HandlePathAccessError(path, ex, logger)));
+        return Task.FromResult(Result.Try<IZafiroDirectory>(() =>
+        {
+            var directoryInfo = path.Path.EndsWith(":") ? new DirectoryInfo(path.Path + "\\") : new DirectoryInfo(path.Path);
+            return new LocalDirectory(directoryInfo, logger, this);
+        }, ex => ExceptionHandler.HandlePathAccessError(path, ex, logger)));
     }
 
     public Task<Result<IZafiroFile>> GetFile(ZafiroPath path)
     {
         return Task.FromResult(Result.Try<IZafiroFile>(() => new LocalFile(new FileInfo(path), logger), ex => ExceptionHandler.HandlePathAccessError(path, ex, logger)));
     }
+
+    public ZafiroPath GetRoot() => Directory.GetCurrentDirectory().ToZafiroPath();
 }

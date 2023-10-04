@@ -1,9 +1,12 @@
-﻿using System.Reactive.Subjects;
+﻿using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
+using JetBrains.Annotations;
 using Zafiro.Actions;
 
 namespace Zafiro.FileSystem.Actions;
 
+[PublicAPI]
 public class DeleteDirectoryAction : IAction<LongProgress>
 {
     private readonly BehaviorSubject<LongProgress> progressSubject = new(new LongProgress(0, 1));
@@ -11,6 +14,7 @@ public class DeleteDirectoryAction : IAction<LongProgress>
     public DeleteDirectoryAction(IZafiroDirectory directory)
     {
         Directory = directory;
+        Progress = progressSubject.AsObservable();
     }
 
     public IZafiroDirectory Directory { get; }

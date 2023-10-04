@@ -4,9 +4,11 @@ namespace Zafiro.FileSystem;
 
 public sealed class ZafiroPath : ValueObject
 {
-    public const char ChuckSeparator = '/';
+    public const char ChunkSeparator = '/';
 
-    public ZafiroPath(string path) : this(path.Split(ChuckSeparator).ToArray())
+    public static readonly ZafiroPath Empty = new();
+
+    public ZafiroPath(string path) : this(GetChunks(path))
     {
     }
 
@@ -15,9 +17,13 @@ public sealed class ZafiroPath : ValueObject
         RouteFragments = relativePathChunks;
     }
 
+    private ZafiroPath() : this(Enumerable.Empty<string>())
+    {
+    }
+
     public IEnumerable<string> RouteFragments { get; }
 
-    public string Path => string.Join(ChuckSeparator, RouteFragments);
+    public string Path => string.Join(ChunkSeparator, RouteFragments);
 
     public static implicit operator ZafiroPath(string[] chunks)
     {
@@ -26,6 +32,11 @@ public sealed class ZafiroPath : ValueObject
 
     public static implicit operator ZafiroPath(string path)
     {
+        if (path == "")
+        {
+            return Empty;
+        }
+
         return new ZafiroPath(path);
     }
 
@@ -34,13 +45,33 @@ public sealed class ZafiroPath : ValueObject
         return path.ToString();
     }
 
+    public static Result<ZafiroPath> Create(string path)
+    {
+        if (path == "")
+        {
+            return Empty;
+        }
+
+        if (GetChunks(path).Any(string.IsNullOrEmpty))
+        {
+            return Result.Failure<ZafiroPath>($"Invalid path {path}");
+        }
+
+        return new ZafiroPath(path);
+    }
+
     public override string ToString()
     {
-        return string.Join(ChuckSeparator, RouteFragments);
+        return Path;
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {
         yield return Path;
+    }
+
+    private static IEnumerable<string> GetChunks(string path)
+    {
+        return path.Split(ChunkSeparator).ToArray();
     }
 }

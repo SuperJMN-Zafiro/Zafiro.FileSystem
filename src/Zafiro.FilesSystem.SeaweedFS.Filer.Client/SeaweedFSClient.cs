@@ -25,7 +25,7 @@ public class SeaweedFSClient : ISeaweedFS
 
     public Task<RootDirectory> GetContents(string directoryPath, CancellationToken cancellationToken = default)
     {
-        return inner.GetContents(directoryPath, cancellationToken);
+        return inner.GetContents(directoryPath[1..], cancellationToken);
     }
 
     public Task Upload(string path, Stream stream, CancellationToken cancellationToken = default)
@@ -35,7 +35,8 @@ public class SeaweedFSClient : ISeaweedFS
 
     public Task CreateFolder(string directoryPath, CancellationToken cancellationToken = default)
     {
-        return inner.CreateFolder(directoryPath, cancellationToken);
+        var finalFolder = directoryPath == "/" ? directoryPath : directoryPath[1..];
+        return inner.CreateFolder(finalFolder, cancellationToken);
     }
 
     public Task DeleteFolder(string directoryPath, CancellationToken cancellationToken = default)

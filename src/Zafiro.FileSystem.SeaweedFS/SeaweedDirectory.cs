@@ -25,8 +25,8 @@ public class SeaweedDirectory : IZafiroDirectory
     public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
     {
         return Result
-            .Try(() => seaweedFS.CreateFolder(Path), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger))
-            .Bind(() => Result.Try(() => seaweedFS.GetContents(Path), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger)))
+            .Try(() => seaweedFS.CreateFolder(Path.ToServicePath()), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger))
+            .Bind(() => Result.Try(() => seaweedFS.GetContents(Path.ToServicePath()), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger)))
             .Map(GetDirectories);
     }
 
@@ -34,21 +34,21 @@ public class SeaweedDirectory : IZafiroDirectory
     {
         return folder.Entries?
             .OfType<Directory>()
-            .Select(f => new SeaweedDirectory(f.FullPath[1..], seaweedFS, logger, FileSystem))  ?? Enumerable.Empty<IZafiroDirectory>();
+            .Select(f => new SeaweedDirectory(f.FullPath.ToZafiroPath(), seaweedFS, logger, FileSystem))  ?? Enumerable.Empty<IZafiroDirectory>();
     }
 
     private IEnumerable<IZafiroFile> GetFiles(RootDirectory folder)
     {
         return folder.Entries?
             .OfType<File>()
-            .Select(f => new SeaweedFile(f.FullPath[1..], seaweedFS, logger)) ?? Enumerable.Empty<IZafiroFile>();
+            .Select(f => new SeaweedFile(f.FullPath.ToZafiroPath(), seaweedFS, logger)) ?? Enumerable.Empty<IZafiroFile>();
     }
 
     public Task<Result<IEnumerable<IZafiroFile>>> GetFiles()
     {
         return Result
-            .Try(() => seaweedFS.CreateFolder(Path))
-            .Bind(() => Result.Try(() => seaweedFS.GetContents(Path), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger)))
+            .Try(() => seaweedFS.CreateFolder(Path.ToServicePath()))
+            .Bind(() => Result.Try(() => seaweedFS.GetContents(Path.ToServicePath()), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger)))
             .Map(GetFiles);
     }
 

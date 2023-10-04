@@ -15,7 +15,21 @@ public class LocalDirectory : IZafiroDirectory
         FileSystem = fileSystem;
     }
 
-    public ZafiroPath Path => directoryInfo.FullName.ToZafiroPath();
+    public ZafiroPath Path
+    {
+        get
+        {
+            if (directoryInfo.FullName.EndsWith(System.IO.Path.DirectorySeparatorChar))
+            {
+                return directoryInfo.FullName[..^1].ToZafiroPath();
+            }
+            else
+            {
+                return directoryInfo.FullName.ToZafiroPath();
+            }
+        }
+    }
+
     public IFileSystem FileSystem { get; }
 
     public async Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()

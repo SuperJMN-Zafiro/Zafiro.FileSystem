@@ -35,4 +35,3 @@ public class CopyDirectoryTests
         result.Should().BeSuccess();
     }
 }
-
