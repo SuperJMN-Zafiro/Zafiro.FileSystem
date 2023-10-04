@@ -5,7 +5,7 @@ namespace Zafiro.FileSystem.SeaweedFS.Filer.Client;
 [Headers("Accept: application/json")]
 public interface ISeaweedApi
 {
-    [Get("/{directoryPath}/?pretty=y")]
+    [Get("/{directoryPath}?pretty=y")]
     Task<RootDirectory> GetContents(string directoryPath, CancellationToken cancellationToken);
 
     [Get("/{filePath}?metadata=true&pretty=y")]

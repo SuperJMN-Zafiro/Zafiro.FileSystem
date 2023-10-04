@@ -1,11 +1,15 @@
 using JetBrains.Annotations;
+using System.Diagnostics.CodeAnalysis;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
 [PublicAPI]
+[SuppressMessage("ReSharper", "InconsistentNaming")]
 public class BaseEntry
 {
     public string FullPath { get; set; }
+
     public DateTime Mtime { get; set; }
     public DateTime Crtime { get; set; }
     public ulong Mode { get; set; }
