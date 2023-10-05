@@ -40,7 +40,7 @@ public class SeaweedFile : IZafiroFile
 
     public Task<Result> Delete(CancellationToken cancellationToken = default)
     {
-        return Result.Try(() => seaweedStore.DeleteFile(Path), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger));
+        return Result.Try(() => seaweedStore.DeleteFile(Path, cancellationToken), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger));
     }
 
     public override string ToString()
