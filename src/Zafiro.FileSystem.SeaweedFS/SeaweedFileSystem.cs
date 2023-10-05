@@ -6,10 +6,10 @@ namespace Zafiro.FileSystem.SeaweedFS;
 
 public class SeaweedFileSystem : IFileSystem
 {
-    private readonly SeaweedFSClient seaweedFSClient;
+    private readonly ISeaweedFS seaweedFSClient;
     private readonly Maybe<ILogger> logger;
 
-    public SeaweedFileSystem(SeaweedFSClient seaweedFSClient, Maybe<ILogger> logger)
+    public SeaweedFileSystem(ISeaweedFS seaweedFSClient, Maybe<ILogger> logger)
     {
         this.seaweedFSClient = seaweedFSClient;
         this.logger = logger;

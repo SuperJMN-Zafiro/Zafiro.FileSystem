@@ -11,7 +11,12 @@ public class TestFile : IZafiroFile
         throw new NotImplementedException();
     }
 
-    public Task<Result<Stream>> GetContents()
+    public Task<Result<bool>> Exists()
+    {
+        return Task.FromResult(Result.Failure<bool>("Not supported"));
+    }
+
+    public Task<Result<Stream>> GetContents(CancellationToken cancellationToken = default)
     {
         return Task.FromResult(Result.Success((Stream)new NeverEndingStream()));
     }
@@ -25,7 +30,7 @@ public class TestFile : IZafiroFile
         }).ConfigureAwait(false);
     }
 
-    public Task<Result> Delete()
+    public Task<Result> Delete(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

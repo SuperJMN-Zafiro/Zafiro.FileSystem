@@ -19,7 +19,12 @@ public class SftpFile : IZafiroFile
         return Task.FromResult(Result.Success(client.GetAttributes(Path).Size));
     }
 
-    public Task<Result<Stream>> GetContents()
+    public Task<Result<bool>> Exists()
+    {
+        return Task.FromResult(Result.Try(() => client.Exists(Path)));
+    }
+
+    public Task<Result<Stream>> GetContents(CancellationToken cancellationToken = default)
     {
         return Result.Try(() => Task.FromResult<Stream>(client.OpenRead(Path)));
     }
@@ -42,7 +47,7 @@ public class SftpFile : IZafiroFile
         }
     }
 
-    public Task<Result> Delete()
+    public Task<Result> Delete(CancellationToken cancellationToken = default)
     {
         return Task.FromResult(Result.Try(() => client.DeleteFile(Path)));
     }

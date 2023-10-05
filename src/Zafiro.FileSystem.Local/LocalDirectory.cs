@@ -1,14 +1,15 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.IO.Abstractions;
+using CSharpFunctionalExtensions;
 using Serilog;
 
 namespace Zafiro.FileSystem.Local;
 
 public class LocalDirectory : IZafiroDirectory
 {
-    private readonly DirectoryInfo directoryInfo;
+    private readonly IDirectoryInfo directoryInfo;
     private readonly Maybe<ILogger> logger;
 
-    public LocalDirectory(DirectoryInfo directoryInfo, Maybe<ILogger> logger, IFileSystem fileSystem)
+    public LocalDirectory(IDirectoryInfo directoryInfo, Maybe<ILogger> logger, IFileSystem fileSystem)
     {
         this.directoryInfo = directoryInfo;
         this.logger = logger;
@@ -45,12 +46,17 @@ public class LocalDirectory : IZafiroDirectory
 
     public Task<Result> Delete()
     {
-        return Task.FromResult(Result.Try(() => Directory.Delete(Path, true)));
+        return Task.FromResult(Result.Try(() => directoryInfo.Delete(true)));
     }
 
-    public Task<Result<IZafiroFile>> GetFile(string file)
+    public async Task<Result<IZafiroFile>> GetFile(string name)
     {
-        return Task.FromResult(Result.Try(() => (IZafiroFile)new LocalFile(new FileInfo(Path.Combine(file)), logger), ex => ExceptionHandler.HandlePathAccessError(file, ex, logger)));
+        if (name.Contains(ZafiroPath.ChunkSeparator))
+        {
+            return Result.Failure<IZafiroFile>("The name cannot be a path, but the name of a file in the directory");
+        }
+
+        return await FileSystem.GetFile(Path.Combine(name));
     }
 
     public override string ToString()

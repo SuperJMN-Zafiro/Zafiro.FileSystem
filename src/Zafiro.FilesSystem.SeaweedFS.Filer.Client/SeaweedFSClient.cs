@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json;
 using Refit;
 
@@ -57,5 +58,22 @@ public class SeaweedFSClient : ISeaweedFS
     public Task<File> GetFileMetadata(string path, CancellationToken cancellationToken = default)
     {
         return inner.GetFileMetadata(path, cancellationToken);
+    }
+
+    public async Task<bool> PathExists(string path)
+    {
+        try
+        {
+            await GetFileMetadata(path);
+        }
+        catch (ApiException e)
+        {
+            if (e.StatusCode == HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
