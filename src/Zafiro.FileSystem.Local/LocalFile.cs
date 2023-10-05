@@ -16,14 +16,22 @@ public class LocalFile : IZafiroFile
 
     public ZafiroPath Path => info.FullName.ToZafiroPath();
 
-    public Task<Result<long>> Size() => Result.Try(() => Task.FromResult(info.Length));
+    public Task<Result<long>> Size()
+    {
+        return Result.Try(() => Task.FromResult(info.Length));
+    }
 
-    public Task<Result<Stream>> GetContents()
+    public Task<Result<bool>> Exists()
+    {
+        return Task.FromResult<Result<bool>>(info.Exists);
+    }
+
+    public Task<Result<Stream>> GetContents(CancellationToken cancellationToken = default)
     {
         return Task.FromResult(Result.Try(() =>
         {
             EnsureFileExists(Path.FromZafiroPath());
-            return (Stream)File.OpenRead(Path);
+            return (Stream) File.OpenRead(Path);
         }, ex => ExceptionHandler.HandlePathAccessError(Path, ex, logger)));
     }
 
@@ -40,7 +48,7 @@ public class LocalFile : IZafiroFile
         });
     }
 
-    public Task<Result> Delete()
+    public Task<Result> Delete(CancellationToken cancellationToken = default)
     {
         return Task.FromResult(Result.Try(() => info.Delete()));
     }
@@ -61,7 +69,9 @@ public class LocalFile : IZafiroFile
 
         if (!File.Exists(path))
         {
-            using (File.Create(path)) { }
+            using (File.Create(path))
+            {
+            }
         }
     }
 }

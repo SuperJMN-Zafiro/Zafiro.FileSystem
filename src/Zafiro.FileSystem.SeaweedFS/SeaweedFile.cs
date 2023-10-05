@@ -6,10 +6,10 @@ namespace Zafiro.FileSystem.SeaweedFS;
 
 public class SeaweedFile : IZafiroFile
 {
-    private readonly SeaweedFSClient seaweedStore;
+    private readonly ISeaweedFS seaweedStore;
     private readonly Maybe<ILogger> logger;
 
-    public SeaweedFile(ZafiroPath path, SeaweedFSClient seaweedStore, Maybe<ILogger> logger)
+    public SeaweedFile(ZafiroPath path, ISeaweedFS seaweedStore, Maybe<ILogger> logger)
     {
         Path = path;
         this.seaweedStore = seaweedStore;
@@ -23,9 +23,14 @@ public class SeaweedFile : IZafiroFile
         .Map(file => file.FileSize)
         .MapError(s => $"Cannot retrieve file size for '{Path}'. Reason: {s}");
 
-    public Task<Result<Stream>> GetContents()
+    public Task<Result<bool>> Exists()
     {
-        return Result.Try(() => seaweedStore.GetFileContent(Path), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger));
+        return Result.Try(() => seaweedStore.PathExists(Path));
+    }
+
+    public Task<Result<Stream>> GetContents(CancellationToken cancellationToken = default)
+    {
+        return Result.Try(() => seaweedStore.GetFileContent(Path, cancellationToken), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger));
     }
 
     public Task<Result> SetContents(Stream stream, CancellationToken cancellationToken)
@@ -33,7 +38,7 @@ public class SeaweedFile : IZafiroFile
         return Result.Try(() => seaweedStore.Upload(Path, stream, cancellationToken), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger));
     }
 
-    public Task<Result> Delete()
+    public Task<Result> Delete(CancellationToken cancellationToken = default)
     {
         return Result.Try(() => seaweedStore.DeleteFile(Path), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger));
     }

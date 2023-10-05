@@ -8,10 +8,10 @@ namespace Zafiro.FileSystem.SeaweedFS;
 
 public class SeaweedDirectory : IZafiroDirectory
 {
-    private readonly SeaweedFSClient seaweedFS;
+    private readonly ISeaweedFS seaweedFS;
     private readonly Maybe<ILogger> logger;
 
-    public SeaweedDirectory(ZafiroPath path, SeaweedFSClient seaweedFS, Maybe<ILogger> logger, IFileSystem fileSystem)
+    public SeaweedDirectory(ZafiroPath path, ISeaweedFS seaweedFS, Maybe<ILogger> logger, IFileSystem fileSystem)
     {
         Path = path;
         this.seaweedFS = seaweedFS;
