@@ -1,22 +1,38 @@
-using FluentAssertions;
+using FluentAssertions.CSharpFunctionalExtensions;
 
 namespace Zafiro.FileSystem.Tests;
 
 public class PathTests
 {
     [Fact]
-    public void Test1()
+    public void Valid_path()
     {
-        var path = new ZafiroPath("/");
-        var combined = path.Combine("Pepito");
-
-        combined.Should().Be(new ZafiroPath("/Pepito"));
+        ZafiroPath.Create("This is a path").Should().BeSuccess();
     }
 
     [Fact]
-    public void EmptyPath()
+    public void Valid_path_with_subparts()
     {
-        var path = new ZafiroPath("/");
-        path.Path.Should().Be("/");
+        ZafiroPath.Create("This is a path/sub dir").Should().BeSuccess();
+    }
+
+    [Fact]
+    public void Invalid_path()
+    {
+        ZafiroPath.Create("/").Should().BeFailure();
+    }
+
+    [Fact]
+    public void Empty_path()
+    {
+        var path = ZafiroPath.Create("");
+        path.Should().BeFailure();
+    }
+
+    [Fact]
+    public void Empty_path_multiple_spaces()
+    {
+        var path = ZafiroPath.Create("   ");
+        path.Should().BeFailure();
     }
 }

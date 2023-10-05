@@ -47,9 +47,9 @@ public sealed class ZafiroPath : ValueObject
 
     public static Result<ZafiroPath> Create(string path)
     {
-        if (path == "")
+        if (path.Trim() == "")
         {
-            return Empty;
+            return Result.Failure<ZafiroPath>("Use ZafiroPath.Empty to create an empty path (usually root)");
         }
 
         if (GetChunks(path).Any(string.IsNullOrEmpty))
