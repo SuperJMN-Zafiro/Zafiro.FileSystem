@@ -116,6 +116,6 @@ public class Syncer
 
     private IObservable<Result<IZafiroFile>> GetEntry(IZafiroDirectory directory, ZafiroPath path)
     {
-        return Observable.FromAsync(() => directory.GetFile(directory.Path.Combine(path)));
+        return Observable.FromAsync(() => directory.FileSystem.GetFile(directory.Path.Combine(path)));
     }
 }
