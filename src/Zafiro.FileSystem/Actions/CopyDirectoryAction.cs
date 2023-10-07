@@ -5,7 +5,7 @@ using Zafiro.CSharpFunctionalExtensions;
 
 namespace Zafiro.FileSystem.Actions;
 
-public class CopyDirectoryAction : IAction<LongProgress>
+public class CopyDirectoryAction : IFileAction
 {
     private readonly CompositeAction compositeAction;
 
@@ -22,9 +22,9 @@ public class CopyDirectoryAction : IAction<LongProgress>
 
     public IObservable<LongProgress> Progress { get; }
 
-    public Task<Result> Execute(CancellationToken ct)
+    public Task<Result> Execute(CancellationToken cancellationToken)
     {
-        return compositeAction.Execute(ct);
+        return compositeAction.Execute(cancellationToken);
     }
 
     public static async Task<Result<CopyDirectoryAction>> Create(IZafiroDirectory source, IZafiroDirectory destination)

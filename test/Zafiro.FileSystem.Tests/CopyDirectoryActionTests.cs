@@ -1,7 +1,5 @@
 using System.IO.Abstractions.TestingHelpers;
 using CSharpFunctionalExtensions;
-using FluentAssertions;
-using FluentAssertions.CSharpFunctionalExtensions;
 using Serilog;
 using Zafiro.FileSystem.Actions;
 using Zafiro.FileSystem.Local;
