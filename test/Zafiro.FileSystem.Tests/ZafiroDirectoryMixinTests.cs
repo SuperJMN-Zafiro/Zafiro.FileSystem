@@ -17,7 +17,7 @@ public class ZafiroDirectoryMixinTests
         
         var fileSystem = new LocalFileSystem(mockFileSystem, Maybe<ILogger>.None);
         var result = await fileSystem.GetDirectory("C:/Dir1")
-            .Bind(directory => directory.MaybeDescendantFile("Dir2/File.txt"));
+            .Bind(directory => directory.DescendantFile("Dir2/File.txt"));
         
         result.Should().BeSuccess().And.Subject.Value.Value.Should().BeAssignableTo<IZafiroFile>();
     }
@@ -32,7 +32,7 @@ public class ZafiroDirectoryMixinTests
 
         var fileSystem = new LocalFileSystem(mockFileSystem, Maybe<ILogger>.None);
         var result = await fileSystem.GetDirectory("C:/Dir1")
-            .Bind(directory => directory.MaybeDescendantDirectory("Dir2"));
+            .Bind(directory => directory.DescendantDirectory("Dir2"));
 
         result.Should().BeSuccess().And.Subject.Value.Value.Should().BeAssignableTo<IZafiroDirectory>();
     }

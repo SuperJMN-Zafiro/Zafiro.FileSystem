@@ -61,4 +61,10 @@ public static class ZafiroFileExtensions
         var size = await zafiroFile.Size().ConfigureAwait(false);
         return size.Map(l => new ObservableStream(new AlwaysForwardStream(timingOutStream, l)));
     }
+
+    public static Task<Result<IZafiroFile>> Translate(this IZafiroFile target, IZafiroDirectory sourceRoot, IZafiroDirectory destination)
+    {
+        var subPath = target.Path.MakeRelativeTo(sourceRoot.Path);
+        return destination.FileSystem.GetFile(destination.Path.Combine(subPath));
+    }
 }
