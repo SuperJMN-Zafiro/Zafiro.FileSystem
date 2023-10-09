@@ -33,11 +33,26 @@ public class SyncDirectoriesActionTests
     }
 }
 
-public static class MockFileSystemMixin
+public interface ISyncAction : IFileAction 
 {
-    public static void ShouldBe(this MockFileSystem fileSystem, IDictionary<string, string> dict)
+}
+
+public class DeleteNonExistent
+{
+
+}
+
+public class SyncDirectoriesAction3 : IFileAction
+{
+    public SyncDirectoriesAction3(IList<FileDiff> diffs)
     {
-        var constraints = dict.Select(pair => fileSystem.GetFile(pair.Key).TextContents.Should().Be(pair.Value));
+        
+    }
+
+    public IObservable<LongProgress> Progress { get; }
+    public Task<Result> Execute(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }
 
