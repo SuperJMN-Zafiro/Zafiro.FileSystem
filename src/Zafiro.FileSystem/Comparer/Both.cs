@@ -1,3 +1,3 @@
 ﻿namespace Zafiro.FileSystem.Comparer;
 
-record Both(IZafiroFile Left, ZafiroPath Right) : FileDiff;
+record Both(IZafiroFile Left, IZafiroFile Right) : FileDiff;

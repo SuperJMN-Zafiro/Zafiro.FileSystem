@@ -19,7 +19,7 @@ public class FileSystemComparer
             f => f.Item2,
             left => (FileDiff)new LeftOnly(left.Item1),
             right => new RightOnly(right.Item1),
-            (left, _) => new Both(left.Item1, left.Item2));
+            (left, right) => new Both(left.Item1, right.Item1));
     }
 
     private static ZafiroPath GetKey(IZafiroDirectory origin, IZafiroFile f)
