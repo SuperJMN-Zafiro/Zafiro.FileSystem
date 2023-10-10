@@ -1,12 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.Actions;
 using Zafiro.CSharpFunctionalExtensions;
-using Zafiro.FileSystem;
 using Zafiro.FileSystem.Actions;
 
 namespace Zafiro.FileSystem.Synchronizer;
 
-public static class Synchronizer
+public static class SynchronizerFactory
 {
     public static async Task<Result<IAction<LongProgress>>> Create(IZafiroDirectory source, IZafiroDirectory destination, params IStrategy[] strategies)
     {

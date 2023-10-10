@@ -1,10 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.Actions;
+using Zafiro.FileSystem.Actions;
 using Zafiro.FileSystem.Comparer;
 
-namespace Zafiro.FileSystem.Actions;
+namespace Zafiro.FileSystem.Synchronizer;
 
-// TODO: Test this
 public class DeleteFilesOnlyOnRightSide : IFileAction
 {
     private readonly CompositeAction composite;
