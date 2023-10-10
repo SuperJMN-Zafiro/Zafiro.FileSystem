@@ -1,8 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.Actions;
 using Zafiro.CSharpFunctionalExtensions;
+using Zafiro.FileSystem;
+using Zafiro.FileSystem.Actions;
 
-namespace Zafiro.FileSystem.Actions;
+namespace Zafiro.FileSystem.Synchronizer;
 
 public static class Synchronizer
 {
@@ -16,7 +18,7 @@ public static class Synchronizer
         return result;
     }
 
-    private static  async Task<Result<IEnumerable<IFileAction>>> GetSubactions(IZafiroDirectory source, IZafiroDirectory destination, params IStrategy[] strategies)
+    private static async Task<Result<IEnumerable<IFileAction>>> GetSubactions(IZafiroDirectory source, IZafiroDirectory destination, params IStrategy[] strategies)
     {
         var subActions = await Task.WhenAll(strategies.Select(x => x.Create(source, destination)));
         return subActions.Combine();

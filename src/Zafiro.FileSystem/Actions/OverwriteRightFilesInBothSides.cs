@@ -28,55 +28,14 @@ public class OverwriteRightFilesInBothSides : IFileAction
             .Bind(async diffs =>
             {
                 var tasks = diffs.OfType<Both>()
-                    .Select(bothDiff => CopyFileAction.Create(bothDiff.Left, bothDiff.Right));
+                    .Select(leftDiff => leftDiff.Get(source, destination)
+                        .Bind(dirs => CopyFileAction.Create(dirs.Item1, dirs.Item2)));
                 var whenAll = await Task.WhenAll(tasks);
                 var combine = whenAll.Combine();
                 return combine;
             });
 
-        return childActions.Map(actions => new OverwriteRightFilesInBothSides(actions.Cast<IFileAction>().ToList()));
+        return childActions.Map(r => new OverwriteRightFilesInBothSides(r.Cast<IFileAction>().ToList()));
     }
 }
 
-public class SyncOptions
-{
-    public SyncOptions(IStrategy bothStrategy, IStrategy leftOnlyStrategy, IStrategy rightOnlyStrategy)
-    {
-        BothStrategy = bothStrategy;
-        LeftOnlyStrategy = leftOnlyStrategy;
-        RightOnlyStrategy = rightOnlyStrategy;
-    }
-
-    public IStrategy BothStrategy { get; }
-    public IStrategy LeftOnlyStrategy { get; }
-    public IStrategy RightOnlyStrategy { get; }
-}
-
-public interface IStrategy
-{
-    Task<Result<IFileAction>> Create(IZafiroDirectory source, IZafiroDirectory destination);
-}
-
-public class OverwriteRightFilesInBothSidesStrategy : IStrategy
-{
-    public Task<Result<IFileAction>> Create(IZafiroDirectory source, IZafiroDirectory destination)
-    {
-        return OverwriteRightFilesInBothSides.Create(source, destination).Cast(r => (IFileAction)r);
-    }
-}
-
-public class CopyLeftFilesStrategy : IStrategy
-{
-    public Task<Result<IFileAction>> Create(IZafiroDirectory source, IZafiroDirectory destination)
-    {
-        return CopyLeftFilesToRightSideAction.Create(source, destination).Cast(r => (IFileAction)r);
-    }
-}
-
-public class DeleteFilesOnlyOnRightSideStrategy : IStrategy
-{
-    public Task<Result<IFileAction>> Create(IZafiroDirectory source, IZafiroDirectory destination)
-    {
-        return DeleteFilesOnlyOnRightSide.Create(source, destination).Cast(r => (IFileAction)r);
-    }
-}

@@ -1,3 +1,3 @@
 ﻿namespace Zafiro.FileSystem.Comparer;
 
-record LeftOnly(IZafiroFile Left) : FileDiff;
+public record LeftOnly(ZafiroPath Left) : FileDiff(Left);

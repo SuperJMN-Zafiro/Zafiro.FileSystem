@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.Actions;
+using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Comparer;
 
 namespace Zafiro.FileSystem.Actions;
@@ -26,13 +27,27 @@ public class CopyLeftFilesToRightSideAction : IFileAction
             .Bind(async diffs =>
             {
                 var tasks = diffs.OfType<LeftOnly>()
-                    .Select(leftDiff => leftDiff.Left.Translate(source, destination)
-                        .Bind(dest => CopyFileAction.Create(leftDiff.Left, dest)));
+                    .Select(leftDiff => leftDiff.Get(source, destination)
+                        .Bind(dirs => CopyFileAction.Create(dirs.Item1, dirs.Item2)));
                 var whenAll = await Task.WhenAll(tasks);
                 var combine = whenAll.Combine();
                 return combine;
             });
 
         return childActions.Map(r => new CopyLeftFilesToRightSideAction(r.Cast<IFileAction>().ToList()));
+    }
+}
+
+
+public static class DiffExtensions
+{
+    public static Task<Result<IZafiroFile>> Get(this FileDiff diff, IZafiroDirectory origin)
+    {
+        return origin.FileSystem.GetFile(origin.Path.Combine(diff.Path));
+    }
+
+    public static Task<Result<(IZafiroFile, IZafiroFile)>> Get(this FileDiff diff, IZafiroDirectory origin, IZafiroDirectory destination)
+    {
+        return diff.Get(origin).CombineAndMap(diff.Get(destination), (src, dst) => (src, dst));
     }
 }

@@ -1,3 +1,3 @@
 ﻿namespace Zafiro.FileSystem.Comparer;
 
-public abstract record FileDiff;
+public abstract record FileDiff(ZafiroPath Path);
