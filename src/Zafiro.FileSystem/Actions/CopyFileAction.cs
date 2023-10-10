@@ -31,7 +31,3 @@ public class CopyFileAction : IFileAction
         return source.Size().Map(l => new CopyFileAction(source, destination, l));
     }
 }
-
-public interface IFileAction : IAction<LongProgress>
-{
-}

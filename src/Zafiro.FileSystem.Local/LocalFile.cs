@@ -41,7 +41,7 @@ public class LocalFile : IZafiroFile
         return Result.Try(async () =>
         {
             EnsureFileExists();
-            var fileStream = info.OpenWrite();
+            var fileStream = info.Open(FileMode.Truncate, FileAccess.Write);
             await using var _ = fileStream.ConfigureAwait(false);
             {
                 await stream.CopyToAsync(fileStream, cancellationToken).ConfigureAwait(false);
