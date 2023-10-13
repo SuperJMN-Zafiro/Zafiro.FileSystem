@@ -13,6 +13,6 @@ public static class ExceptionHandler
         }
 
         logger.Execute(l => l.Error(exception, "Error while accessing {Path}", path));
-        return $"Error while accessing {path}";
+        return $"Error while accessing {path}. Details: {exception}";
     }
 }
