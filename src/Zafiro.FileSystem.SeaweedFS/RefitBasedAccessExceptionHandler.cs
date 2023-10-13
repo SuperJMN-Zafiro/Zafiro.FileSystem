@@ -15,6 +15,6 @@ internal static class RefitBasedAccessExceptionHandler
             return $"Path not found: {path}";
         }
 
-        return ExceptionHandler.HandlePathAccessError(path, exception, logger);
+        return ExceptionHandler.HandleError(path, exception, logger);
     }
 }

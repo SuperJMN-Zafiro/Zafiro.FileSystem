@@ -33,7 +33,7 @@ public class LocalFile : IZafiroFile
         {
             EnsureFileExists();
             return (Stream) info.OpenRead();
-        }, ex => ExceptionHandler.HandlePathAccessError(Path, ex, logger)));
+        }, ex => ExceptionHandler.HandleError(Path, ex, logger)));
     }
 
     public Task<Result> SetContents(Stream stream, CancellationToken cancellationToken)
