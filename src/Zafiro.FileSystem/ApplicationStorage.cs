@@ -5,9 +5,9 @@ using JetBrains.Annotations;
 namespace Zafiro.FileSystem;
 
 [PublicAPI]
-public class IsolatedStorage
+public class ApplicationStorage
 {
-    private static Result<Stream> OpenRead(string path)
+    public static Result<Stream> OpenRead(string path)
     {
         return Result.Try(GetStore)
             .Bind(store =>
@@ -20,7 +20,7 @@ public class IsolatedStorage
             });
     }
 
-    private static Result<Stream> OpenWrite(string path)
+    public static Result<Stream> OpenWrite(string path)
     {
         return Result.Try(GetStore)
             .Map(store => (Stream)new IsolatedStorageFileStream(path, FileMode.Create, store));
