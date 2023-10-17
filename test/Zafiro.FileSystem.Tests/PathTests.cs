@@ -1,5 +1,3 @@
-using FluentAssertions.CSharpFunctionalExtensions;
-
 namespace Zafiro.FileSystem.Tests;
 
 public class PathTests

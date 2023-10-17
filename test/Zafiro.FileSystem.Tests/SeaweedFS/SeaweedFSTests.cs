@@ -1,9 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
-using FluentAssertions;
 using Serilog;
 using Zafiro.FileSystem.SeaweedFS;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
-using FluentAssertions.CSharpFunctionalExtensions;
 using Moq;
 
 namespace Zafiro.FileSystem.Tests.SeaweedFS;

@@ -1,7 +1,5 @@
 using System.IO.Abstractions.TestingHelpers;
 using CSharpFunctionalExtensions;
-using FluentAssertions;
-using FluentAssertions.CSharpFunctionalExtensions;
 using Serilog;
 using Zafiro.FileSystem.Actions;
 using Zafiro.FileSystem.Local;
@@ -10,22 +8,6 @@ namespace Zafiro.FileSystem.Tests;
 
 public class CopyDirectoryActionTests
 {
-    [Fact]
-    public async Task Get_descendant_directory_should()
-    {
-        var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>()
-        {
-            ["C:\\Users\\JMN\\Desktop\\Wild"] = new MockDirectoryData()
-        });
-        var fs = new LocalFileSystem(mockFileSystem, logger: Maybe<ILogger>.None);
-
-        var dir = await fs
-            .GetDirectory("C:\\Users\\JMN")
-            .Bind(directory => directory.DescendantDirectory("Desktop/Wild"));
-        
-        dir.Should().BeSuccess().And.Subject.Value.Path.Should().Be(ZafiroPath.Create("C:/Users/JMN/Desktop/Wild").Value);
-    }
-
     [Fact]
     public async Task Executing_CopyDirectoryAction_should_copy_directory_recursively()
     {

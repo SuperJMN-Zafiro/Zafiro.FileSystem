@@ -5,7 +5,7 @@ using Zafiro.Actions;
 
 namespace Zafiro.FileSystem.Actions;
 
-public class CopyFileAction : IAction<LongProgress>
+public class CopyFileAction : IFileAction
 {
     private readonly BehaviorSubject<LongProgress> progress;
 
@@ -21,9 +21,9 @@ public class CopyFileAction : IAction<LongProgress>
 
     public IObservable<LongProgress> Progress => progress.AsObservable();
 
-    public Task<Result> Execute(CancellationToken ct)
+    public Task<Result> Execute(CancellationToken cancellationToken)
     {
-        return Source.Copy(Destination, Maybe<IObserver<LongProgress>>.From(progress), cancellationToken: ct);
+        return Source.Copy(Destination, Maybe<IObserver<LongProgress>>.From(progress), cancellationToken: cancellationToken);
     }
 
     public static Task<Result<CopyFileAction>> Create(IZafiroFile source, IZafiroFile destination)

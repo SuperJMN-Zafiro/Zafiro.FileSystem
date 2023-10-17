@@ -20,12 +20,12 @@ public class LocalFileSystem : IFileSystem
         {
             var directoryInfo = path.Path.EndsWith(":") ? fileSystem.DirectoryInfo.New(path.Path + "\\") : fileSystem.DirectoryInfo.New(path.Path);
             return new LocalDirectory(directoryInfo, logger, this);
-        }, ex => ExceptionHandler.HandlePathAccessError(path, ex, logger)));
+        }, ex => ExceptionHandler.HandleError(path, ex, logger)));
     }
 
     public Task<Result<IZafiroFile>> GetFile(ZafiroPath path)
     {
-        return Task.FromResult(Result.Try<IZafiroFile>(() => new LocalFile(fileSystem.FileInfo.New(path), logger), ex => ExceptionHandler.HandlePathAccessError(path, ex, logger)));
+        return Task.FromResult(Result.Try<IZafiroFile>(() => new LocalFile(fileSystem.FileInfo.New(path), logger), ex => ExceptionHandler.HandleError(path, ex, logger)));
     }
 
     public ZafiroPath GetRoot() => Directory.GetCurrentDirectory().ToZafiroPath();

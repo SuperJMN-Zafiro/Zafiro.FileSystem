@@ -10,7 +10,5 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
 	</ItemGroup>
-
 	<Import Project="..\Common.props" />
-
 </Project>

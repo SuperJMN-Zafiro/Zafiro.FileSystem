@@ -5,7 +5,7 @@ using Zafiro.Actions;
 
 namespace Zafiro.FileSystem.Actions;
 
-public class DeleteFileAction : IAction<LongProgress>
+public class DeleteFileAction : IFileAction
 {
     private readonly IZafiroFile file;
     private readonly BehaviorSubject<LongProgress> progress = new(new LongProgress(0, 1));
@@ -18,7 +18,7 @@ public class DeleteFileAction : IAction<LongProgress>
 
     public IZafiroFile Source { get; }
 
-    public async Task<Result> Execute(CancellationToken ct)
+    public async Task<Result> Execute(CancellationToken cancellationToken)
     {
         var execute = await file.Delete().ConfigureAwait(false);
         execute.Tap(() => progress.OnNext(new LongProgress(1, 1)));

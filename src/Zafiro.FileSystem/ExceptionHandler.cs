@@ -5,9 +5,14 @@ namespace Zafiro.FileSystem;
 
 public static class ExceptionHandler
 {
-    public static string HandlePathAccessError(ZafiroPath path, Exception exception, Maybe<ILogger> logger)
+    public static string HandleError(ZafiroPath path, Exception exception, Maybe<ILogger> logger)
     {
+        if (exception is TaskCanceledException)
+        {
+            return "Cancelled";
+        }
+
         logger.Execute(l => l.Error(exception, "Error while accessing {Path}", path));
-        return $"Error while accessing {path}";
+        return $"Error while accessing {path}. Details: {exception}";
     }
 }
