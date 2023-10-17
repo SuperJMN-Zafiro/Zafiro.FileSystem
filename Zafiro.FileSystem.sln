@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem", "src\Za
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.SeaweedFS.Filer.Client", "src\Zafiro.FilesSystem.SeaweedFS.Filer.Client\Zafiro.FileSystem.SeaweedFS.Filer.Client.csproj", "{50AA49AE-7D16-4FFF-9B27-DB5BF87E6F31}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Temporary", "Temporary", "{73225F9C-CCCB-4000-8AF1-E67F4BB55E9D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
