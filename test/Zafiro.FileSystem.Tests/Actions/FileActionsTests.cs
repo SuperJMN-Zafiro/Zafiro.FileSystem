@@ -2,8 +2,8 @@
 using CSharpFunctionalExtensions;
 using Serilog;
 using Zafiro.CSharpFunctionalExtensions;
-using Zafiro.FileSystem.Actions;
 using Zafiro.FileSystem.Local;
+using Zafiro.FileSystem.Synchronizer;
 
 namespace Zafiro.FileSystem.Tests.Actions;
 

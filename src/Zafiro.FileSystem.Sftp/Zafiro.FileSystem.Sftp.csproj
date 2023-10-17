@@ -9,12 +9,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
-    <ProjectReference Include="E:\Repos\SuperJMN-Zafiro\Zafiro.FileSystem\src\Zafiro.FileSystem\Zafiro.FileSystem.csproj">
-      <Temp>Zafiro.FileSystem</Temp>
-    </ProjectReference>
-    <ProjectReference Include="E:\Repos\SuperJMN-Zafiro\Zafiro\src\Zafiro\Zafiro.csproj">
-      <Temp>Zafiro</Temp>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Common.props" />
 </Project>
