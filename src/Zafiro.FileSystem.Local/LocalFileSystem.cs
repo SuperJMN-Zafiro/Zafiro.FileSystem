@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using Serilog;
+﻿using Serilog;
 
 namespace Zafiro.FileSystem.Local;
 
@@ -28,5 +27,5 @@ public class LocalFileSystem : IFileSystem
         return Task.FromResult(Result.Try<IZafiroFile>(() => new LocalFile(fileSystem.FileInfo.New(path), logger), ex => ExceptionHandler.HandleError(path, ex, logger)));
     }
 
-    public ZafiroPath GetRoot() => Directory.GetCurrentDirectory().ToZafiroPath();
+    public Task<Result<ZafiroPath>> GetRoot() => Task.FromResult<Result<ZafiroPath>>(Directory.GetCurrentDirectory().ToZafiroPath());
 }

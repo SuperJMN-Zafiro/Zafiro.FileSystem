@@ -1,14 +1,14 @@
 ﻿using System.IO.Abstractions;
 using Serilog;
 
-namespace Zafiro.FileSystem.Local;
+namespace Zafiro.FileSystem.Android;
 
-public class LocalDirectory : IZafiroDirectory
+public class AndroidDirectory : IZafiroDirectory
 {
     private readonly IDirectoryInfo directoryInfo;
     private readonly Maybe<ILogger> logger;
 
-    public LocalDirectory(IDirectoryInfo directoryInfo, Maybe<ILogger> logger, IFileSystem fileSystem)
+    public AndroidDirectory(IDirectoryInfo directoryInfo, Maybe<ILogger> logger, IFileSystem fileSystem)
     {
         this.directoryInfo = directoryInfo;
         this.logger = logger;
@@ -21,11 +21,11 @@ public class LocalDirectory : IZafiroDirectory
         {
             if (directoryInfo.FullName.EndsWith(System.IO.Path.DirectorySeparatorChar))
             {
-                return directoryInfo.FullName[..^1].ToZafiroPath();
+                return directoryInfo.FullName[..^1].FromAndroidToZafiro();
             }
             else
             {
-                return directoryInfo.FullName.ToZafiroPath();
+                return directoryInfo.FullName[1..];
             }
         }
     }
@@ -34,13 +34,14 @@ public class LocalDirectory : IZafiroDirectory
 
     public async Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
     {
-        var fromResult = await Task.FromResult(Result.Try(() => directoryInfo.GetDirectories().Select(info => (IZafiroDirectory) new LocalDirectory(info, logger, FileSystem)), ex => ExceptionHandler.HandleError(Path, ex, logger))).ConfigureAwait(false);
+        var fromResult = await Task.FromResult(Result.Try(() => directoryInfo.GetDirectories()
+            .Select(info => (IZafiroDirectory) new AndroidDirectory(info, logger, FileSystem)), ex => ExceptionHandler.HandleError(Path, ex, logger))).ConfigureAwait(false);
         return fromResult;
     }
 
     public Task<Result<IEnumerable<IZafiroFile>>> GetFiles()
     {
-        return Task.FromResult(Result.Try(() => directoryInfo.GetFiles().Select(info => (IZafiroFile) new LocalFile(info, logger)), ex => ExceptionHandler.HandleError(Path, ex, logger)));
+        return Task.FromResult(Result.Try(() => directoryInfo.GetFiles().Select(info => (IZafiroFile) new AndroidFile(info, logger)), ex => ExceptionHandler.HandleError(Path, ex, logger)));
     }
 
     public Task<Result> Delete()

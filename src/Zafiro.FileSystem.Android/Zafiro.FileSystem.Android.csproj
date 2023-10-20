@@ -1,12 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFrameworks>net7.0;net7.0-android</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  <Import Project="..\Common.props" />
   <ItemGroup>
-    <PackageReference Include="TestableIO.System.IO.Abstractions" Version="19.2.69" />
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.40.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
