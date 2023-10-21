@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
@@ -26,15 +27,14 @@ public class MainActivity : AvaloniaMainActivity<App>
 
     protected override void OnCreate(Bundle savedInstanceState)
     {
-        AndroidPermissions.SetIsGranted(() => Environment.IsExternalStorageManager);
-        AndroidPermissions.SetHandler(() => StartActivityForResult(new Intent(global::Android.Provider.Settings.ActionManageAllFilesAccessPermission), AndroidPermissions.RequestCode));
         base.OnCreate(savedInstanceState);
+        AndroidFileSystem.Register(this);
     }
 
 
-    protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+    protected override void OnActivityResult(int requestCode, Result resultCode, Intent? data)
     {
-        AndroidPermissions.OnResume();
         base.OnActivityResult(requestCode, resultCode, data);
+        AndroidFileSystem.OnActivityResult(requestCode, resultCode, data);
     }
 }

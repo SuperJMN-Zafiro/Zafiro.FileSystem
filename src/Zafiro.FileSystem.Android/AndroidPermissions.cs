@@ -1,26 +1,30 @@
-﻿namespace Zafiro.FileSystem.Android;
+﻿#if ANDROID
+using Android.Content;
+using AppResult = Android.App.Result;
+
+namespace Zafiro.FileSystem.Android;
 
 public static class AndroidPermissions
 {
-    private static Func<bool> IsGranted;
-    private static TaskCompletionSource<Result> tcs;
+    private static Func<bool> GetIsGranted;
+    private static TaskCompletionSource<Result>? tcs;
+    public static readonly int RequestCode = 1;
+    private static Action RequestEnable { get; set; }
 
     public static void SetIsGranted(Func<bool> isGranted)
     {
-        IsGranted = isGranted;
-    }
-    
-    public static void SetHandler(Action action)
-    {
-        Enable = action;
+        GetIsGranted = isGranted;
     }
 
-    public static Action Enable { get; set; }
-    public static readonly int RequestCode = 1;
+    public static void SetHandler(Action action)
+    {
+        RequestEnable = action;
+    }
 
     public static Task<Result> Request()
     {
-        var isGranted = IsGranted();
+        var isGranted = GetIsGranted();
+
         if (tcs != null && !isGranted)
         {
             return Task.FromResult(Result.Failure("There's an pending request"));
@@ -30,7 +34,7 @@ public static class AndroidPermissions
 
         if (!isGranted)
         {
-            Enable();
+            RequestEnable();
         }
         else
         {
@@ -40,11 +44,12 @@ public static class AndroidPermissions
         return tcs.Task;
     }
 
-    public static void OnResume()
+    public static void OnActivityResult(int requestCode, AppResult resultCode, Intent? data)
     {
         if (tcs != null)
         {
-            tcs.SetResult(IsGranted() ? Result.Success() : Result.Failure("Permission not granted"));
+            tcs.SetResult(GetIsGranted() ? Result.Success() : Result.Failure("Permission not granted"));
         }
     }
 }
+#endif
