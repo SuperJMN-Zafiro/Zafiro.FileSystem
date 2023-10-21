@@ -1,20 +1,20 @@
 ﻿using System.IO.Abstractions;
 using Serilog;
 
-namespace Zafiro.FileSystem.Local;
+namespace Zafiro.FileSystem.Android;
 
-public class LocalFile : IZafiroFile
+public class AndroidFile : IZafiroFile
 {
     private readonly IFileInfo info;
     private readonly Maybe<ILogger> logger;
 
-    public LocalFile(IFileInfo info, Maybe<ILogger> logger)
+    public AndroidFile(IFileInfo info, Maybe<ILogger> logger)
     {
         this.info = info;
         this.logger = logger;
     }
 
-    public ZafiroPath Path => info.FullName.ToZafiroPath();
+    public ZafiroPath Path => info.FullName.FromAndroidToZafiro();
 
     public Task<Result<long>> Size()
     {

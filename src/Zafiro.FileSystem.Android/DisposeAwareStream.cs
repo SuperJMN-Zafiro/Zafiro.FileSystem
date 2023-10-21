@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace Zafiro.FileSystem.Local;
+namespace Zafiro.FileSystem.Android;
 
 public class DisposeAwareStream : Stream
 {
