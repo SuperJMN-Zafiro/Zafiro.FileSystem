@@ -11,7 +11,6 @@ public class AndroidFileSystem : IFileSystem
     private readonly System.IO.Abstractions.IFileSystem fileSystem;
     private readonly Maybe<ILogger> logger;
     private static bool isInitialized;
-    private static bool isHandingActivityResult;
 
     public AndroidFileSystem(System.IO.Abstractions.IFileSystem fileSystem, Maybe<ILogger> logger)
     {
@@ -22,6 +21,11 @@ public class AndroidFileSystem : IFileSystem
 
     public Task<Result<IZafiroDirectory>> GetDirectory(ZafiroPath path)
     {
+        if (path == ZafiroPath.Empty)
+        {
+            return Task.FromResult(Result.Success<IZafiroDirectory>(new RootDirectory(this, fileSystem, logger)));
+        }
+
         return Task.FromResult(Result.Try<IZafiroDirectory>(() =>
         {
             var localPath = "/" + path;
@@ -59,7 +63,6 @@ public class AndroidFileSystem : IFileSystem
     public static void OnActivityResult(int requestCode, AppResult resultCode, Intent? data)
     {
         AndroidPermissions.OnActivityResult(requestCode, resultCode, data);
-        isHandingActivityResult = true;
     }
 
     public static void Register(Activity activity)
