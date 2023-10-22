@@ -1,6 +1,7 @@
 ﻿#if ANDROID
 using Android.Content;
 using AppResult = Android.App.Result;
+#endif
 
 namespace Zafiro.FileSystem.Android;
 
@@ -44,12 +45,14 @@ public static class AndroidPermissions
         return tcs.Task;
     }
 
+#if ANDROID
     public static void OnActivityResult(int requestCode, AppResult resultCode, Intent? data)
     {
         if (tcs != null)
         {
             tcs.SetResult(GetIsGranted() ? Result.Success() : Result.Failure("Permission not granted"));
+            tcs = null;
         }
     }
-}
 #endif
+}

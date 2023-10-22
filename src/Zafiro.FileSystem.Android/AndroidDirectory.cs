@@ -32,28 +32,31 @@ public class AndroidDirectory : IZafiroDirectory
 
     public IFileSystem FileSystem { get; }
 
-    public async Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
+    public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
     {
-        var fromResult = await Task.FromResult(Result.Try(() => directoryInfo.GetDirectories()
-            .Select(info => (IZafiroDirectory) new AndroidDirectory(info, logger, FileSystem)), ex => ExceptionHandler.HandleError(Path, ex, logger))).ConfigureAwait(false);
-        return fromResult;
+        return AndroidPermissions.Request().Bind(async () =>
+        {
+            var fromResult = await Task.FromResult(Result.Try(() => directoryInfo.GetDirectories()
+                .Select(info => (IZafiroDirectory) new AndroidDirectory(info, logger, FileSystem)), ex => ExceptionHandler.HandleError(Path, ex, logger))).ConfigureAwait(false);
+            return fromResult;
+        });
     }
 
     public Task<Result<IEnumerable<IZafiroFile>>> GetFiles()
     {
-        return Task.FromResult(Result.Try(() => directoryInfo.GetFiles().Select(info => (IZafiroFile) new AndroidFile(info, logger)), ex => ExceptionHandler.HandleError(Path, ex, logger)));
+        return AndroidPermissions.Request().Bind(() => Result.Try(() => directoryInfo.GetFiles().Select(info => (IZafiroFile) new AndroidFile(info, logger)), ex => ExceptionHandler.HandleError(Path, ex, logger)));
     }
 
     public Task<Result> Delete()
     {
-        return Task.FromResult(Result.Try(() => directoryInfo.Delete(true)));
+        return AndroidPermissions.Request().Bind(() => Result.Try(() => directoryInfo.Delete(true)));
     }
 
     public async Task<Result<IZafiroFile>> GetFile(string name)
     {
         if (name.Contains(ZafiroPath.ChunkSeparator))
         {
-            return Result.Failure<IZafiroFile>("The name cannot be a path, but the name of a file in the directory");
+            return Result.Failure<IZafiroFile>("GetFile is used to get direct files in the directory. Subpaths are not supported. Use FileSystem.GetFile instead.");
         }
 
         return await FileSystem.GetFile(Path.Combine(name));

@@ -21,22 +21,26 @@ public class AndroidFileSystem : IFileSystem
 
     public Task<Result<IZafiroDirectory>> GetDirectory(ZafiroPath path)
     {
-        if (path == ZafiroPath.Empty)
+        return AndroidPermissions.Request().Bind(() =>
         {
-            return Task.FromResult(Result.Success<IZafiroDirectory>(new RootDirectory(this, fileSystem, logger)));
-        }
+            if (path == ZafiroPath.Empty)
+            {
+                return Task.FromResult(Result.Success<IZafiroDirectory>(new RootDirectory(this, fileSystem, logger)));
+            }
 
-        return Task.FromResult(Result.Try<IZafiroDirectory>(() =>
-        {
-            var localPath = "/" + path;
-            var directoryInfo = fileSystem.DirectoryInfo.New(localPath);
-            return new AndroidDirectory(directoryInfo, logger, this);
-        }, ex => ExceptionHandler.HandleError(path, ex, logger)));
+            return Task.FromResult(Result.Try<IZafiroDirectory>(() =>
+            {
+                var localPath = "/" + path;
+                var directoryInfo = fileSystem.DirectoryInfo.New(localPath);
+                return new AndroidDirectory(directoryInfo, logger, this);
+            }, ex => ExceptionHandler.HandleError(path, ex, logger)));
+        });
     }
 
     public Task<Result<IZafiroFile>> GetFile(ZafiroPath path)
     {
-        return Task.FromResult(Result.Try<IZafiroFile>(() => new AndroidFile(fileSystem.FileInfo.New(path), logger), ex => ExceptionHandler.HandleError(path, ex, logger)));
+        return AndroidPermissions.Request()
+            .Bind(() => Result.Try<IZafiroFile>(() => new AndroidFile(fileSystem.FileInfo.New(path), logger), ex => ExceptionHandler.HandleError(path, ex, logger)));
     }
 
     public Task<Result<ZafiroPath>> GetRoot()
