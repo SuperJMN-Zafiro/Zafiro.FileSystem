@@ -19,6 +19,11 @@ public class LocalDirectory : IZafiroDirectory
     {
         get
         {
+            if (directoryInfo.FullName.StartsWith("/"))
+            {
+                return directoryInfo.FullName[1..];
+            }
+            
             if (directoryInfo.FullName.EndsWith(System.IO.Path.DirectorySeparatorChar))
             {
                 return directoryInfo.FullName[..^1].ToZafiroPath();

@@ -14,7 +14,18 @@ public class LocalFile : IZafiroFile
         this.logger = logger;
     }
 
-    public ZafiroPath Path => info.FullName.ToZafiroPath();
+    public ZafiroPath Path
+    {
+        get
+        {
+            if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+            {
+                return info.FullName[1..];
+            }
+            
+            return info.FullName.Replace("\\", "/");
+        }
+    }
 
     public Task<Result<long>> Size()
     {
