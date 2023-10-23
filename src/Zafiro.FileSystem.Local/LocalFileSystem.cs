@@ -15,6 +15,14 @@ public class LocalFileSystem : IFileSystem
 
     public Task<Result<IZafiroDirectory>> GetDirectory(ZafiroPath path)
     {
+        if (path == ZafiroPath.Empty)
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                return Task.FromResult(Result.Success((IZafiroDirectory)new RootDirectory(fileSystem, this, logger)));
+            }
+        }
+
         return Task.FromResult(Result.Try<IZafiroDirectory>(() =>
         {
             var directoryInfo = path.Path.EndsWith(":") ? fileSystem.DirectoryInfo.New(path.Path + "\\") : fileSystem.DirectoryInfo.New(path.Path);
