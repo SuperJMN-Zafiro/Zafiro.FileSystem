@@ -33,7 +33,7 @@ public class FileSystemComparerTests
             .Bind(source => fileSystem2.GetDirectory("D:/")
                 .Bind(dest => sut.Diff(source, dest)));
 
-        diff.Should().BeSuccess().And.Subject.Value.Should().NotBeEmpty();
+        diff.Should().Succeed().And.Subject.Value.Should().NotBeEmpty();
     }
 }
 

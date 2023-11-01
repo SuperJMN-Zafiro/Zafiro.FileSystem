@@ -20,6 +20,6 @@ public class SeaweedFSTests
             .Bind(seaweedFS.GetFile)
             .Bind(file => file.Exists());
 
-        result.Should().BeSuccess().And.Subject.Value.Should().Be(match);
+        result.Should().Succeed().And.Subject.Value.Should().Be(match);
     }
 }
