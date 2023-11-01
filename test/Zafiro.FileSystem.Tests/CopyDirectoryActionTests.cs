@@ -25,7 +25,7 @@ public class CopyDirectoryActionTests
 
         var result = await action.Bind(directoryAction => directoryAction.Execute(CancellationToken.None));
 
-        result.Should().BeSuccess();
+        result.Should().Succeed();
         mockFileSystem.GetFile("C:\\Destination\\File1.txt").TextContents.Should().Be("Hi");
         mockFileSystem.GetFile("C:\\Destination\\File2.txt").TextContents.Should().Be("How");
         mockFileSystem.GetFile("C:\\Destination\\Subfolder\\File3.txt").TextContents.Should().Be("Are you?");

@@ -22,7 +22,7 @@ public class FileActionsTests
         var local = new LocalFileSystem(mockFileSystem, Maybe<ILogger>.None);
         var r = await local.GetDirectory("C:/Source").CombineAndBind(local.GetDirectory("C:/Destination"), CopyLeftFilesToRightSideAction.Create);
         var execution = await r.Bind(s => s.Execute(CancellationToken.None));
-        execution.Should().BeSuccess();
+        execution.Should().Succeed();
 
         mockFileSystem.GetFile("C:\\Source\\File1.txt").TextContents.Should().Be("Hi");
         mockFileSystem.GetFile("C:\\Source\\File2.txt").TextContents.Should().Be("How");
@@ -43,7 +43,7 @@ public class FileActionsTests
         var local = new LocalFileSystem(mockFileSystem, Maybe<ILogger>.None);
         var r = await local.GetDirectory("C:/Source").CombineAndBind(local.GetDirectory("C:/Destination"), OverwriteRightFilesInBothSides.Create);
         var execution = await r.Bind(s => s.Execute(CancellationToken.None));
-        execution.Should().BeSuccess();
+        execution.Should().Succeed();
 
         mockFileSystem.GetFile("C:\\Source\\File1.txt").TextContents.Should().Be("Hi");
         mockFileSystem.GetFile("C:\\Source\\File2.txt").TextContents.Should().Be("How");
@@ -66,7 +66,7 @@ public class FileActionsTests
         var local = new LocalFileSystem(mockFileSystem, Maybe<ILogger>.None);
         var r = await local.GetDirectory("C:/Source").CombineAndBind(local.GetDirectory("C:/Destination"), DeleteFilesOnlyOnRightSide.Create);
         var execution = await r.Bind(s => s.Execute(CancellationToken.None));
-        execution.Should().BeSuccess();
+        execution.Should().Succeed();
 
         mockFileSystem.GetFile("C:\\Source\\File1.txt").TextContents.Should().Be("Hi");
         mockFileSystem.GetFile("C:\\Source\\File2.txt").TextContents.Should().Be("How");

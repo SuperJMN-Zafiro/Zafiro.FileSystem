@@ -19,7 +19,7 @@ public class ZafiroDirectoryMixinTests
         var result = await fileSystem.GetDirectory("C:/Dir1")
             .Bind(directory => directory.DescendantFile("Dir2/File.txt"));
         
-        result.Should().BeSuccess().And.Subject.Value.Value.Should().BeAssignableTo<IZafiroFile>();
+        result.Should().Succeed().And.Subject.Value.Value.Should().BeAssignableTo<IZafiroFile>();
     }
 
     [Fact]
@@ -34,6 +34,6 @@ public class ZafiroDirectoryMixinTests
         var result = await fileSystem.GetDirectory("C:/Dir1")
             .Bind(directory => directory.DescendantDirectory("Dir2"));
 
-        result.Should().BeSuccess().And.Subject.Value.Value.Should().BeAssignableTo<IZafiroDirectory>();
+        result.Should().Succeed().And.Subject.Value.Value.Should().BeAssignableTo<IZafiroDirectory>();
     }
 }

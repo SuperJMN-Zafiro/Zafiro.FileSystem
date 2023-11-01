@@ -29,4 +29,14 @@ public static class ZafiroPathMixin
         var dotPos = name.LastIndexOf('.');
         return dotPos < 0 ? Maybe<string>.None : name[(dotPos+1)..];
     }
+
+    public static IEnumerable<ZafiroPath> Parents(this ZafiroPath path)
+    {
+        if (path.RouteFragments.Count() <= 1)
+        {
+            return Enumerable.Empty<ZafiroPath>();
+        }
+
+        return new[] { path.Parent() }.Concat(path.Parent().Parents());
+    }
 }

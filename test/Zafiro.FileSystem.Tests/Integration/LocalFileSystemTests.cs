@@ -1,6 +1,4 @@
-using System.Drawing;
 using CSharpFunctionalExtensions;
-using FluentAssertions.CSharpFunctionalExtensions;
 using Serilog;
 using Xunit.Abstractions;
 using Zafiro.FileSystem.Local;
@@ -23,7 +21,7 @@ public class LocalFileSystemTests
         {
             var localFs = new LocalFileSystem(new System.IO.Abstractions.FileSystem(), Maybe<ILogger>.None);
             var root = await localFs.GetDirectory(ZafiroPath.Empty);
-            root.Should().BeSuccess().And.Subject.Value.Path.Should().Be(ZafiroPath.Empty);
+            root.Should().Succeed().And.Subject.Value.Path.Should().Be(ZafiroPath.Empty);
         }
     }
     
@@ -38,7 +36,7 @@ public class LocalFileSystemTests
                 .Bind(x => x.GetDirectories())
                 .Tap(dirs => dirs.ToList().ForEach(d => output.WriteLine(d.Path)));
             
-            root.Should().BeSuccess().And.Subject.Value.Should().NotBeEmpty();
+            root.Should().Succeed().And.Subject.Value.Should().NotBeEmpty();
         }
     }
     
@@ -51,7 +49,7 @@ public class LocalFileSystemTests
             var root = await localFs
                 .GetDirectory("home/jmn");
             
-            root.Should().BeSuccess().And.Subject.Value.Path.ToString().Should().NotStartWith("/");
+            root.Should().Succeed().And.Subject.Value.Path.ToString().Should().NotStartWith("/");
         }
     }
     
@@ -66,7 +64,7 @@ public class LocalFileSystemTests
                 .Bind(directory => directory.GetFiles())
                 .Tap(files => files.ToList().ForEach(d => output.WriteLine(d.Path)));
             
-            root.Should().BeSuccess().And.Subject.Value.Should().NotBeEmpty();
+            root.Should().Succeed().And.Subject.Value.Should().NotBeEmpty();
             root.Value.Should().NotContain(file => file.Path.ToString().StartsWith("/"));
         }
     }
