@@ -7,20 +7,22 @@ public class SftpDirectory : IZafiroDirectory
 {
     private readonly SftpClient client;
 
-    public SftpDirectory(string path, SftpClient client, IFileSystem fileSystem)
+    public SftpDirectory(string pathInSftp, SftpClient client, IFileSystem fileSystem)
     {
-        Path = path;
+        PathInSftp = pathInSftp;
+        Path = pathInSftp.ToZafiroPath();
         this.client = client;
         FileSystem = fileSystem;
     }
 
     public ZafiroPath Path { get; }
+    public ZafiroPath PathInSftp { get; }
     public IFileSystem FileSystem { get; }
 
     public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
     {
         return Result
-            .Try(() => client.ListDirectoryAsync(Path), ex => ErrorHandler(Path, ex))
+            .Try(() => client.ListDirectoryAsync(PathInSftp), ex => ErrorHandler(PathInSftp, ex))
             .Map(files => files
                 .Where(s => s.IsDirectory)
                 .Where(file => new[] { ".", ".." }.All(x => x != file.Name))
@@ -30,7 +32,7 @@ public class SftpDirectory : IZafiroDirectory
     public Task<Result<IEnumerable<IZafiroFile>>> GetFiles()
     {
         return Result
-            .Try(() => client.ListDirectoryAsync(Path), exception => ErrorHandler(Path, exception))
+            .Try(() => client.ListDirectoryAsync(PathInSftp), exception => ErrorHandler(PathInSftp, exception))
             .Map(files => files
                 .Where(s => !s.IsDirectory)
                 .Select(file => (IZafiroFile)new SftpFile(file.FullName, client)));
@@ -48,6 +50,6 @@ public class SftpDirectory : IZafiroDirectory
 
     public Task<Result<IZafiroFile>> GetFile(string filename)
     {
-        return Task.FromResult(Result.Success((IZafiroFile)new SftpFile(Path.Combine(filename), client)));
+        return Task.FromResult(Result.Success((IZafiroFile)new SftpFile(PathInSftp.Combine(filename), client)));
     }
 }
