@@ -15,7 +15,28 @@ public class LocalDirectory : IZafiroDirectory
         FileSystem = fileSystem;
     }
 
-    public bool IsHidden => (directoryInfo.Attributes & FileAttributes.Hidden) != 0;
+    public bool IsHidden
+    {
+        get
+        {
+            if (directoryInfo.Root.FullName == directoryInfo.FullName)
+            {
+                return false;
+            }
+
+            if (directoryInfo.Attributes.HasFlag(FileAttributes.Hidden))
+            {
+                return true;
+            }
+
+            if (directoryInfo.Name.StartsWith("."))
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
 
     public ZafiroPath Path
     {

@@ -61,7 +61,7 @@ public class LocalFile : IZafiroFile
         return Task.FromResult(Result.Try(() => info.Delete()));
     }
 
-    public bool IsHidden => info.IsReadOnly;
+    public bool IsHidden => (info.Attributes & FileAttributes.Hidden) != 0;
 
     public override string ToString() => Path;
 
