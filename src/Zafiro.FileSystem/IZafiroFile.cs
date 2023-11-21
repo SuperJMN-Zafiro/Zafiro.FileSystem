@@ -10,4 +10,5 @@ public interface IZafiroFile
     Task<Result<Stream>> GetContents(CancellationToken cancellationToken = default);
     Task<Result> SetContents(Stream stream, CancellationToken cancellationToken = default);
     Task<Result> Delete(CancellationToken cancellationToken = default);
+    public bool IsHidden { get; }
 }

@@ -7,12 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.cspr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.Tests", "test\Zafiro.FileSystem.Tests\Zafiro.FileSystem.Tests.csproj", "{C0269C35-E79A-4AD0-8DE1-760107F6B22A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp.Android", "samples\SampleApp.Android\SampleApp.Android.csproj", "{248F4510-FB56-4215-843B-D058050DA374}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp.Desktop", "samples\SampleApp.Desktop\SampleApp.Desktop.csproj", "{4C585407-9BAF-46D9-A603-21A495FE2B13}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{66032D82-0318-4416-9EA4-9AF2666BFC78}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem", "src\Zafiro.FileSystem\Zafiro.FileSystem.csproj", "{5CA2DF80-0689-4AEF-A9C0-5FE659BC481B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.Local", "src\Zafiro.FileSystem.Local\Zafiro.FileSystem.Local.csproj", "{35962223-9C2A-4F74-BF93-620AF54AC39D}"
@@ -24,10 +18,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.SeaweedFS.Filer.Client", "src\Zafiro.FilesSystem.SeaweedFS.Filer.Client\Zafiro.FileSystem.SeaweedFS.Filer.Client.csproj", "{3B9D9154-DEDB-4F2B-908A-D3CE1E7CCBA2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.Android", "src\Zafiro.FileSystem.Android\Zafiro.FileSystem.Android.csproj", "{F3F30982-EE21-4F13-BC14-E39508AA6A0C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp", "samples\SampleApp\SampleApp.csproj", "{3943CF22-C701-45FD-92D6-302A8021544D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Temporary", "Temporary", "{0893A673-30B1-4F8A-BE9A-8BCED23201D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,16 +31,6 @@ Global
 		{C0269C35-E79A-4AD0-8DE1-760107F6B22A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0269C35-E79A-4AD0-8DE1-760107F6B22A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0269C35-E79A-4AD0-8DE1-760107F6B22A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{248F4510-FB56-4215-843B-D058050DA374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{248F4510-FB56-4215-843B-D058050DA374}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{248F4510-FB56-4215-843B-D058050DA374}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{248F4510-FB56-4215-843B-D058050DA374}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{248F4510-FB56-4215-843B-D058050DA374}.Release|Any CPU.Build.0 = Release|Any CPU
-		{248F4510-FB56-4215-843B-D058050DA374}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{4C585407-9BAF-46D9-A603-21A495FE2B13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C585407-9BAF-46D9-A603-21A495FE2B13}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C585407-9BAF-46D9-A603-21A495FE2B13}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C585407-9BAF-46D9-A603-21A495FE2B13}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5CA2DF80-0689-4AEF-A9C0-5FE659BC481B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5CA2DF80-0689-4AEF-A9C0-5FE659BC481B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CA2DF80-0689-4AEF-A9C0-5FE659BC481B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,18 +55,9 @@ Global
 		{F3F30982-EE21-4F13-BC14-E39508AA6A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3F30982-EE21-4F13-BC14-E39508AA6A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3F30982-EE21-4F13-BC14-E39508AA6A0C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3943CF22-C701-45FD-92D6-302A8021544D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3943CF22-C701-45FD-92D6-302A8021544D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3943CF22-C701-45FD-92D6-302A8021544D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3943CF22-C701-45FD-92D6-302A8021544D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{248F4510-FB56-4215-843B-D058050DA374} = {66032D82-0318-4416-9EA4-9AF2666BFC78}
-		{4C585407-9BAF-46D9-A603-21A495FE2B13} = {66032D82-0318-4416-9EA4-9AF2666BFC78}
-		{3943CF22-C701-45FD-92D6-302A8021544D} = {66032D82-0318-4416-9EA4-9AF2666BFC78}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6309FF7A-E6E5-485B-BAE6-70DD0E37B3BA}

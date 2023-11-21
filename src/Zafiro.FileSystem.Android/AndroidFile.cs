@@ -53,6 +53,8 @@ public class AndroidFile : IZafiroFile
         return Task.FromResult(Result.Try(() => info.Delete()));
     }
 
+    public bool IsHidden => false;
+
     public override string ToString()
     {
         return Path;

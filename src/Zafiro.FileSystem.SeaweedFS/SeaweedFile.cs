@@ -43,6 +43,8 @@ public class SeaweedFile : IZafiroFile
         return Result.Try(() => seaweedStore.DeleteFile(Path, cancellationToken), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(Path, ex, logger));
     }
 
+    public bool IsHidden => false;
+
     public override string ToString()
     {
         return Path;

@@ -22,7 +22,7 @@ public class LocalFile : IZafiroFile
             {
                 return info.FullName[1..];
             }
-            
+
             return info.FullName.Replace("\\", "/");
         }
     }
@@ -32,10 +32,7 @@ public class LocalFile : IZafiroFile
         return Result.Try(() => Task.FromResult(info.Length));
     }
 
-    public Task<Result<bool>> Exists()
-    {
-        return Task.FromResult<Result<bool>>(info.Exists);
-    }
+    public Task<Result<bool>> Exists() => Task.FromResult<Result<bool>>(info.Exists);
 
     public Task<Result<Stream>> GetContents(CancellationToken cancellationToken = default)
     {
@@ -64,10 +61,9 @@ public class LocalFile : IZafiroFile
         return Task.FromResult(Result.Try(() => info.Delete()));
     }
 
-    public override string ToString()
-    {
-        return Path;
-    }
+    public bool IsHidden => info.IsReadOnly;
+
+    public override string ToString() => Path;
 
     private void EnsureFileExists()
     {
