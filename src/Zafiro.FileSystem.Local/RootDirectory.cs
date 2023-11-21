@@ -15,6 +15,7 @@ public class RootDirectory : IZafiroDirectory
         this.logger = logger;
     }
 
+    public bool IsHidden => false;
     public ZafiroPath Path => ZafiroPath.Empty;
     public IFileSystem FileSystem => localFileSystem;
     public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()

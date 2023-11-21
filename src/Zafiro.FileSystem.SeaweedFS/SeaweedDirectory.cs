@@ -19,6 +19,7 @@ public class SeaweedDirectory : IZafiroDirectory
         FileSystem = fileSystem;
     }
 
+    public bool IsHidden => false;
     public ZafiroPath Path { get; }
     public IFileSystem FileSystem { get; }
 

@@ -18,6 +18,7 @@ public class RootDirectory : IZafiroDirectory
         FileSystem = fileSystem;
     }
 
+    public bool IsHidden => false;
     public ZafiroPath Path => ZafiroPath.Empty;
     public IFileSystem FileSystem { get; }
     public async Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()

@@ -15,6 +15,8 @@ public class LocalDirectory : IZafiroDirectory
         FileSystem = fileSystem;
     }
 
+    public bool IsHidden => (directoryInfo.Attributes & FileAttributes.Hidden) != 0;
+
     public ZafiroPath Path
     {
         get

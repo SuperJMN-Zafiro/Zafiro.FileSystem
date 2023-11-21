@@ -15,6 +15,8 @@ public class AndroidDirectory : IZafiroDirectory
         FileSystem = fileSystem;
     }
 
+    public bool IsHidden => false;
+
     public ZafiroPath Path
     {
         get

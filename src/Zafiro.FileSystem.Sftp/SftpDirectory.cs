@@ -13,8 +13,10 @@ public class SftpDirectory : IZafiroDirectory
         Path = pathInSftp.ToZafiroPath();
         this.client = client;
         FileSystem = fileSystem;
+        IsHidden = Path.Name().StartsWith(".");
     }
 
+    public bool IsHidden { get; }
     public ZafiroPath Path { get; }
     public ZafiroPath PathInSftp { get; }
     public IFileSystem FileSystem { get; }
