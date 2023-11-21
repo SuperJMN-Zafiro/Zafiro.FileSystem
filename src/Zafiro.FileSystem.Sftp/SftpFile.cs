@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Reflection.Metadata;
+using CSharpFunctionalExtensions;
 using Renci.SshNet;
 
 namespace Zafiro.FileSystem.Sftp;
@@ -51,4 +52,6 @@ public class SftpFile : IZafiroFile
     {
         return Task.FromResult(Result.Try(() => client.DeleteFile(Path)));
     }
+
+    public bool IsHidden => Path.Name().StartsWith(".");
 }

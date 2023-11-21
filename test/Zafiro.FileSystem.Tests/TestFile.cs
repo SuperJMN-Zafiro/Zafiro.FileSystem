@@ -34,4 +34,6 @@ public class TestFile : IZafiroFile
     {
         throw new NotImplementedException();
     }
+
+    public bool IsHidden => false;
 }
