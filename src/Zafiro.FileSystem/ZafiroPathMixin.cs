@@ -12,7 +12,7 @@ public static class ZafiroPathMixin
 
     public static string Name(this ZafiroPath path)
     { 
-        return  path.RouteFragments.Last();
+        return path.RouteFragments.LastOrDefault() ?? "";
     }
 
     public static string NameWithoutExtension(this ZafiroPath path)
