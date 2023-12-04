@@ -45,6 +45,8 @@ public class SftpDirectory : IZafiroDirectory
         return Task.FromResult(Result.Failure("Not supported"));
     }
 
+    public Task<Result> Create() => Task.FromResult(Result.Try(() => client.CreateDirectory(PathInSftp)));
+
     private string ErrorHandler(ZafiroPath zafiroPath, Exception exception)
     {
         return $"{exception.Message} for path '{zafiroPath}'";

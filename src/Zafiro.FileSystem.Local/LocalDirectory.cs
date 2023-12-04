@@ -76,6 +76,11 @@ public class LocalDirectory : IZafiroDirectory
         return Task.FromResult(Result.Try(() => directoryInfo.Delete(true)));
     }
 
+    public Task<Result> Create() => Task.FromResult(Result.Try(() =>
+    {
+        directoryInfo.CreateSubdirectory(Path.Name());
+    }));
+
     public async Task<Result<IZafiroFile>> GetFile(string name)
     {
         if (name.Contains(ZafiroPath.ChunkSeparator))

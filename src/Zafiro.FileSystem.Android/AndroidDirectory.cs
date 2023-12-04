@@ -54,6 +54,11 @@ public class AndroidDirectory : IZafiroDirectory
         return AndroidPermissions.Request().Bind(() => Result.Try(() => directoryInfo.Delete(true)));
     }
 
+    public Task<Result> Create() => Task.FromResult(Result.Try(() =>
+    {
+        directoryInfo.CreateSubdirectory(Path);
+    }));
+
     public async Task<Result<IZafiroFile>> GetFile(string name)
     {
         if (name.Contains(ZafiroPath.ChunkSeparator))

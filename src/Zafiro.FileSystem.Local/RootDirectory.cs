@@ -30,4 +30,5 @@ public class RootDirectory : IZafiroDirectory
     public Task<Result<IEnumerable<IZafiroFile>>> GetFiles() => Task.FromResult(Result.Success(Enumerable.Empty<IZafiroFile>()));
 
     public Task<Result> Delete() => Task.FromResult(Result.Failure("Cannot delete root"));
+    public Task<Result> Create() => Task.FromResult(Result.Failure("Can't create this directory"));
 }
