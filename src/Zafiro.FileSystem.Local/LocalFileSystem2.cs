@@ -36,4 +36,23 @@ public class LocalFileSystem2
                 }
             }));
     }
+
+    public async Task<Result> CreateFolder(ZafiroPath path)
+    {
+        return Result.Try(() => fileSystem.Directory.CreateDirectory(path));
+    }
+
+    public async Task<Result<FileProperties>> GetFileProperties(ZafiroPath path)
+    {
+        return Result.Try(() =>
+        {
+            var info = fileSystem.FileInfo.New(path);
+            return new FileProperties()
+            {
+                IsHidden = info.Attributes.HasFlag(FileAttributes.Hidden),
+                CreationTime = info.CreationTime,
+                Length = info.Length,
+            };
+        });
+    }
 }
