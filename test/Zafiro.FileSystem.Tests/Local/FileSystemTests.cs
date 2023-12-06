@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using System.Text;
 using FluentAssertions.Extensions;
-using Zafiro.FileSystem.Local;
+using Zafiro.FileSystem2;
 
 namespace Zafiro.FileSystem.Tests.Local;
 
@@ -26,10 +26,9 @@ public class FileSystemTests
             ["Pepito.txt"] = new("Salute")
         });
         var sut = new LocalFileSystem2(mockFileSystem);
-        var result = await sut.GetFileContents("Pepito.txt");
+        var result = await sut.Contents("Pepito.txt").ToList();
 
-        var bytes = result.Should().Succeed().And.Subject.Value.ToList().GetAwaiter().GetResult().ToArray();
-        Encoding.UTF8.GetString(bytes).Should().Be("Salute");
+        Encoding.UTF8.GetString(result.ToArray()).Should().Be("Salute");
     }
 
     [Fact]

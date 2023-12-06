@@ -1,11 +1,13 @@
 ﻿using System.Reactive.Linq;
+using CSharpFunctionalExtensions;
+using Zafiro.FileSystem;
 using Zafiro.IO;
 using Zafiro.Mixins;
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-namespace Zafiro.FileSystem.Local;
+namespace Zafiro.FileSystem2;
 
-public class LocalFileSystem2
+public class LocalFileSystem2 : IFileSystem2
 {
     private readonly System.IO.Abstractions.IFileSystem fileSystem;
 
@@ -19,9 +21,9 @@ public class LocalFileSystem2
         return Result.Try(() => fileSystem.File.Create(path));
     }
 
-    public async Task<Result<IObservable<byte>>> GetFileContents(ZafiroPath path)
+    public IObservable<byte> Contents(ZafiroPath path)
     {
-        return Result.Try(() => Observable.Using(() => fileSystem.File.OpenRead(path), f => f.ToObservable()));
+        return Observable.Using(() => fileSystem.File.OpenRead(path), f => f.ToObservable());
     }
 
     public Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes)

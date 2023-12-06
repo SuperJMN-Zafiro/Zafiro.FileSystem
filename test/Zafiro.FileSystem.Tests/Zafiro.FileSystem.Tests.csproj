@@ -26,5 +26,6 @@
 	  <ProjectReference Include="..\..\src\Zafiro.FileSystem.Local\Zafiro.FileSystem.Local.csproj" />
 	  <ProjectReference Include="..\..\src\Zafiro.FileSystem.SeaweedFS\Zafiro.FileSystem.SeaweedFS.csproj" />
 	  <ProjectReference Include="..\..\src\Zafiro.FileSystem.Sftp\Zafiro.FileSystem.Sftp.csproj" />
+	  <ProjectReference Include="..\..\src\Zafiro.FileSystem2\Zafiro.FileSystem2.csproj" />
 	</ItemGroup>
 </Project>

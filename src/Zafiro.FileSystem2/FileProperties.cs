@@ -1,4 +1,4 @@
-﻿namespace Zafiro.FileSystem.Local;
+﻿namespace Zafiro.FileSystem2;
 
 #pragma warning disable CS1998
 public class FileProperties
