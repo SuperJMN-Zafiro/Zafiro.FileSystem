@@ -16,5 +16,6 @@ public class ZafiroDirectory2 : IZafiroDirectory2
     public Task<Result> Create() => FileSystemRoot.CreateDirectory(Path);
     public Task<Result<IEnumerable<IZafiroFile2>>> GetFiles() => FileSystemRoot.GetFiles(Path);
     public Task<Result<IEnumerable<IZafiroDirectory2>>> GetDirectories() => FileSystemRoot.GetDirectories(Path);
+    public Task<Result> Delete() => FileSystemRoot.DeleteDirectory(Path);
     public Task<Result<bool>> Exists => FileSystemRoot.ExistDirectory(Path);
 }

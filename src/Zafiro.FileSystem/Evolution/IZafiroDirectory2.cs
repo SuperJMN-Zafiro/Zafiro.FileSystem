@@ -10,4 +10,5 @@ public interface IZafiroDirectory2
     Task<Result> Create();
     Task<Result<IEnumerable<IZafiroFile2>>> GetFiles();
     Task<Result<IEnumerable<IZafiroDirectory2>>> GetDirectories();
+    Task<Result> Delete();
 }
