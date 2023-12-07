@@ -1,9 +1,8 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
-using Zafiro.FileSystem;
 
-namespace Zafiro.FileSystem2;
+namespace Zafiro.FileSystem.Evolution;
 
 public class ObservableFileSystem : IObservableFileSystem
 {

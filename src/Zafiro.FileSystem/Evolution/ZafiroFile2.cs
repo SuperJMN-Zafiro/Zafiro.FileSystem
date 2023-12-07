@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using Zafiro.FileSystem;
 
-namespace Zafiro.FileSystem2;
+namespace Zafiro.FileSystem.Evolution;
 
 public class ZafiroFile2 : IZafiroFile2
 {
@@ -17,4 +16,6 @@ public class ZafiroFile2 : IZafiroFile2
     public Task<Result<bool>> Exists => fileSystemRoot.ExistFile(Path);
     public ZafiroPath Path { get; }
     public Task<Result> Delete() => fileSystemRoot.DeleteFile(Path);
+    public Task<Result> SetContents(IObservable<byte> contents) => fileSystemRoot.SetFileContents(Path, contents);
+    public Task<Result<FileProperties>> Properties => fileSystemRoot.GetFileProperties(Path);
 }

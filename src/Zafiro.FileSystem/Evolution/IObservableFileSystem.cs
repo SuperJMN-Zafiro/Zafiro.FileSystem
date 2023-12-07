@@ -1,4 +1,4 @@
-﻿namespace Zafiro.FileSystem2;
+﻿namespace Zafiro.FileSystem.Evolution;
 
 public interface IObservableFileSystem : IFileSystem2
 {

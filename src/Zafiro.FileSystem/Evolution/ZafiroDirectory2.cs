@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using Zafiro.FileSystem;
 
-namespace Zafiro.FileSystem2;
+namespace Zafiro.FileSystem.Evolution;
 
 public class ZafiroDirectory2 : IZafiroDirectory2
 {

@@ -1,11 +1,10 @@
 ﻿using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
-using Zafiro.FileSystem;
 using Zafiro.IO;
 using Zafiro.Mixins;
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-namespace Zafiro.FileSystem2;
+namespace Zafiro.FileSystem.Evolution;
 
 public class LocalFileSystem2 : IFileSystem2
 {

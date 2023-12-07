@@ -1,3 +1,3 @@
-﻿namespace Zafiro.FileSystem2;
+﻿namespace Zafiro.FileSystem.Evolution;
 
 public record FileProperties(bool IsHidden, DateTime CreationTime, long Length);
