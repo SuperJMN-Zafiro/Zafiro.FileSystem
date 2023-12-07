@@ -5,14 +5,16 @@ namespace Zafiro.FileSystem.Evolution;
 public class ZafiroDirectory2 : IZafiroDirectory2
 {
     public ZafiroPath Path { get; }
-    private readonly IFileSystemRoot fileSystemRoot;
+    public IFileSystemRoot FileSystemRoot { get; }
 
     public ZafiroDirectory2(ZafiroPath path, IFileSystemRoot fileSystemRoot)
     {
         this.Path = path;
-        this.fileSystemRoot = fileSystemRoot;
+        this.FileSystemRoot = fileSystemRoot;
     }
 
-    public Task<Result> Create() => fileSystemRoot.CreateDirectory(Path);
-    public Task<Result<bool>> Exists => fileSystemRoot.ExistDirectory(Path);
+    public Task<Result> Create() => FileSystemRoot.CreateDirectory(Path);
+    public Task<Result<IEnumerable<IZafiroFile2>>> GetFiles() => FileSystemRoot.GetFiles(Path);
+    public Task<Result<IEnumerable<IZafiroDirectory2>>> GetDirectories() => FileSystemRoot.GetDirectories(Path);
+    public Task<Result<bool>> Exists => FileSystemRoot.ExistDirectory(Path);
 }
