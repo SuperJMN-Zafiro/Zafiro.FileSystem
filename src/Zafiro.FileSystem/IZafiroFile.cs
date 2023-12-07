@@ -4,11 +4,10 @@ namespace Zafiro.FileSystem;
 
 public interface IZafiroFile
 {
+    IObservable<byte> Contents { get; }
+    Task<Result<bool>> Exists { get; }
     ZafiroPath Path { get; }
-    Task<Result<long>> Size();
-    Task<Result<bool>> Exists();
-    Task<Result<Stream>> GetContents(CancellationToken cancellationToken = default);
-    Task<Result> SetContents(Stream stream, CancellationToken cancellationToken = default);
-    Task<Result> Delete(CancellationToken cancellationToken = default);
-    public bool IsHidden { get; }
+    Task<Result<FileProperties>> Properties { get; }
+    Task<Result> Delete();
+    Task<Result> SetContents(IObservable<byte> contents);
 }

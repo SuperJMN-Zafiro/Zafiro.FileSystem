@@ -1,7 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.Actions;
+using Zafiro.FileSystem;
 using Zafiro.FileSystem.Actions;
 using Zafiro.FileSystem.Comparer;
+using DeleteFileAction = Zafiro.FileSystem.Actions.DeleteFileAction;
 
 namespace Zafiro.FileSystem.Synchronizer;
 
@@ -26,8 +28,9 @@ public class DeleteFilesOnlyOnRightSide : IFileAction
         var childActions = await new FileSystemComparer().Diff(source, destination)
             .Bind(diffs =>
             {
-                var results = diffs.OfType<RightOnly>().Select(rightDiff => rightDiff.Get(destination).Bind(DeleteFileAction.Create));
-                return results.Combine();
+                return diffs.OfType<RightOnly>()
+                    .Select(rightDiff => DeleteFileAction.Create(rightDiff.Get(destination)))
+                    .Combine();
             });
 
         return childActions.Map<IEnumerable<DeleteFileAction>, DeleteFilesOnlyOnRightSide>(r => new DeleteFilesOnlyOnRightSide(r.Cast<IFileAction>().ToList()));

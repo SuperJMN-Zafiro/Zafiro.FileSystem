@@ -28,8 +28,11 @@ public class OverwriteRightFilesInBothSides : IFileAction
             .Bind(async diffs =>
             {
                 var tasks = diffs.OfType<Both>()
-                    .Select(leftDiff => leftDiff.Get(source, destination)
-                        .Bind(dirs => CopyFileAction.Create(dirs.Item1, dirs.Item2)));
+                    .Select(diff =>
+                    {
+                        var valueTuple = FileSystem.DiffExtensions.Get(diff, source, destination);
+                        return CopyFileAction.Create(valueTuple.Item1, valueTuple.Item2);
+                    });
                 var whenAll = await Task.WhenAll(tasks);
                 var combine = whenAll.Combine();
                 return combine;
@@ -38,4 +41,3 @@ public class OverwriteRightFilesInBothSides : IFileAction
         return childActions.Map(r => new OverwriteRightFilesInBothSides(r.Cast<IFileAction>().ToList()));
     }
 }
-

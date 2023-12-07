@@ -47,6 +47,6 @@ public static class ZafiroDirectoryMixin
 
     public static Task<Result<IZafiroFile>> GetFromPath(this IZafiroDirectory origin, ZafiroPath path)
     {
-        return origin.FileSystem.GetFile(origin.Path.Combine(path));
+        return Task.FromResult(Result.Success(origin.FileSystem.GetFile(origin.Path.Combine(path))));
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.Actions;
 using Zafiro.CSharpFunctionalExtensions;
+using Zafiro.FileSystem;
 using Zafiro.FileSystem.Actions;
 
 namespace Zafiro.FileSystem.Synchronizer;

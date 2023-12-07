@@ -1,12 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Zafiro.FileSystem.Evolution;
+namespace Zafiro.FileSystem;
 
-public class ZafiroFile2 : IZafiroFile2
+public class ZafiroFile : IZafiroFile
 {
     private readonly IFileSystemRoot fileSystemRoot;
 
-    public ZafiroFile2(ZafiroPath path, IFileSystemRoot fileSystemRoot)
+    public ZafiroFile(ZafiroPath path, IFileSystemRoot fileSystemRoot)
     {
         Path = path;
         this.fileSystemRoot = fileSystemRoot;

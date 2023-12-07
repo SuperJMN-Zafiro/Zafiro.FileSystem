@@ -2,14 +2,14 @@
 using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
 
-namespace Zafiro.FileSystem.Evolution;
+namespace Zafiro.FileSystem;
 
 public class ObservableFileSystem : IObservableFileSystem
 {
     private readonly Subject<FileSystemChange> changed = new();
-    private readonly IFileSystem2 fs;
+    private readonly IZafiroFileSystem fs;
 
-    public ObservableFileSystem(IFileSystem2 fs)
+    public ObservableFileSystem(IZafiroFileSystem fs)
     {
         this.fs = fs;
     }

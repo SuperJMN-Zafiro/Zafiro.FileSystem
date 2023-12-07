@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Zafiro.FileSystem.Evolution;
+namespace Zafiro.FileSystem;
 
 public class FileSystemRoot : IFileSystemRoot
 {
@@ -11,10 +11,10 @@ public class FileSystemRoot : IFileSystemRoot
         this.obsFs = obsFs;
     }
 
-    public IZafiroFile2 GetFile(ZafiroPath path) => new ZafiroFile2(path, this);
-    public IZafiroDirectory2 GetDirectory(ZafiroPath path) => new ZafiroDirectory2(path, this);
-    public Task<Result<IEnumerable<IZafiroFile2>>> GetFiles(ZafiroPath path) => obsFs.GetFilePaths(path).Map(paths => paths.Select(zafiroPath => (IZafiroFile2)new ZafiroFile2(zafiroPath, this)));
-    public Task<Result<IEnumerable<IZafiroDirectory2>>> GetDirectories(ZafiroPath path) => obsFs.GetFilePaths(path).Map(paths => paths.Select(zafiroPath => (IZafiroDirectory2)new ZafiroDirectory2(zafiroPath, this)));
+    public IZafiroFile GetFile(ZafiroPath path) => new ZafiroFile(path, this);
+    public IZafiroDirectory GetDirectory(ZafiroPath path) => new ZafiroDirectory(path, this);
+    public Task<Result<IEnumerable<IZafiroFile>>> GetFiles(ZafiroPath path) => obsFs.GetFilePaths(path).Map(paths => paths.Select(zafiroPath => (IZafiroFile)new ZafiroFile(zafiroPath, this)));
+    public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories(ZafiroPath path) => obsFs.GetFilePaths(path).Map(paths => paths.Select(zafiroPath => (IZafiroDirectory)new ZafiroDirectory(zafiroPath, this)));
     public Task<Result<bool>> ExistFile(ZafiroPath path) => obsFs.ExistFile(path);
     public Task<Result> DeleteFile(ZafiroPath path) => obsFs.DeleteFile(path);
     public Task<Result> DeleteDirectory(ZafiroPath path) => obsFs.DeleteDirectory(path);

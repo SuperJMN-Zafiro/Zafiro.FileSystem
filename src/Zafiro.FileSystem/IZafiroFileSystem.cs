@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Zafiro.FileSystem.Evolution;
+namespace Zafiro.FileSystem;
 
-public interface IFileSystem2
+public interface IZafiroFileSystem
 {
     Task<Result> CreateFile(ZafiroPath path);
     IObservable<byte> Contents(ZafiroPath path);

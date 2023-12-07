@@ -1,12 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.Actions;
-using Zafiro.FileSystem.Evolution;
 
 namespace Zafiro.FileSystem;
 
 public static class ZafiroFileExtensions2
 {
-    public static Task<Result> Copy(this IZafiroFile2 source, IZafiroFile2 destination, Maybe<IObserver<LongProgress>> progress, TimeSpan? readTimeout = default, CancellationToken cancellationToken = default)
+    public static Task<Result> Copy(this IZafiroFile source, IZafiroFile destination, Maybe<IObserver<LongProgress>> progress, TimeSpan? readTimeout = default, CancellationToken cancellationToken = default)
     {
         return destination
             .SetContents(source.Contents);
@@ -65,6 +64,6 @@ public static class ZafiroFileExtensions2
     public static Task<Result<IZafiroFile>> Translate(this IZafiroFile target, IZafiroDirectory sourceRoot, IZafiroDirectory destination)
     {
         var subPath = target.Path.MakeRelativeTo(sourceRoot.Path);
-        return destination.FileSystem.GetFile(destination.Path.Combine(subPath));
+        return Task.FromResult(Result.Success(destination.FileSystem.GetFile(destination.Path.Combine(subPath))));
     }
 }

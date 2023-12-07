@@ -1,7 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.Actions;
+using Zafiro.FileSystem;
 using Zafiro.FileSystem.Actions;
 using Zafiro.FileSystem.Comparer;
+using CopyFileAction = Zafiro.FileSystem.Actions.CopyFileAction;
 
 namespace Zafiro.FileSystem.Synchronizer;
 
@@ -35,5 +37,19 @@ public class CopyLeftFilesToRightSideAction : IFileAction
             });
 
         return childActions.Map(r => new CopyLeftFilesToRightSideAction(r.Cast<IFileAction>().ToList()));
+    }
+}
+
+
+public static class DiffExtensions
+{
+    public static IZafiroFile Get(this FileDiff diff, IZafiroDirectory origin)
+    {
+        return origin.FileSystem.GetFile(origin.Path.Combine(diff.Path));
+    }
+
+    public static Task<Result<(IZafiroFile, IZafiroFile)>> Get(this FileDiff diff, IZafiroDirectory origin, IZafiroDirectory destination)
+    {
+        return Task.FromResult(Result.Success((diff.Get(origin), diff.Get(destination))));
     }
 }
