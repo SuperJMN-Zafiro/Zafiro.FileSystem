@@ -54,6 +54,6 @@ public class CopyDirectoryAction : IFileAction
 
     private static IZafiroFile2 GetDestinationFile(IZafiroFile2 src, IZafiroDirectory2 source, IZafiroDirectory2 destination)
     {
-        return destination.FileSystemRoot.GetFile(destination.Path.Combine(src.Path.MakeRelativeTo(source.Path)));
+        return destination.FileSystem.GetFile(destination.Path.Combine(src.Path.MakeRelativeTo(source.Path)));
     }
 }
