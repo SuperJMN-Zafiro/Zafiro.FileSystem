@@ -22,6 +22,8 @@ public class ObservableFileSystem : IObservableFileSystem
     public IObservable<ZafiroPath> FileCreated => fileCreated.AsObservable();
 
     public IObservable<ZafiroPath> FolderCreated => folderCreated.AsObservable();
+    public Task<Result<bool>> ExistsDirectory(ZafiroPath path) => fs.ExistDirectory(path);
+
 
     public Task<Result> CreateFile(ZafiroPath path) => fs.CreateFile(path).Tap(() => fileCreated.OnNext(path));
 
@@ -32,4 +34,7 @@ public class ObservableFileSystem : IObservableFileSystem
     public Task<Result> CreateFolder(ZafiroPath path) => fs.CreateFolder(path).Tap(() => folderCreated.OnNext(path));
 
     public Task<Result<FileProperties>> GetFileProperties(ZafiroPath path) => fs.GetFileProperties(path).Tap(() => fileCreated.OnNext(path));
+    public Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path) => fs.GetFilePaths(path);
+    public Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path) => fs.GetDirectoryPaths(path);
+    public Task<Result<bool>> ExistDirectory(ZafiroPath path) => fs.ExistDirectory(path);
 }

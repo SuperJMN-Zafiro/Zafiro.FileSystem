@@ -57,4 +57,8 @@ public class LocalFileSystem2 : IFileSystem2
             };
         });
     }
+
+    public async Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path) => Result.Try(() => fileSystem.Directory.GetFiles(path).Select(s => (ZafiroPath)s));
+    public async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path) => Result.Try(() => fileSystem.Directory.GetDirectories(path).Select(s => (ZafiroPath)s));
+    public async Task<Result<bool>> ExistDirectory(ZafiroPath path) => Result.Try(() => fileSystem.Directory.Exists(path));
 }

@@ -1,4 +1,5 @@
-﻿using Zafiro.FileSystem;
+﻿using CSharpFunctionalExtensions;
+using Zafiro.FileSystem;
 
 namespace Zafiro.FileSystem2;
 
@@ -6,4 +7,7 @@ public interface IFileSystemRoot : IObservableFileSystem
 {
     IZafiroFile2 GetFile(ZafiroPath path);
     IZafiroDirectory2 GetDirectory(ZafiroPath path);
+    Task<Result<IEnumerable<ZafiroFile2>>> GetFiles(ZafiroPath path);
+    Task<Result<IEnumerable<ZafiroDirectory2>>> GetDirectories(ZafiroPath path);
+    Task<Result<bool>> ExistDirectory(ZafiroPath path);
 }
