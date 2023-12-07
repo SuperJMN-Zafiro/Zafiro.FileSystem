@@ -9,6 +9,15 @@ namespace Zafiro.FileSystem.Local.Tests;
 public class FileSystemTests
 {
     [Fact]
+    public async Task Get_root_of_windows_filesystem()
+    {
+        var mockFileSystem = new MockFileSystem();
+        var sut = new LocalZafiroFileSystem(mockFileSystem);
+        var result = await sut.GetDirectoryPaths(new ZafiroPath(string.Empty));
+        result.Should().Succeed().And.Subject.Value.Should().BeEquivalentTo(new[] { new ZafiroPath("C:") });
+    }
+
+    [Fact]
     public async Task Create_file()
     {
         var mockFileSystem = new MockFileSystem();

@@ -52,7 +52,18 @@ public class LocalZafiroFileSystem : IZafiroFileSystem
     }
 
     public async Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path) => Result.Try(() => fileSystem.Directory.GetFiles(path).Select(s => (ZafiroPath)s));
-    public async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path) => Result.Try(() => fileSystem.Directory.GetDirectories(path).Select(s => (ZafiroPath)s));
+    public async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path) => Result.Try(() => GetDirectories(path).Select(s => (ZafiroPath)s));
+
+    private IEnumerable<ZafiroPath> GetDirectories(ZafiroPath path)
+    {
+        if (path == ZafiroPath.Empty)
+        {
+            return fileSystem.DriveInfo.GetDrives().Select(i => i.RootDirectory.FullName[..^1]).Select(x => x.ToZafiroPath());
+        }
+
+        return fileSystem.Directory.GetDirectories(path).Select(x => x.ToZafiroPath());
+    }
+
     public async Task<Result<bool>> ExistDirectory(ZafiroPath path) => Result.Try(() => fileSystem.Directory.Exists(path));
     public async Task<Result<bool>> ExistFile(ZafiroPath path) => Result.Try(() => fileSystem.File.Exists(path));
     public async Task<Result> DeleteFile(ZafiroPath path) => Result.Try(() => fileSystem.Directory.Delete(path));
