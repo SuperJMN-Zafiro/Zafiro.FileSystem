@@ -39,7 +39,7 @@ public class LocalFileSystem2 : IFileSystem2
             }));
     }
 
-    public async Task<Result> CreateFolder(ZafiroPath path)
+    public async Task<Result> CreateDirectory(ZafiroPath path)
     {
         return Result.Try(() => fileSystem.Directory.CreateDirectory(path));
     }
@@ -49,16 +49,14 @@ public class LocalFileSystem2 : IFileSystem2
         return Result.Try(() =>
         {
             var info = fileSystem.FileInfo.New(path);
-            return new FileProperties()
-            {
-                IsHidden = info.Attributes.HasFlag(FileAttributes.Hidden),
-                CreationTime = info.CreationTime,
-                Length = info.Length,
-            };
+            return new FileProperties(info.Attributes.HasFlag(FileAttributes.Hidden), info.CreationTime, info.Length);
         });
     }
 
     public async Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path) => Result.Try(() => fileSystem.Directory.GetFiles(path).Select(s => (ZafiroPath)s));
     public async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path) => Result.Try(() => fileSystem.Directory.GetDirectories(path).Select(s => (ZafiroPath)s));
     public async Task<Result<bool>> ExistDirectory(ZafiroPath path) => Result.Try(() => fileSystem.Directory.Exists(path));
+    public async Task<Result<bool>> ExistFile(ZafiroPath path) => Result.Try(() => fileSystem.File.Exists(path));
+    public async Task<Result> DeleteFile(ZafiroPath path) => Result.Try(() => fileSystem.Directory.Delete(path));
+    public async Task<Result> DeleteDirectory(ZafiroPath path) => Result.Try(() => fileSystem.Directory.Delete(path, true));
 }

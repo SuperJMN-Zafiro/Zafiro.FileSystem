@@ -9,5 +9,4 @@ public interface IFileSystemRoot : IObservableFileSystem
     IZafiroDirectory2 GetDirectory(ZafiroPath path);
     Task<Result<IEnumerable<ZafiroFile2>>> GetFiles(ZafiroPath path);
     Task<Result<IEnumerable<ZafiroDirectory2>>> GetDirectories(ZafiroPath path);
-    Task<Result<bool>> ExistDirectory(ZafiroPath path);
 }

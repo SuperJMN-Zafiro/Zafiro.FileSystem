@@ -53,7 +53,7 @@ public class FileSystemTests
         var fs = new MockFileSystem(new Dictionary<string, MockFileData>());
 
         var sut = new LocalFileSystem2(fs);
-        var result = await sut.CreateFolder("Folder");
+        var result = await sut.CreateDirectory("Folder");
 
         result.Should().Succeed();
         fs.Directory.Exists("Folder").Should().BeTrue();

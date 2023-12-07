@@ -10,7 +10,9 @@ public class AndroidFileSystem : IFileSystem
 {
     private readonly System.IO.Abstractions.IFileSystem fileSystem;
     private readonly Maybe<ILogger> logger;
+#pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
     private static bool isInitialized;
+#pragma warning restore CS0649 // Field is never assigned to, and will always have its default value
 
     public AndroidFileSystem(System.IO.Abstractions.IFileSystem fileSystem, Maybe<ILogger> logger)
     {
