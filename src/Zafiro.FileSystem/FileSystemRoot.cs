@@ -20,7 +20,7 @@ public class FileSystemRoot : IFileSystemRoot
     public Task<Result> DeleteDirectory(ZafiroPath path) => obsFs.DeleteDirectory(path);
     public Task<Result<bool>> ExistDirectory(ZafiroPath path) => obsFs.ExistDirectory(path);
     public Task<Result> CreateFile(ZafiroPath path) => obsFs.CreateFile(path);
-    public IObservable<byte> Contents(ZafiroPath path) => obsFs.Contents(path);
+    public IObservable<byte> GetFileContents(ZafiroPath path) => obsFs.GetFileContents(path);
     public Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes) => obsFs.SetFileContents(path, bytes);
     public Task<Result> CreateDirectory(ZafiroPath path) => obsFs.CreateDirectory(path);
     public Task<Result<FileProperties>> GetFileProperties(ZafiroPath path) => obsFs.GetFileProperties(path);

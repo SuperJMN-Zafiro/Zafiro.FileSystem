@@ -21,7 +21,7 @@ public class ObservableFileSystem : IObservableFileSystem
     public Task<Result> DeleteDirectory(ZafiroPath path) => fs.DeleteDirectory(path);
 
     public Task<Result> CreateFile(ZafiroPath path) => fs.CreateFile(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.FileCreated)));
-    public IObservable<byte> Contents(ZafiroPath path) => fs.Contents(path);
+    public IObservable<byte> GetFileContents(ZafiroPath path) => fs.GetFileContents(path);
     public Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes) => fs.SetFileContents(path, bytes).Tap(() => changed.OnNext(new FileSystemChange(path, Change.FileContentsChanged)));
     public Task<Result> CreateDirectory(ZafiroPath path) => fs.CreateDirectory(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.DirectoryCreated)));
     public Task<Result<FileProperties>> GetFileProperties(ZafiroPath path) => fs.GetFileProperties(path);

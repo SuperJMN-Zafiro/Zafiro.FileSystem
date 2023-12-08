@@ -5,7 +5,7 @@ namespace Zafiro.FileSystem;
 public interface IZafiroFileSystem
 {
     Task<Result> CreateFile(ZafiroPath path);
-    IObservable<byte> Contents(ZafiroPath path);
+    IObservable<byte> GetFileContents(ZafiroPath path);
     Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes);
     Task<Result> CreateDirectory(ZafiroPath path);
     Task<Result<FileProperties>> GetFileProperties(ZafiroPath path);

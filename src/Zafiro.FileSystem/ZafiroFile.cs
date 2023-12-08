@@ -12,7 +12,7 @@ public class ZafiroFile : IZafiroFile
         this.fileSystemRoot = fileSystemRoot;
     }
 
-    public IObservable<byte> Contents => fileSystemRoot.Contents(Path);
+    public IObservable<byte> Contents => fileSystemRoot.GetFileContents(Path);
     public Task<Result<bool>> Exists => fileSystemRoot.ExistFile(Path);
     public ZafiroPath Path { get; }
     public Task<Result> Delete() => fileSystemRoot.DeleteFile(Path);
