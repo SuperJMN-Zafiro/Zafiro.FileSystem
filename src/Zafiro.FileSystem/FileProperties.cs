@@ -1,3 +1,5 @@
-﻿namespace Zafiro.FileSystem;
+﻿using CSharpFunctionalExtensions;
 
-public record FileProperties(bool IsHidden, DateTime CreationTime, long Length);
+namespace Zafiro.FileSystem;
+
+public record FileProperties(bool IsHidden, DateTimeOffset CreationTime, long Length);

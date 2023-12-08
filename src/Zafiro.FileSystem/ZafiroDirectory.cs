@@ -6,6 +6,7 @@ public class ZafiroDirectory : IZafiroDirectory
 {
     public ZafiroPath Path { get; }
     public IFileSystemRoot FileSystem { get; }
+    public Task<Result<DirectoryProperties>> Properties => FileSystem.GetDirectoryProperties(Path);
 
     public ZafiroDirectory(ZafiroPath path, IFileSystemRoot fileSystemRoot)
     {
@@ -18,4 +19,6 @@ public class ZafiroDirectory : IZafiroDirectory
     public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories() => FileSystem.GetDirectories(Path);
     public Task<Result> Delete() => FileSystem.DeleteDirectory(Path);
     public Task<Result<bool>> Exists => FileSystem.ExistDirectory(Path);
+
+    public override string ToString() => $"{Path}";
 }

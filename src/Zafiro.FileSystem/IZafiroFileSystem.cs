@@ -9,6 +9,7 @@ public interface IZafiroFileSystem
     Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes);
     Task<Result> CreateDirectory(ZafiroPath path);
     Task<Result<FileProperties>> GetFileProperties(ZafiroPath path);
+    Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path);
     Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path);
     Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path);
     Task<Result<bool>> ExistDirectory(ZafiroPath path);

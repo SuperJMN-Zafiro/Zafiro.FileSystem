@@ -9,8 +9,18 @@ public class LinuxZafiroFileSystem : ZafiroFileSystemBase
     public override string PathToFileSystem(ZafiroPath path) => "/" + path;
     public override ZafiroPath FileSystemToZafiroPath(string fileSystemPath) => fileSystemPath[1..];
 
-    protected override IEnumerable<ZafiroPath> GetDirectories(ZafiroPath path)
+    public override async Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path) => Result.Try(() => FileSystem.Directory.GetFiles(PathToFileSystem(path)).Select(s => (ZafiroPath) s));
+    public override async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path)
     {
-        return FileSystem.Directory.GetDirectories(path).Select(x => x.ToZafiroPath());
+        return Result.Try(() => FileSystem.Directory.GetDirectories(path).Select(x => x.ToZafiroPath()));
+    }
+
+    public override async Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path)
+    {
+        return Result.Try(() =>
+        {
+            var info = FileSystem.FileInfo.New(PathToFileSystem(path));
+            return new DirectoryProperties(info.Attributes.HasFlag(FileAttributes.Hidden), info.CreationTime);
+        });
     }
 }

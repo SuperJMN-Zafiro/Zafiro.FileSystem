@@ -19,7 +19,7 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
         return Result.Try(() => FileSystem.File.Create(PathToFileSystem(path)));
     }
 
-    public virtual IObservable<byte> GetFileContents(ZafiroPath path)
+    public IObservable<byte> GetFileContents(ZafiroPath path)
     {
         return Observable.Using(() => FileSystem.File.OpenRead(PathToFileSystem(path)), f => f.ToObservable());
     }
@@ -51,14 +51,13 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
         });
     }
 
-    public async Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path) => Result.Try(() => FileSystem.Directory.GetFiles(PathToFileSystem(path)).Select(s => (ZafiroPath) s));
-    public async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path) => Result.Try(() => GetDirectories(PathToFileSystem(path)).Select(s => FileSystemToZafiroPath(s)));
+    public abstract Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path);
+    public abstract Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path);
+    public abstract Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path);
     public async Task<Result<bool>> ExistDirectory(ZafiroPath path) => Result.Try(() => FileSystem.Directory.Exists(path));
     public async Task<Result<bool>> ExistFile(ZafiroPath path) => Result.Try(() => FileSystem.File.Exists(path));
-    public async Task<Result> DeleteFile(ZafiroPath path) => Result.Try(() => FileSystem.Directory.Delete(path));
+    public async Task<Result> DeleteFile(ZafiroPath path) => Result.Try(() => FileSystem.File.Delete(path));
     public async Task<Result> DeleteDirectory(ZafiroPath path) => Result.Try(() => FileSystem.Directory.Delete(path, true));
-
     public abstract string PathToFileSystem(ZafiroPath path);
     public abstract ZafiroPath FileSystemToZafiroPath(string fileSystemPath);
-    protected abstract IEnumerable<ZafiroPath> GetDirectories(ZafiroPath path);
 }

@@ -1,8 +1,8 @@
 ﻿namespace Zafiro.FileSystem.Local;
 
-public class LocalFileSystem
+public static class LocalFileSystem
 {
-    public IZafiroFileSystem Create()
+    public static IZafiroFileSystem Create()
     {
         if (OperatingSystem.IsWindows())
         {
