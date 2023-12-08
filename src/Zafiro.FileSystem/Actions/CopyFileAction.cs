@@ -28,6 +28,6 @@ public class CopyFileAction : IFileAction
 
     public static Task<Result<CopyFileAction>> Create(IZafiroFile source, IZafiroFile destination)
     {
-        return source.Size().Map(l => new CopyFileAction(source, destination, l));
+        return source.Properties.Map(p => new CopyFileAction(source, destination, p.Length));
     }
 }

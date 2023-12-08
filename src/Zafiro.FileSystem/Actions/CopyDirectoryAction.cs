@@ -44,15 +44,14 @@ public class CopyDirectoryAction : IFileAction
     {
         var results = sources
             .ToObservable()
-            .SelectMany(src => GetDestinationFile(src, source, destination).Map(dest => (src, dest)))
-            .Successes()
-            .SelectMany(copy => Observable.FromAsync(() => CopyFileAction.Create(copy.src, copy.dest)).Successes());
+            .Select(src => (src, dst: GetDestinationFile(src, source, destination)))
+            .SelectMany(copy => Observable.FromAsync(() => CopyFileAction.Create(copy.src, copy.dst)).Successes());
 
         return results;
     }
 
 
-    private static Task<Result<IZafiroFile>> GetDestinationFile(IZafiroFile src, IZafiroDirectory source, IZafiroDirectory destination)
+    private static IZafiroFile GetDestinationFile(IZafiroFile src, IZafiroDirectory source, IZafiroDirectory destination)
     {
         return destination.FileSystem.GetFile(destination.Path.Combine(src.Path.MakeRelativeTo(source.Path)));
     }

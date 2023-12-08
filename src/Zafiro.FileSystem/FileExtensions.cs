@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
+using Zafiro.FileSystem;
 
 namespace Zafiro.FileSystem;
 
@@ -20,9 +21,10 @@ public static class FileExtensions
                 return results.Map(x => x.SelectMany(u => u));
             }).ConfigureAwait(false);
 
-        var filesInTree = 
-            from p in myFiles 
-            from q in filesFromSubdirs select p.Concat(q);
+        var filesInTree =
+            from p in myFiles
+            from q in filesFromSubdirs
+            select p.Concat(q);
         return filesInTree;
     }
 }
