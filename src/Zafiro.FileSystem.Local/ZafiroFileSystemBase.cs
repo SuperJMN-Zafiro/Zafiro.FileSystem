@@ -52,8 +52,8 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
     }
 
     public abstract Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path);
-    public abstract Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path);
-    public abstract Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path);
+    public abstract Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path, CancellationToken ct = default);
+    public abstract Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path, CancellationToken ct = default);
     public async Task<Result<bool>> ExistDirectory(ZafiroPath path) => Result.Try(() => FileSystem.Directory.Exists(path));
     public async Task<Result<bool>> ExistFile(ZafiroPath path) => Result.Try(() => FileSystem.File.Exists(path));
     public async Task<Result> DeleteFile(ZafiroPath path) => Result.Try(() => FileSystem.File.Delete(path));

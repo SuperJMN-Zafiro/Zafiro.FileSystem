@@ -22,7 +22,7 @@ public class WindowsZafiroFileSystem : ZafiroFileSystemBase
 
     public override ZafiroPath FileSystemToZafiroPath(string fileSystemPath) => fileSystemPath.Replace("\\", "/");
 
-    public override async Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path)
+    public override async Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path, CancellationToken ct = default)
     {
         if (path == ZafiroPath.Empty)
         {
@@ -32,7 +32,7 @@ public class WindowsZafiroFileSystem : ZafiroFileSystemBase
         return Result.Try(() => FileSystem.Directory.GetFiles(PathToFileSystem(path)).Select(FileSystemToZafiroPath));
     }
 
-    public override async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path)
+    public override async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path, CancellationToken ct = default)
     {
         return Result.Try(GetDirs);
 

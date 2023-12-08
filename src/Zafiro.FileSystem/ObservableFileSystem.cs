@@ -26,8 +26,8 @@ public class ObservableFileSystem : IObservableFileSystem
     public Task<Result> CreateDirectory(ZafiroPath path) => fs.CreateDirectory(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.DirectoryCreated)));
     public Task<Result<FileProperties>> GetFileProperties(ZafiroPath path) => fs.GetFileProperties(path);
     public Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path) => fs.GetDirectoryProperties(path);
-    public Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path) => fs.GetFilePaths(path);
-    public Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path) => fs.GetDirectoryPaths(path);
+    public Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path, CancellationToken ct = default) => fs.GetFilePaths(path, ct);
+    public Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path, CancellationToken ct = default) => fs.GetDirectoryPaths(path, ct);
     public Task<Result<bool>> ExistDirectory(ZafiroPath path) => fs.ExistDirectory(path);
 }
 
