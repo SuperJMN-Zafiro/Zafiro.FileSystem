@@ -10,7 +10,7 @@ public class SeaweedFSClient : ISeaweedFS
 {
     private readonly HttpClient httpClient;
     private readonly ISeaweedApi inner;
-    private readonly MemoryCache medatadas = MemoryCache.Default;
+    private readonly MemoryCache fileMetadatas = MemoryCache.Default;
 
     public SeaweedFSClient(HttpClient httpClient)
     {
@@ -38,7 +38,7 @@ public class SeaweedFSClient : ISeaweedFS
             {
                 AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5),
             };
-            medatadas.Add(file.FullPath, file, policy);
+            fileMetadatas.Add(file.FullPath, file, policy);
         }
 
         return contents;
@@ -72,7 +72,7 @@ public class SeaweedFSClient : ISeaweedFS
 
     public async Task<FileMetadata> GetFileMetadata(string path, CancellationToken cancellationToken = default)
     {
-        if (medatadas.Get(path) is FileMetadata metadata)
+        if (fileMetadatas.Get(path) is FileMetadata metadata)
         {
             return metadata;
         }
