@@ -1,11 +1,12 @@
-﻿using System.Reactive.Linq;
+﻿using System.Collections.Concurrent;
+using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using Serilog;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 using Zafiro.IO;
 using Zafiro.Mixins;
 using Directory = Zafiro.FileSystem.SeaweedFS.Filer.Client.Directory;
-using File = Zafiro.FileSystem.SeaweedFS.Filer.Client.File;
+using File = System.IO.File;
 
 namespace Zafiro.FileSystem.SeaweedFS;
 
@@ -60,7 +61,7 @@ public class SeaweedFileSystem : IZafiroFileSystem
     public Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path, CancellationToken ct = default)
     {
         return Result.Try(() => seaweedFSClient.GetContents(ToServicePath(path), ct))
-            .Map(directory => directory.Entries?.OfType<File>().Select(d => d.FullPath) ?? Enumerable.Empty<string>())
+            .Map(directory => directory.Entries?.OfType<FileMetadata>().Select(d => d.FullPath) ?? Enumerable.Empty<string>())
             .Map(x => x.Select(s => (ZafiroPath)s));
     }
 

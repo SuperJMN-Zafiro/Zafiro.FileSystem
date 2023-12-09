@@ -12,7 +12,7 @@ public class FileSystemEntryConverter : JsonConverter<BaseEntry>
             var root = doc.RootElement;
             if (IsFile(root))
             {
-                return JsonSerializer.Deserialize<File>(root.GetRawText(), options);
+                return JsonSerializer.Deserialize<FileMetadata>(root.GetRawText(), options);
             }
 
             return JsonSerializer.Deserialize<Directory>(root.GetRawText(), options);

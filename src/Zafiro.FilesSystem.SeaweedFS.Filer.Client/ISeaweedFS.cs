@@ -8,6 +8,6 @@ public interface ISeaweedFS
     Task<Stream> GetFileContent(string filePath, CancellationToken cancellationToken = default);
     Task DeleteFile(string filePath, CancellationToken cancellationToken = default);
     Task DeleteFolder(string directoryPath, CancellationToken cancellationToken = default);
-    Task<File> GetFileMetadata(string path, CancellationToken cancellationToken = default);
+    Task<FileMetadata> GetFileMetadata(string path, CancellationToken cancellationToken = default);
     Task<bool> PathExists(string path);
 }
