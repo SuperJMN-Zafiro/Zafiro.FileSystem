@@ -43,14 +43,9 @@ public class SeaweedFSClient : ISeaweedFS
         return contents;
     }
 
-    public async Task Upload(string path, Stream stream, CancellationToken cancellationToken = default)
+    public Task Upload(string path, Stream stream, CancellationToken cancellationToken = default)
     {
-        //var ms = new MemoryStream();
-        //await stream.CopyToAsync(ms, cancellationToken);
-
-        //ms.Position = 0;
-        //await inner.Upload(path, ms, cancellationToken);
-        await inner.Upload(path, stream, cancellationToken);
+        return inner.Upload(path, stream, cancellationToken);
     }
 
     public Task CreateFolder(string directoryPath, CancellationToken cancellationToken = default)
