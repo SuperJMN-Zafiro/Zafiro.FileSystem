@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Net;
 using System.Runtime.Caching;
 using System.Text.Json;
@@ -29,7 +28,7 @@ public class SeaweedFSClient : ISeaweedFS
 
     public async Task<RootDirectory> GetContents(string directoryPath, CancellationToken cancellationToken = default)
     {
-        var contents = await inner.GetContents(directoryPath[1..], cancellationToken);
+        var contents = await inner.GetContents(directoryPath, cancellationToken);
         var files = contents.Entries?.OfType<FileMetadata>() ?? Enumerable.Empty<FileMetadata>();
 
         foreach (var file in files)
@@ -44,9 +43,14 @@ public class SeaweedFSClient : ISeaweedFS
         return contents;
     }
 
-    public Task Upload(string path, Stream stream, CancellationToken cancellationToken = default)
+    public async Task Upload(string path, Stream stream, CancellationToken cancellationToken = default)
     {
-        return inner.Upload(path, stream, cancellationToken);
+        //var ms = new MemoryStream();
+        //await stream.CopyToAsync(ms, cancellationToken);
+
+        //ms.Position = 0;
+        //await inner.Upload(path, ms, cancellationToken);
+        await inner.Upload(path, stream, cancellationToken);
     }
 
     public Task CreateFolder(string directoryPath, CancellationToken cancellationToken = default)

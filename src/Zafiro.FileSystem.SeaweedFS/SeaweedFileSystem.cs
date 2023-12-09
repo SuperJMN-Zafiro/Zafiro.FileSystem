@@ -28,19 +28,23 @@ public class SeaweedFileSystem : IZafiroFileSystem
         return ObservableFactory.UsingAsync(() => seaweedFSClient.GetFileContent(ToServicePath(path)), stream => stream.ToObservable());
     }
 
-    private string ToServicePath(ZafiroPath path)
+    private static string ToServicePath(ZafiroPath path)
     {
-        return "/" + path;
+        if (path == "")
+        {
+            return "/";
+        }
+        return path;
     }
 
-    private string ToZafiroPath(ZafiroPath path)
+    private static ZafiroPath ToZafiroPath(ZafiroPath path)
     {
         return path.ToString()[1..];
     }
 
     public async Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes)
     {
-        return await Observable.Using(() => bytes.ToStream(), stream => Observable.FromAsync(ct => Result.Try(() => seaweedFSClient.Upload(path, stream, ct))));
+        return await Observable.Using(() => bytes.ToStream(), stream => Observable.FromAsync(ct => Result.Try(() => seaweedFSClient.Upload(ToServicePath(path), stream, ct))));
     }
 
     public Task<Result> CreateDirectory(ZafiroPath path) => throw new NotImplementedException();
@@ -48,7 +52,7 @@ public class SeaweedFileSystem : IZafiroFileSystem
     public Task<Result<FileProperties>> GetFileProperties(ZafiroPath path)
     {
         return Result
-            .Try(() => seaweedFSClient.GetFileMetadata(path, CancellationToken.None))
+            .Try(() => seaweedFSClient.GetFileMetadata(ToServicePath(path), CancellationToken.None))
             .Map(f => new FileProperties(false, f.Crtime, f.FileSize));
     }
 
@@ -62,14 +66,14 @@ public class SeaweedFileSystem : IZafiroFileSystem
     {
         return Result.Try(() => seaweedFSClient.GetContents(ToServicePath(path), ct))
             .Map(directory => directory.Entries?.OfType<FileMetadata>().Select(d => d.FullPath) ?? Enumerable.Empty<string>())
-            .Map(x => x.Select(s => (ZafiroPath)s));
+            .Map(x => x.Select(s => ToZafiroPath(s)));
     }
 
     public Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path, CancellationToken ct = default)
     {
         return Result.Try(() => seaweedFSClient.GetContents(ToServicePath(path), ct))
-            .Map(directory => directory.Entries?.OfType<Directory>().Select(d => ToZafiroPath(d.FullPath)) ?? Enumerable.Empty<string>())
-            .Map(x => x.Select(s => (ZafiroPath)s));
+            .Map(directory => directory.Entries?.OfType<Directory>().Select(d => d.FullPath) ?? Enumerable.Empty<string>())
+            .Map(x => x.Select(s => ToZafiroPath(s)));
     }
 
     public Task<Result<bool>> ExistDirectory(ZafiroPath path) => throw new NotImplementedException();
