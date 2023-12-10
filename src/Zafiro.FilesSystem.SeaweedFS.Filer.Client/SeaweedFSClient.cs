@@ -37,7 +37,7 @@ public class SeaweedFSClient : ISeaweedFS
             {
                 AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5),
             };
-            fileMetadatas.Add(file.FullPath, file, policy);
+            fileMetadatas.Add(file.FullPath.StartsWith("/") ? file.FullPath[1..] : file.FullPath, file, policy);
         }
 
         return contents;
@@ -66,6 +66,8 @@ public class SeaweedFSClient : ISeaweedFS
 
     public Task DeleteFile(string filePath, CancellationToken cancellationToken = default)
     {
+        fileMetadatas.Remove(filePath);
+
         return inner.DeleteFile(filePath, cancellationToken);
     }
 

@@ -29,6 +29,12 @@ public static class ZafiroDirectoryMixin
         return zafiroDirectory.Path.Name() == subDirectoryPath.RouteFragments.First();
     }
 
+    public static IZafiroFile GetSingleFile(this IZafiroDirectory zafiroDirectory, string filename)
+    {
+        var zafiroPath = zafiroDirectory.Path.Combine(filename);
+        return new ZafiroFile(zafiroPath, zafiroDirectory.FileSystem);
+    }
+
     public static Task<Result<Maybe<IZafiroFile>>> GetFile(this IZafiroDirectory zafiroDirectory, string filename)
     {
         var maybeGetFile = zafiroDirectory

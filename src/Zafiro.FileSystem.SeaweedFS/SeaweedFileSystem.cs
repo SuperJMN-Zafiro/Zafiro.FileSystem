@@ -1,12 +1,10 @@
-﻿using System.Collections.Concurrent;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using Serilog;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 using Zafiro.IO;
 using Zafiro.Mixins;
 using Directory = Zafiro.FileSystem.SeaweedFS.Filer.Client.Directory;
-using File = System.IO.File;
 
 namespace Zafiro.FileSystem.SeaweedFS;
 
@@ -78,9 +76,9 @@ public class SeaweedFileSystem : IZafiroFileSystem
 
     public Task<Result<bool>> ExistDirectory(ZafiroPath path) => throw new NotImplementedException();
 
-    public Task<Result<bool>> ExistFile(ZafiroPath path) => throw new NotImplementedException();
+    public Task<Result<bool>> ExistFile(ZafiroPath path) => Result.Try(() => seaweedFSClient.PathExists(path));
 
-    public Task<Result> DeleteFile(ZafiroPath path) => throw new NotImplementedException();
+    public Task<Result> DeleteFile(ZafiroPath path) => Result.Try(() => seaweedFSClient.DeleteFile(ToServicePath(path)));
 
     public Task<Result> DeleteDirectory(ZafiroPath path) => throw new NotImplementedException();
 }
