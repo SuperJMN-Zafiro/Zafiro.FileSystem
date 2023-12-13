@@ -6,19 +6,22 @@ using Zafiro.CSharpFunctionalExtensions;
 
 namespace Zafiro.FileSystem;
 
-public static class ZafiroFileExtensions2
+public static class ZafiroFileExtensions
 {
     public static async Task<Result> Copy(this IZafiroFile source, IZafiroFile destination, Maybe<IObserver<LongProgress>> progress, TimeSpan? readTimeout = default, CancellationToken cancellationToken = default)
     {
-    var asMaybe = source.Properties.Map(f => f.Length).AsMaybe();
-        using (await InjectProgress(asMaybe, source.Contents, progress))
+        var contents = source.Contents.Publish();
+        var asMaybe = source.Properties.Map(f => f.Length).AsMaybe();
+
+        using (contents.Connect())
+        using (await InjectProgress(asMaybe, contents, progress))
         {
-            var contents = await destination.SetContents(source.Contents).ConfigureAwait(false);
-            return contents;
+            var result = await destination.SetContents(contents).ConfigureAwait(false);
+            return result;
         }
     }
 
-    public static async Task<IDisposable> InjectProgress(Task<Maybe<long>> length, IObservable<byte> bytes, Maybe<IObserver<LongProgress>> progress)
+    private static async Task<IDisposable> InjectProgress(Task<Maybe<long>> length, IObservable<byte> bytes, Maybe<IObserver<LongProgress>> progress)
     {
         var taggedBytes = bytes.Select((b, i) => (b, i: i + 1));
 
