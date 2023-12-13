@@ -20,7 +20,7 @@ public class ObservableFileSystem : IObservableFileSystem
     public Task<Result<bool>> ExistsDirectory(ZafiroPath path) => fs.ExistDirectory(path);
     public Task<Result<bool>> ExistFile(ZafiroPath path) => fs.ExistFile(path);
     public Task<Result> DeleteFile(ZafiroPath path) => fs.DeleteFile(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.FileDeleted)));
-    public Task<Result> DeleteDirectory(ZafiroPath path) => fs.DeleteDirectory(path);
+    public Task<Result> DeleteDirectory(ZafiroPath path) => fs.DeleteDirectory(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.DirectoryDeleted)));
 
     public Task<Result> CreateFile(ZafiroPath path) => fs.CreateFile(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.FileCreated)));
     public IObservable<byte> GetFileContents(ZafiroPath path) => fs.GetFileContents(path);
@@ -46,7 +46,8 @@ public enum Change
     FileCreated,
     FileDeleted,
     DirectoryCreated,
-    FileContentsChanged
+    FileContentsChanged,
+    DirectoryDeleted
 }
 
 public record FileSystemChange(ZafiroPath Path, Change Change);

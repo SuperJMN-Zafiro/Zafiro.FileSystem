@@ -45,7 +45,7 @@ public class SeaweedFileSystem : IZafiroFileSystem
         return await Observable.Using(() => bytes.ToStream(), stream => Observable.FromAsync(ct => Result.Try(() => seaweedFSClient.Upload(ToServicePath(path), stream, ct))));
     }
 
-    public Task<Result> CreateDirectory(ZafiroPath path) => throw new NotImplementedException();
+    public Task<Result> CreateDirectory(ZafiroPath path) => Result.Try(() => seaweedFSClient.CreateFolder(ToServicePath(path)));
 
     public Task<Result<FileProperties>> GetFileProperties(ZafiroPath path)
     {
@@ -80,5 +80,5 @@ public class SeaweedFileSystem : IZafiroFileSystem
 
     public Task<Result> DeleteFile(ZafiroPath path) => Result.Try(() => seaweedFSClient.DeleteFile(ToServicePath(path)));
 
-    public Task<Result> DeleteDirectory(ZafiroPath path) => throw new NotImplementedException();
+    public Task<Result> DeleteDirectory(ZafiroPath path) => Result.Try(() => seaweedFSClient.DeleteFolder(ToServicePath(path)));
 }

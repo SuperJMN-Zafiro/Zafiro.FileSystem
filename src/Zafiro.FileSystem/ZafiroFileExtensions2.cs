@@ -1,69 +1,32 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using CSharpFunctionalExtensions;
 using Zafiro.Actions;
+using Zafiro.CSharpFunctionalExtensions;
 
 namespace Zafiro.FileSystem;
 
 public static class ZafiroFileExtensions2
 {
-    public static Task<Result> Copy(this IZafiroFile source, IZafiroFile destination, Maybe<IObserver<LongProgress>> progress, TimeSpan? readTimeout = default, CancellationToken cancellationToken = default)
+    public static async Task<Result> Copy(this IZafiroFile source, IZafiroFile destination, Maybe<IObserver<LongProgress>> progress, TimeSpan? readTimeout = default, CancellationToken cancellationToken = default)
     {
-        return destination
-            .SetContents(source.Contents);
-        //return GetStream(source, readTimeout).Bind(async sourceStream =>
-        //{
-        //    var copyWithRetries = await CopyWithRetries(sourceStream, destination, progress, cancellationToken).ConfigureAwait(false);
-        //    await sourceStream.DisposeAsync().ConfigureAwait(false);
-        //    return copyWithRetries;
-        //});
+    var asMaybe = source.Properties.Map(f => f.Length).AsMaybe();
+        using (await InjectProgress(asMaybe, source.Contents, progress))
+        {
+            var contents = await destination.SetContents(source.Contents).ConfigureAwait(false);
+            return contents;
+        }
     }
 
-    //private static async Task<Result> CopyWithRetries(ObservableStream sourceStream, IZafiroFile destination, Maybe<IObserver<LongProgress>> progress, CancellationToken cancellationToken)
-    //{
-    //    return await Observable
-    //        .FromAsync(() => CopyStreamToFile(sourceStream, destination, progress, cancellationToken))
-    //        .RetryWithBackoffStrategy();
-    //}
-
-    //private static async Task<Result> CopyStreamToFile(ObservableStream sourceStream, IZafiroFile destinationFile, Maybe<IObserver<LongProgress>> progress, CancellationToken cancellationToken)
-    //{
-    //    var maybeSubscription = progress.Map(observer => GetProgressObservable(sourceStream).Subscribe(observer));
-    //    var result = await destinationFile.SetContents(sourceStream, cancellationToken).ConfigureAwait(false);
-    //    maybeSubscription.Execute(x => x.Dispose());
-    //    return result;
-    //}
-
-    //private static IObservable<LongProgress> GetProgressObservable(ObservableStream sourceStream)
-    //{
-    //    return sourceStream.Positions
-    //        .Select(processed => new LongProgress(processed, sourceStream.Length))
-    //        .StartWith(new LongProgress(0, sourceStream.Length));
-    //}
-
-    //private static Task<Result<ObservableStream>> GetStream(IZafiroFile zafiroFile, TimeSpan? readTimeout = default)
-    //{
-    //    var streamResult = zafiroFile.GetContents();
-    //    var timeoutAfter = readTimeout ?? TimeSpan.FromDays(1);
-
-    //    return streamResult
-    //        .Bind(stream => GetCompatibleStream(zafiroFile, stream, timeoutAfter));
-    //}
-
-    //private static async Task<Result<ObservableStream>> GetCompatibleStream(IZafiroFile zafiroFile, Stream stream, TimeSpan timeoutAfter)
-    //{
-    //    var timingOutStream = new ReadTimeOutStream(stream){ ReadTimeout = (int) timeoutAfter.TotalMilliseconds};
-
-    //    if (timingOutStream.CanSeek)
-    //    {
-    //        return new ObservableStream(timingOutStream);
-    //    }
-
-    //    var size = await zafiroFile.Size().ConfigureAwait(false);
-    //    return size.Map(l => new ObservableStream(new AlwaysForwardStream(timingOutStream, l)));
-    //}
-
-    public static Task<Result<IZafiroFile>> Translate(this IZafiroFile target, IZafiroDirectory sourceRoot, IZafiroDirectory destination)
+    public static async Task<IDisposable> InjectProgress(Task<Maybe<long>> length, IObservable<byte> bytes, Maybe<IObserver<LongProgress>> progress)
     {
-        var subPath = target.Path.MakeRelativeTo(sourceRoot.Path);
-        return Task.FromResult(Result.Success(destination.FileSystem.GetFile(destination.Path.Combine(subPath))));
+        var taggedBytes = bytes.Select((b, i) => (b, i: i + 1));
+
+        var lengthResult = await length.ConfigureAwait(false);
+        var maybeDisposable = lengthResult.Bind(l => progress.Map(f => taggedBytes.Buffer(TimeSpan.FromSeconds(1))
+            .Where(list => list.Any())
+            .Select(tuple => new LongProgress(tuple.Last().i, l)).Subscribe(f)));
+
+        return maybeDisposable.GetValueOrDefault(Disposable.Empty);
     }
 }
