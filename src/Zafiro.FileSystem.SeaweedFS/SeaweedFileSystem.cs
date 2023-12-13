@@ -74,7 +74,7 @@ public class SeaweedFileSystem : IZafiroFileSystem
             .Map(x => x.Select(s => ToZafiroPath(s)));
     }
 
-    public Task<Result<bool>> ExistDirectory(ZafiroPath path) => throw new NotImplementedException();
+    public Task<Result<bool>> ExistDirectory(ZafiroPath path) => Result.Try(() => seaweedFSClient.PathExists(path + "/"));
 
     public Task<Result<bool>> ExistFile(ZafiroPath path) => Result.Try(() => seaweedFSClient.PathExists(path));
 
