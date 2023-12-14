@@ -1,7 +1,7 @@
 ﻿using System.IO.Abstractions;
 using Serilog;
 
-namespace Zafiro.FileSystem.Android;
+namespace Zafiro.FileSystem.Android.Old;
 
 public class AndroidFile : IZafiroFile
 {
@@ -31,7 +31,7 @@ public class AndroidFile : IZafiroFile
         return Task.FromResult(Result.Try(() =>
         {
             EnsureFileExists();
-            return (Stream) info.OpenRead();
+            return (Stream)info.OpenRead();
         }, ex => ExceptionHandler.HandleError(Path, ex, logger)));
     }
 

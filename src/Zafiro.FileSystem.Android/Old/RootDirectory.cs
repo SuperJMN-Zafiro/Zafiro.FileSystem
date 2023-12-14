@@ -4,7 +4,7 @@ using Android.OS.Storage;
 
 using Serilog;
 
-namespace Zafiro.FileSystem.Android;
+namespace Zafiro.FileSystem.Android.Old;
 
 public class RootDirectory : IZafiroDirectory
 {
@@ -33,7 +33,7 @@ public class RootDirectory : IZafiroDirectory
             return list.Select(volume =>
             {
                 var directoryInfo = regularFileSystem.DirectoryInfo.New(volume.Directory!.Path);
-                return (IZafiroDirectory) new AndroidDirectory(directoryInfo, logger, FileSystem);
+                return (IZafiroDirectory)new AndroidDirectory(directoryInfo, logger, FileSystem);
             });
         });
 #else

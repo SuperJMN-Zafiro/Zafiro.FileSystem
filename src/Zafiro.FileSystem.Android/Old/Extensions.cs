@@ -1,4 +1,4 @@
-﻿namespace Zafiro.FileSystem.Android;
+﻿namespace Zafiro.FileSystem.Android.Old;
 
 public static class Extensions
 {

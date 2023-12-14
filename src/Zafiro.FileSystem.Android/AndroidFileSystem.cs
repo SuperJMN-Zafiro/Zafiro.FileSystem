@@ -1,69 +1,39 @@
-﻿using Serilog;
+﻿using System.IO.Abstractions;
+using Zafiro.FileSystem.Local;
+#pragma warning disable CS0414 // Field is assigned but its value is never used
 #if ANDROID
 using Android.Content;
+using Android.OS.Storage;
 using AppResult = Android.App.Result;
 #endif
 
 namespace Zafiro.FileSystem.Android;
 
-public class AndroidFileSystem : IFileSystem
+public class AndroidFileSystem : ZafiroFileSystemBase
 {
-    private readonly System.IO.Abstractions.IFileSystem fileSystem;
-    private readonly Maybe<ILogger> logger;
-#pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
     private static bool isInitialized;
-#pragma warning restore CS0649 // Field is never assigned to, and will always have its default value
 
-    public AndroidFileSystem(System.IO.Abstractions.IFileSystem fileSystem, Maybe<ILogger> logger)
+    public AndroidFileSystem(IFileSystem fileSystem) : base(fileSystem)
     {
-        EnsureInitialized();
-        this.fileSystem = fileSystem;
-        this.logger = logger;
     }
 
-    public Task<Result<IZafiroDirectory>> GetDirectory(ZafiroPath path)
-    {
-        return AndroidPermissions.Request().Bind(() =>
-        {
-            if (path == ZafiroPath.Empty)
-            {
-                return Task.FromResult(Result.Success<IZafiroDirectory>(new RootDirectory(this, fileSystem, logger)));
-            }
-
-            return Task.FromResult(Result.Try<IZafiroDirectory>(() =>
-            {
-                var localPath = "/" + path;
-                var directoryInfo = fileSystem.DirectoryInfo.New(localPath);
-                return new AndroidDirectory(directoryInfo, logger, this);
-            }, ex => ExceptionHandler.HandleError(path, ex, logger)));
-        });
-    }
-
-    public Task<Result<IZafiroFile>> GetFile(ZafiroPath path)
-    {
-        return AndroidPermissions.Request()
-            .Bind(() => Result.Try<IZafiroFile>(() => new AndroidFile(fileSystem.FileInfo.New(path), logger), ex => ExceptionHandler.HandleError(path, ex, logger)));
-    }
-
-    public Task<Result<ZafiroPath>> GetRoot()
+    public override async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path, CancellationToken ct = default)
     {
 #if ANDROID
-        return AndroidPermissions.Request().Bind(() =>
-        {
-            var path = global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
-            return ZafiroPath.Create(path[1..]);
-        });
+        return Result
+            .Try(() => StorageManager.FromContext(Application.Context)!.StorageVolumes.ToList())
+            .Map(list => list.Select(volume => FileSystemToZafiroPath(volume.Directory!.Path)));
+#else
+        return Result.Failure<IEnumerable<ZafiroPath>>("Only supported in Android");
 #endif
-        return Task.FromResult(Result.Failure<ZafiroPath>("Not supported"));
     }
+    public override string PathToFileSystem(ZafiroPath path) => "/" + path;
 
-    private void EnsureInitialized()
-    {
-        if (!isInitialized)
-        {
-            throw new InvalidOperationException("AndroidFilesSystem has not been initialized. Please, call AndroidFileSystem.Register(this) in you main Activity and override OnActivityResult to call AndroidFileSystem.OnActivityResult(...) in it.");
-        }
-    }
+    public override ZafiroPath FileSystemToZafiroPath(string fileSystemPath) => throw new NotImplementedException();
+
+    public override Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path) => throw new NotImplementedException();
+
+    public override async Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path, CancellationToken ct = default) => Result.Try(() => FileSystem.Directory.GetFiles(PathToFileSystem(path)).Select(s => (ZafiroPath) s));
 
 #if ANDROID
     public static void OnActivityResult(int requestCode, AppResult resultCode, Intent? data)

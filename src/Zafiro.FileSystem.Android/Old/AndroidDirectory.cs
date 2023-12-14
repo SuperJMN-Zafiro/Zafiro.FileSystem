@@ -1,7 +1,8 @@
 ﻿using System.IO.Abstractions;
 using Serilog;
+using Zafiro.FileSystem;
 
-namespace Zafiro.FileSystem.Android;
+namespace Zafiro.FileSystem.Android.Old;
 
 public class AndroidDirectory : IZafiroDirectory
 {
@@ -39,14 +40,14 @@ public class AndroidDirectory : IZafiroDirectory
         return AndroidPermissions.Request().Bind(async () =>
         {
             var fromResult = await Task.FromResult(Result.Try(() => directoryInfo.GetDirectories()
-                .Select(info => (IZafiroDirectory) new AndroidDirectory(info, logger, FileSystem)), ex => ExceptionHandler.HandleError(Path, ex, logger))).ConfigureAwait(false);
+                .Select(info => (IZafiroDirectory)new AndroidDirectory(info, logger, FileSystem)), ex => ExceptionHandler.HandleError(Path, ex, logger))).ConfigureAwait(false);
             return fromResult;
         });
     }
 
     public Task<Result<IEnumerable<IZafiroFile>>> GetFiles()
     {
-        return AndroidPermissions.Request().Bind(() => Result.Try(() => directoryInfo.GetFiles().Select(info => (IZafiroFile) new AndroidFile(info, logger)), ex => ExceptionHandler.HandleError(Path, ex, logger)));
+        return AndroidPermissions.Request().Bind(() => Result.Try(() => directoryInfo.GetFiles().Select(info => (IZafiroFile)new AndroidFile(info, logger)), ex => ExceptionHandler.HandleError(Path, ex, logger)));
     }
 
     public Task<Result> Delete()

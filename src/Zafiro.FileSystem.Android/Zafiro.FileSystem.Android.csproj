@@ -6,9 +6,15 @@
   </PropertyGroup>
   <Import Project="..\Common.props" />
   <ItemGroup>
+    <Compile Remove="Old\**" />
+    <EmbeddedResource Remove="Old\**" />
+    <None Remove="Old\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.40.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Zafiro.FileSystem.Local\Zafiro.FileSystem.Local.csproj" />
     <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
   </ItemGroup>
 </Project>
