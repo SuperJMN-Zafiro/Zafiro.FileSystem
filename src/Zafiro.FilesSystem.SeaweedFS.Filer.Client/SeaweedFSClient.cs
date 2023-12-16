@@ -9,7 +9,7 @@ public class SeaweedFSClient : ISeaweedFS
 {
     private readonly HttpClient httpClient;
     private readonly ISeaweedApi inner;
-    private readonly MemoryCache fileMetadatas = MemoryCache.Default;
+    private readonly MemoryCache fileMetadatas = new MemoryCache("metadatas");
 
     public SeaweedFSClient(HttpClient httpClient)
     {
