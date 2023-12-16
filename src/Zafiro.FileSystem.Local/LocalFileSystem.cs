@@ -1,4 +1,6 @@
-﻿namespace Zafiro.FileSystem.Local;
+﻿using Zafiro.FileSystem.Local.Android;
+
+namespace Zafiro.FileSystem.Local;
 
 public static class LocalFileSystem
 {
@@ -14,6 +16,12 @@ public static class LocalFileSystem
             return new LinuxZafiroFileSystem(new System.IO.Abstractions.FileSystem());
         }
 
+        if (OperatingSystem.IsAndroid())
+        {
+#if ANDROID
+            return new AndroidFileSystem(new System.IO.Abstractions.FileSystem());
+#endif
+        }
         throw new NotSupportedException("The file system is not supported");
     }
 }
