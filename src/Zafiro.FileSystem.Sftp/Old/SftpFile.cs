@@ -2,7 +2,7 @@
 using CSharpFunctionalExtensions;
 using Renci.SshNet;
 
-namespace Zafiro.FileSystem.Sftp;
+namespace Zafiro.FileSystem.Sftp.Old;
 
 public class SftpFile : IZafiroFile
 {

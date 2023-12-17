@@ -37,7 +37,7 @@ public class WindowsZafiroFileSystem : ZafiroFileSystemBase
         return Result.Try(() =>
         {
             var info = FileSystem.FileInfo.New(PathToFileSystem(path));
-            var isHidden = path.RouteFragments.Count() != 1 && info.Attributes.HasFlag(FileAttributes.Hidden);
+            var isHidden = path.Name().StartsWith(".") || path.RouteFragments.Count() != 1 && info.Attributes.HasFlag(FileAttributes.Hidden);
             return new DirectoryProperties(isHidden, info.CreationTime);
         });
     }

@@ -1,4 +1,4 @@
-﻿namespace Zafiro.FileSystem.Sftp;
+﻿namespace Zafiro.FileSystem.Sftp.Old;
 
 public static class PathMixin
 {
