@@ -5,21 +5,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Old\**" />
-    <EmbeddedResource Remove="Old\**" />
-    <None Remove="Old\**" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="SSH.NET" Version="2020.0.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
-    <ProjectReference Include="E:\Repos\SuperJMN-Zafiro\Zafiro.FileSystem\src\Zafiro.FileSystem\Zafiro.FileSystem.csproj">
-      <Temp>Zafiro.FileSystem</Temp>
-    </ProjectReference>
-    <ProjectReference Include="E:\Repos\SuperJMN-Zafiro\Zafiro\src\Zafiro\Zafiro.csproj">
-      <Temp>Zafiro</Temp>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Common.props" />
 </Project>
