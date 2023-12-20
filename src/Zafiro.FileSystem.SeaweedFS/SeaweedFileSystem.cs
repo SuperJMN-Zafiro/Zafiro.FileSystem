@@ -57,7 +57,7 @@ public class SeaweedFileSystem : IZafiroFileSystem
     public async Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path)
     {
         return Result
-            .Success(new DirectoryProperties(false, DateTime.MinValue));
+            .Success(new DirectoryProperties(false, DateTimeOffset.MinValue));
     }
 
     public Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path, CancellationToken ct = default)
