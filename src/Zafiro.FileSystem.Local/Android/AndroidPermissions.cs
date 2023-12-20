@@ -1,9 +1,8 @@
 ﻿#if ANDROID
 using Android.Content;
 using AppResult = Android.App.Result;
-#endif
 
-namespace Zafiro.FileSystem.Android;
+namespace Zafiro.FileSystem.Local.Android;
 
 public static class AndroidPermissions
 {
@@ -45,7 +44,7 @@ public static class AndroidPermissions
         return tcs.Task;
     }
 
-#if ANDROID
+
     public static void OnActivityResult(int requestCode, AppResult resultCode, Intent? data)
     {
         if (tcs != null)
@@ -54,5 +53,6 @@ public static class AndroidPermissions
             tcs = null;
         }
     }
-#endif
+
 }
+#endif

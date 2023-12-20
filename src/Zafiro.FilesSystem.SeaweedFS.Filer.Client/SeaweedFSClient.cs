@@ -1,4 +1,5 @@
 using System.Net;
+using System.Runtime.Caching;
 using System.Text.Json;
 using Refit;
 
@@ -8,6 +9,7 @@ public class SeaweedFSClient : ISeaweedFS
 {
     private readonly HttpClient httpClient;
     private readonly ISeaweedApi inner;
+    private readonly MemoryCache fileMetadatas = new MemoryCache("metadatas");
 
     public SeaweedFSClient(HttpClient httpClient)
     {
@@ -24,9 +26,21 @@ public class SeaweedFSClient : ISeaweedFS
         });
     }
 
-    public Task<RootDirectory> GetContents(string directoryPath, CancellationToken cancellationToken = default)
+    public async Task<RootDirectory> GetContents(string directoryPath, CancellationToken cancellationToken = default)
     {
-        return inner.GetContents(directoryPath[1..], cancellationToken);
+        var contents = await inner.GetContents(directoryPath, cancellationToken);
+        var files = contents.Entries?.OfType<FileMetadata>() ?? Enumerable.Empty<FileMetadata>();
+
+        foreach (var file in files)
+        {
+            var policy = new CacheItemPolicy
+            {
+                AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5),
+            };
+            fileMetadatas.Add(file.FullPath.StartsWith("/") ? file.FullPath[1..] : file.FullPath, file, policy);
+        }
+
+        return contents;
     }
 
     public Task Upload(string path, Stream stream, CancellationToken cancellationToken = default)
@@ -52,12 +66,19 @@ public class SeaweedFSClient : ISeaweedFS
 
     public Task DeleteFile(string filePath, CancellationToken cancellationToken = default)
     {
+        fileMetadatas.Remove(filePath);
+
         return inner.DeleteFile(filePath, cancellationToken);
     }
 
-    public Task<File> GetFileMetadata(string path, CancellationToken cancellationToken = default)
+    public async Task<FileMetadata> GetFileMetadata(string path, CancellationToken cancellationToken = default)
     {
-        return inner.GetFileMetadata(path, cancellationToken);
+        if (fileMetadatas.Get(path) is FileMetadata metadata)
+        {
+            return metadata;
+        }
+
+        return await inner.GetFileMetadata(path, cancellationToken);
     }
 
     public async Task<bool> PathExists(string path)

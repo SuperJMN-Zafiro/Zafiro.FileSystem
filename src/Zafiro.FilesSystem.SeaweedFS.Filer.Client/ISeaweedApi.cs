@@ -9,7 +9,7 @@ public interface ISeaweedApi
     Task<RootDirectory> GetContents(string directoryPath, CancellationToken cancellationToken);
 
     [Get("/{filePath}?metadata=true&pretty=y")]
-    Task<File> GetFileMetadata(string filePath, CancellationToken cancellationToken);
+    Task<FileMetadata> GetFileMetadata(string filePath, CancellationToken cancellationToken);
 
     [Multipart]
     [Post("/{path}")]

@@ -22,31 +22,14 @@ public class WindowsZafiroFileSystem : ZafiroFileSystemBase
 
     public override ZafiroPath FileSystemToZafiroPath(string fileSystemPath) => fileSystemPath.Replace("\\", "/");
 
-    public override async Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path)
+    public override async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path, CancellationToken ct = default)
     {
         if (path == ZafiroPath.Empty)
         {
-            return Result.Success(Enumerable.Empty<ZafiroPath>());
+            return Result.Try(() => FileSystem.DriveInfo.GetDrives().Select(i => i.RootDirectory.FullName[..^1]).Select(x => x.ToZafiroPath()));
         }
-        
-        return Result.Try(() => FileSystem.Directory.GetFiles(PathToFileSystem(path)).Select(FileSystemToZafiroPath));
-    }
 
-    public override async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path)
-    {
-        return Result.Try(GetDirs);
-
-        IEnumerable<ZafiroPath> GetDirs()
-        {
-            if (path == ZafiroPath.Empty)
-            {
-                var zafiroPaths = FileSystem.DriveInfo.GetDrives().Select(i => i.RootDirectory.FullName[..^1]).Select(x => x.ToZafiroPath());
-                return zafiroPaths;
-            }
-
-            var paths = FileSystem.Directory.GetDirectories(PathToFileSystem(path)).Select(FileSystemToZafiroPath);
-            return paths;
-        }
+        return await base.GetDirectoryPaths(path, ct);
     }
 
     public override async Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path)
@@ -54,7 +37,7 @@ public class WindowsZafiroFileSystem : ZafiroFileSystemBase
         return Result.Try(() =>
         {
             var info = FileSystem.FileInfo.New(PathToFileSystem(path));
-            var isHidden = path.RouteFragments.Count() != 1 && info.Attributes.HasFlag(FileAttributes.Hidden);
+            var isHidden = path.Name().StartsWith(".") || path.RouteFragments.Count() != 1 && info.Attributes.HasFlag(FileAttributes.Hidden);
             return new DirectoryProperties(isHidden, info.CreationTime);
         });
     }

@@ -2,12 +2,12 @@
 
 public class DirectoryProperties
 {
-    public DirectoryProperties(bool isHidden, DateTime creationTime)
+    public DirectoryProperties(bool isHidden, DateTimeOffset creationTime)
     {
         IsHidden = isHidden;
         CreationTime = creationTime;
     }
 
-    public DateTime CreationTime { get; }
+    public DateTimeOffset CreationTime { get; }
     public bool IsHidden { get; }
 }

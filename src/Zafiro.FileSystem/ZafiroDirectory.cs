@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Reactive.Linq;
+using CSharpFunctionalExtensions;
 
 namespace Zafiro.FileSystem;
 
@@ -12,8 +13,10 @@ public class ZafiroDirectory : IZafiroDirectory
     {
         Path = path;
         FileSystem = fileSystemRoot;
+        Changed = fileSystemRoot.Changed.Where(change => change.Path.Parent() == Path);
     }
 
+    public IObservable<FileSystemChange> Changed { get; }
     public Task<Result> Create() => FileSystem.CreateDirectory(Path);
     public Task<Result<IEnumerable<IZafiroFile>>> GetFiles() => FileSystem.GetFiles(Path);
     public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories() => FileSystem.GetDirectories(Path);
