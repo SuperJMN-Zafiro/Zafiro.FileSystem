@@ -27,7 +27,11 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
     public virtual Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes)
     {
         return Result
-            .Try(() => FileSystem.File.Open(PathToFileSystem(path), FileMode.Create))
+            .Try(() =>
+            {
+                EnsureExist(PathToFileSystem(path.Parent()));
+                return FileSystem.File.Open(PathToFileSystem(path), FileMode.Create);
+            })
             .Bind(stream => Result.Try(async () =>
             {
                 using (stream)
@@ -75,10 +79,19 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
     {
         return Result.Try(() => FileSystem.Directory.GetDirectories(PathToFileSystem(path)).Select(FileSystemToZafiroPath));
     }
+
     public async Task<Result<bool>> ExistDirectory(ZafiroPath path) => Result.Try(() => FileSystem.Directory.Exists(path));
     public async Task<Result<bool>> ExistFile(ZafiroPath path) => Result.Try(() => FileSystem.File.Exists(path));
     public async Task<Result> DeleteFile(ZafiroPath path) => Result.Try(() => FileSystem.File.Delete(path));
     public async Task<Result> DeleteDirectory(ZafiroPath path) => Result.Try(() => FileSystem.Directory.Delete(path, true));
     public abstract string PathToFileSystem(ZafiroPath path);
     public abstract ZafiroPath FileSystemToZafiroPath(string fileSystemPath);
+
+    private void EnsureExist(string path)
+    {
+        if (!FileSystem.Directory.Exists(path))
+        {
+            FileSystem.Directory.CreateDirectory(path);
+        }
+    }
 }
