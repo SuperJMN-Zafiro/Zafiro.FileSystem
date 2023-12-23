@@ -44,7 +44,7 @@ public class SftpFileSystem : IZafiroFileSystem
     {
         return Result
             .Try(() => sftpClient.GetAttributes(FromZafiroToFileSystem(path)))
-            .Map(f => new FileProperties(path.Name().StartsWith("."), DateTimeOffset.MinValue, f.Size));
+            .Map(f => new FileProperties(path.Name().StartsWith("."), DateTimeOffset.MinValue, f.Size, new Dictionary<ChecksumKind, byte[]>()));
     }
 
     public async Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path)

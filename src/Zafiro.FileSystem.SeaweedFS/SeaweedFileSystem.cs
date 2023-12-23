@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Linq;
+using System.Text;
 using CSharpFunctionalExtensions;
 using Serilog;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
@@ -52,7 +53,16 @@ public class SeaweedFileSystem : IZafiroFileSystem
     {
         return Result
             .Try(() => seaweedFSClient.GetFileMetadata(ToServicePath(path), CancellationToken.None), e => RefitBasedAccessExceptionHandler.HandlePathAccessError(path, e, logger))
-            .Map(f => new FileProperties(false, f.Crtime, f.FileSize));
+            .Map(f => new FileProperties(false, f.Crtime, f.FileSize, GetChecksumData(f)));
+    }
+
+    private static Dictionary<ChecksumKind, byte[]> GetChecksumData(FileMetadata f)
+    {
+        var bytesMap = Maybe.From(f.Md5).Map(s => new Dictionary<ChecksumKind, byte[]>()
+        {
+            [ChecksumKind.Md5] = Encoding.UTF8.GetBytes(s!),
+        }).GetValueOrDefault(new Dictionary<ChecksumKind, byte[]>());
+        return bytesMap;
     }
 
     public async Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path)

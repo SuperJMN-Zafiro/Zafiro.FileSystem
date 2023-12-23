@@ -51,7 +51,7 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
         return Result.Try(() =>
         {
             var info = FileSystem.FileInfo.New(PathToFileSystem(path));
-            return new FileProperties(info.Attributes.HasFlag(FileAttributes.Hidden), info.CreationTime, info.Length);
+            return new FileProperties(info.Attributes.HasFlag(FileAttributes.Hidden), info.CreationTime, info.Length, new Dictionary<ChecksumKind, byte[]>());
         });
     }
 

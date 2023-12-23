@@ -20,7 +20,7 @@ public class BaseEntry
     public string UserName { get; set; }
     public object GroupNames { get; set; }
     public string SymlinkTarget { get; set; }
-    public object Md5 { get; set; }
+    public string? Md5 { get; set; }
     public long FileSize { get; set; }
     public int Rdev { get; set; }
     public ulong Inode { get; set; }
