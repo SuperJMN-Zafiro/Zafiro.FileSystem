@@ -1,6 +1,8 @@
 ﻿using System.Reactive.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions.ValueTasks;
 using Serilog;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 using Zafiro.IO;
@@ -53,16 +55,22 @@ public class SeaweedFileSystem : IZafiroFileSystem
     {
         return Result
             .Try(() => seaweedFSClient.GetFileMetadata(ToServicePath(path), CancellationToken.None), e => RefitBasedAccessExceptionHandler.HandlePathAccessError(path, e, logger))
-            .Map(f => new FileProperties(false, f.Crtime, f.FileSize, GetChecksumData(f)));
+            .Map(f => new FileProperties(false, f.Crtime, f.FileSize));
     }
 
-    private static Dictionary<ChecksumKind, byte[]> GetChecksumData(FileMetadata f)
+    public async Task<Result<IDictionary<ChecksumKind, byte[]>>> GetChecksums(ZafiroPath path) => await GetChecksumData(path);
+
+    private async Task<Result<IDictionary<ChecksumKind, byte[]>>> GetChecksumData(ZafiroPath path)
     {
-        var bytesMap = Maybe.From(f.Md5).Map(s => new Dictionary<ChecksumKind, byte[]>()
-        {
-            [ChecksumKind.Md5] = Encoding.UTF8.GetBytes(s!),
-        }).GetValueOrDefault(new Dictionary<ChecksumKind, byte[]>());
-        return bytesMap;
+        var result = await Result
+            .Try(() => seaweedFSClient.GetFileMetadata(ToServicePath(path)))
+            .Map(metadata => Maybe.From(metadata.Md5))
+            .Map(maybeMd5 => maybeMd5.Map(s => (IDictionary<ChecksumKind, byte[]>) new Dictionary<ChecksumKind, byte[]>
+            {
+                [ChecksumKind.Md5] = Encoding.UTF8.GetBytes(s!),
+            }).GetValueOrDefault(new Dictionary<ChecksumKind, byte[]>()));
+
+        return result;
     }
 
     public async Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path)

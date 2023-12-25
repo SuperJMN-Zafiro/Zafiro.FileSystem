@@ -51,8 +51,13 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
         return Result.Try(() =>
         {
             var info = FileSystem.FileInfo.New(PathToFileSystem(path));
-            return new FileProperties(info.Attributes.HasFlag(FileAttributes.Hidden), info.CreationTime, info.Length, new Dictionary<ChecksumKind, byte[]>());
+            return new FileProperties(info.Attributes.HasFlag(FileAttributes.Hidden), info.CreationTime, info.Length);
         });
+    }
+
+    public async Task<Result<IDictionary<ChecksumKind, byte[]>>> GetChecksums(ZafiroPath path)
+    {
+        return new Dictionary<ChecksumKind, byte[]>();
     }
 
     public virtual async Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path)
