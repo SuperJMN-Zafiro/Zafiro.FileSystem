@@ -3,5 +3,6 @@
 public enum ChecksumKind
 {
     Invalid = 0,
-    Md5
+    Md5,
+    Sha256
 }

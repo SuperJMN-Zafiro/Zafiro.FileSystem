@@ -10,6 +10,11 @@ public static class Mixin
         return taskResult.Bind(inputs => inputs.Select(selector).Combine());
     }
 
+    public static Task<Result<IEnumerable<TResult>>> MapMany<TInput, TResult>(this Task<Result<IEnumerable<TInput>>> taskResult, Func<TInput, TResult> selector)
+    {
+        return taskResult.Map(inputs => inputs.Select(selector));
+    }
+
     public static Task<Result<IEnumerable<TResult>>> BindMany<TInput, TResult>(this Task<Result<IEnumerable<TInput>>> taskResult, Func<TInput, Task<Result<TResult>>> selector)
     {
         return taskResult.Bind(inputs => inputs.Select(selector).Combine());
@@ -20,20 +25,25 @@ public class FileSystemComparer2
 {
     public Task<Result<IEnumerable<FileDiff>>> Diff(IZafiroDirectory origin, IZafiroDirectory destination)
     {
-        var sourceFiles = FilesWithMetadata(origin);
-        var destinationFiles = FilesWithMetadata(origin);
+        var sourceFiles = FilesWithMetadata(origin).MapMany(fwm => (Key: GetKey(origin, fwm.File), File: fwm));
+        var destinationFiles = FilesWithMetadata(destination).MapMany(fwm => (Key: GetKey(destination, fwm.File), File: fwm));;
 
         var diff = from s in sourceFiles from d in destinationFiles select GetDiffs(s, d);
         return diff;
     }
 
-    private IEnumerable<FileDiff> GetDiffs(IEnumerable<FileWithMetadata> originFiles, IEnumerable<FileWithMetadata> destinationFiles)
+    private IEnumerable<FileDiff> GetDiffs(IEnumerable<(ZafiroPath Key, FileWithMetadata File)> originFiles, IEnumerable<(ZafiroPath Key, FileWithMetadata File)> destinationFiles)
     {
         return originFiles.FullJoin(destinationFiles,
-            f => f,
-            left => (FileDiff) new LeftOnlyDiff(left),
-            right => new RightOnlyDiff(right),
-            (left, right) => new BothDiff(left, right));
+            f => f.Key,
+            left => (FileDiff) new LeftOnlyDiff(left.File),
+            right => new RightOnlyDiff(right.File),
+            (left, right) => new BothDiff(left.File, right.File));
+    }
+
+    private static ZafiroPath GetKey(IZafiroDirectory origin, IZafiroFile f)
+    {
+        return f.Path.MakeRelativeTo(origin.Path);
     }
 
     private static Task<Result<IEnumerable<FileWithMetadata>>> FilesWithMetadata(IZafiroDirectory origin)
