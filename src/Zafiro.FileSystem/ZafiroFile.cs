@@ -1,27 +1,23 @@
 ﻿using CSharpFunctionalExtensions;
-using Zafiro.CSharpFunctionalExtensions;
 
 namespace Zafiro.FileSystem;
 
 public class ZafiroFile : IZafiroFile
 {
-    private readonly IFileSystemRoot fileSystemRoot;
-
     public ZafiroFile(ZafiroPath path, IFileSystemRoot fileSystemRoot)
     {
         Path = path;
-        this.fileSystemRoot = fileSystemRoot;
+        FileSystem = fileSystemRoot;
     }
 
-    public IObservable<byte> Contents => fileSystemRoot.GetFileContents(Path);
-    public Task<Result<bool>> Exists => fileSystemRoot.ExistFile(Path);
+    public IFileSystemRoot FileSystem { get; }
+    public IObservable<byte> Contents => FileSystem.GetFileContents(Path);
+    public Task<Result<bool>> Exists => FileSystem.ExistFile(Path);
     public ZafiroPath Path { get; }
-    public Task<Result> Delete() => fileSystemRoot.DeleteFile(Path);
+    public Task<Result<IDictionary<ChecksumKind, byte[]>>> Hashes => FileSystem.GetChecksums(Path);
+    public Task<Result> Delete() => FileSystem.DeleteFile(Path);
 
-    public Task<Result> SetContents(IObservable<byte> contents)
-    {
-        return fileSystemRoot.SetFileContents(Path, contents);
-    }
+    public Task<Result> SetContents(IObservable<byte> contents) => FileSystem.SetFileContents(Path, contents);
 
-    public Task<Result<FileProperties>> Properties => fileSystemRoot.GetFileProperties(Path);
+    public Task<Result<FileProperties>> Properties => FileSystem.GetFileProperties(Path);
 }

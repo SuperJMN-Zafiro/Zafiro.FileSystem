@@ -21,6 +21,16 @@ public static class ZafiroFileExtensions
         }
     }
 
+    public static IZafiroFile EquivaletIn(this IZafiroFile file, IZafiroDirectory destination)
+    {
+        return destination.FileSystem.GetFile(destination.Path.Combine(file.Path.Name()));
+    }
+
+    public static IZafiroDirectory Parent(this IZafiroFile file)
+    {
+        return file.FileSystem.GetDirectory(file.Path.Parent());
+    }
+
     private static async Task<IDisposable> InjectProgress(Task<Maybe<long>> length, IObservable<byte> bytes, Maybe<IObserver<LongProgress>> progress)
     {
         var taggedBytes = bytes.Select((b, i) => (b, i: i + 1));
