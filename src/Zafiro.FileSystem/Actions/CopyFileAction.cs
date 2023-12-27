@@ -21,7 +21,7 @@ public class CopyFileAction : IFileAction
 
     public IObservable<LongProgress> Progress => progress.AsObservable();
 
-    public Task<Result> Execute(CancellationToken cancellationToken)
+    public Task<Result> Execute(CancellationToken cancellationToken = default)
     {
         return Source.Copy(Destination, Maybe<IObserver<LongProgress>>.From(progress), cancellationToken: cancellationToken);
     }

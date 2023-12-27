@@ -4,7 +4,7 @@ using Serilog;
 using Zafiro.FileSystem.Actions;
 using Zafiro.FileSystem.Local;
 
-namespace Zafiro.FileSystem.Tests;
+namespace Zafiro.FileSystem.Tests.Old;
 
 public class CopyDirectoryActionTests
 {
@@ -19,9 +19,9 @@ public class CopyDirectoryActionTests
         });
         var fs = new LocalFileSystem(mockFileSystem, Maybe<ILogger>.None);
         var action = from src in fs.GetDirectory("C:\\Source")
-            from dst in fs.GetDirectory("C:\\Destination")
-            from ca in CopyDirectoryAction.Create(src, dst)
-            select ca;
+                     from dst in fs.GetDirectory("C:\\Destination")
+                     from ca in CopyDirectoryAction.Create(src, dst)
+                     select ca;
 
         var result = await action.Bind(directoryAction => directoryAction.Execute(CancellationToken.None));
 

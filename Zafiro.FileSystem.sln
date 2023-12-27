@@ -19,6 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.SeaweedFS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.SeaweedFS.Tests", "test\Zafiro.FileSystem.SeaweedFS.Tests\Zafiro.FileSystem.SeaweedFS.Tests.csproj", "{171BB47D-5DE9-4AFB-8DB9-014DDFAA9F44}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.Tests", "test\Zafiro.FileSystem.Tests\Zafiro.FileSystem.Tests.csproj", "{3325AEAA-B19E-4BFD-9E25-D700C2A0689F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Temporary", "Temporary", "{AF937671-5759-4C03-A502-98EB407B4DCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zafiro", "..\Zafiro\src\Zafiro\Zafiro.csproj", "{C56822CC-2FC2-43F6-A0BF-EA42D43E35EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,11 +61,22 @@ Global
 		{171BB47D-5DE9-4AFB-8DB9-014DDFAA9F44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{171BB47D-5DE9-4AFB-8DB9-014DDFAA9F44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{171BB47D-5DE9-4AFB-8DB9-014DDFAA9F44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3325AEAA-B19E-4BFD-9E25-D700C2A0689F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3325AEAA-B19E-4BFD-9E25-D700C2A0689F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3325AEAA-B19E-4BFD-9E25-D700C2A0689F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3325AEAA-B19E-4BFD-9E25-D700C2A0689F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C56822CC-2FC2-43F6-A0BF-EA42D43E35EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C56822CC-2FC2-43F6-A0BF-EA42D43E35EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C56822CC-2FC2-43F6-A0BF-EA42D43E35EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C56822CC-2FC2-43F6-A0BF-EA42D43E35EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6309FF7A-E6E5-485B-BAE6-70DD0E37B3BA}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C56822CC-2FC2-43F6-A0BF-EA42D43E35EA} = {AF937671-5759-4C03-A502-98EB407B4DCC}
 	EndGlobalSection
 EndGlobal

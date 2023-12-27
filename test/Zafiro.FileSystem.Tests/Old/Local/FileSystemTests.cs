@@ -4,7 +4,7 @@ using System.Text;
 using FluentAssertions.Extensions;
 using Zafiro.FileSystem.Evolution;
 
-namespace Zafiro.FileSystem.Tests.Local;
+namespace Zafiro.FileSystem.Tests.Old.Local;
 
 public class FileSystemTests
 {
@@ -64,7 +64,7 @@ public class FileSystemTests
     {
         var fs = new MockFileSystem(new Dictionary<string, MockFileData>()
         {
-            ["File.txt"] = new("Some content") { CreationTime = 30.January(2010)}
+            ["File.txt"] = new("Some content") { CreationTime = 30.January(2010) }
         });
 
         var sut = new LocalFileSystem2(fs);

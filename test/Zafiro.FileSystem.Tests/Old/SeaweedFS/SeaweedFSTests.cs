@@ -3,8 +3,9 @@ using Serilog;
 using Zafiro.FileSystem.SeaweedFS;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 using Moq;
+using Zafiro.FileSystem;
 
-namespace Zafiro.FileSystem.Tests.SeaweedFS;
+namespace Zafiro.FileSystem.Tests.Old.SeaweedFS;
 
 public class SeaweedFSTests
 {

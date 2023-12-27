@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 
-namespace Zafiro.FileSystem.Tests;
+namespace Zafiro.FileSystem.Tests.Old;
 
 public class TestFile : IZafiroFile
 {

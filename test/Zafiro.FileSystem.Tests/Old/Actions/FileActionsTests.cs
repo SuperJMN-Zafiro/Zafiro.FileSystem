@@ -5,7 +5,7 @@ using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Local;
 using Zafiro.FileSystem.Evolution.Synchronizer;
 
-namespace Zafiro.FileSystem.Tests.Actions;
+namespace Zafiro.FileSystem.Tests.Old.Actions;
 
 public class FileActionsTests
 {

@@ -2,7 +2,7 @@
 using CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Evolution;
 
-namespace Zafiro.FileSystem.Tests.Local;
+namespace Zafiro.FileSystem.Tests.Old.Local;
 
 public class FileSystemRootTests
 {

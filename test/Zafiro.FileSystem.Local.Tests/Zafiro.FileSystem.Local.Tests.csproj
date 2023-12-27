@@ -23,5 +23,14 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Zafiro.FileSystem.Local\Zafiro.FileSystem.Local.csproj" />
     <ProjectReference Include="..\..\src\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
+    <ProjectReference Include="E:\Repos\SuperJMN-Zafiro\Zafiro.FileSystem\src\Zafiro.FileSystem.Local\Zafiro.FileSystem.Local.csproj">
+      <Temp>Zafiro.FileSystem.Local</Temp>
+    </ProjectReference>
+    <ProjectReference Include="E:\Repos\SuperJMN-Zafiro\Zafiro.FileSystem\src\Zafiro.FileSystem\Zafiro.FileSystem.csproj">
+      <Temp>Zafiro.FileSystem</Temp>
+    </ProjectReference>
+    <ProjectReference Include="E:\Repos\SuperJMN-Zafiro\Zafiro\src\Zafiro\Zafiro.csproj">
+      <Temp>Zafiro</Temp>
+    </ProjectReference>
   </ItemGroup>
 </Project>

@@ -112,6 +112,11 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
 
     private void EnsureExist(string path)
     {
+        if (path == "")
+        {
+            return;
+        }
+
         if (!FileSystem.Directory.Exists(path))
         {
             FileSystem.Directory.CreateDirectory(path);
