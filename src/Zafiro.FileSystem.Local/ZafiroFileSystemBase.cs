@@ -68,7 +68,7 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
         byte[] sha256;
         await using (var fileSystemStream = FileSystem.File.OpenRead(pathToFileSystem))
         {
-            sha256 = await MD5.HashDataAsync(fileSystemStream);
+            sha256 = await SHA256.HashDataAsync(fileSystemStream);
         }
 
         return new Dictionary<ChecksumKind, byte[]>()
