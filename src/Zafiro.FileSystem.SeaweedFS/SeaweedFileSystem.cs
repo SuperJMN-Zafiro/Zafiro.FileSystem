@@ -67,7 +67,7 @@ public class SeaweedFileSystem : IZafiroFileSystem
             .Map(metadata => Maybe.From(metadata.Md5))
             .Map(maybeMd5 => maybeMd5.Map(s => (IDictionary<ChecksumKind, byte[]>) new Dictionary<ChecksumKind, byte[]>
             {
-                [ChecksumKind.Md5] = Encoding.UTF8.GetBytes(s!),
+                [ChecksumKind.Md5] = Convert.FromBase64String(s!),
             }).GetValueOrDefault(new Dictionary<ChecksumKind, byte[]>()));
 
         return result;
