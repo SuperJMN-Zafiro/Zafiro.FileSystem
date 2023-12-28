@@ -14,6 +14,5 @@
     <PackageReference Include="System.IO.Abstractions" Version="19.2.69" />
     <PackageReference Include="System.Reactive" Version="6.0.0" />
     <PackageReference Include="Zafiro" Version="4.0.16" />
-    <PackageReference Include="E:\Repos\SuperJMN-Zafiro\Zafiro\src\Zafiro\Zafiro.csproj" Version="4.0.15" />
   </ItemGroup>
 </Project>
