@@ -4,7 +4,7 @@ using Serilog;
 using Zafiro.FileSystem.Comparer;
 using Zafiro.FileSystem.Local;
 
-namespace Zafiro.FileSystem.Tests;
+namespace Zafiro.FileSystem.Tests.Old;
 
 public class FileSystemComparerTests
 {

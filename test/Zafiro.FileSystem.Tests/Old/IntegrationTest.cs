@@ -1,9 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Serilog;
+using Zafiro.FileSystem;
 using Zafiro.FileSystem.Sftp;
 using Zafiro.IO;
 
-namespace Zafiro.FileSystem.Tests;
+namespace Zafiro.FileSystem.Tests.Old;
 
 public class IntegrationTest
 {

@@ -1,4 +1,4 @@
-namespace Zafiro.FileSystem.Tests;
+namespace Zafiro.FileSystem.Tests.Old;
 
 public class NeverEndingStream : Stream
 {

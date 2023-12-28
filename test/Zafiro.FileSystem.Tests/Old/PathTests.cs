@@ -1,7 +1,7 @@
 using CSharpFunctionalExtensions;
 using System.IO;
 
-namespace Zafiro.FileSystem.Tests;
+namespace Zafiro.FileSystem.Tests.Old;
 
 public class PathTests
 {

@@ -1,5 +1,6 @@
 ﻿using System.IO.Abstractions;
 using System.Reactive.Linq;
+using System.Security.Cryptography;
 using Zafiro.IO;
 using Zafiro.Mixins;
 
@@ -55,6 +56,28 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
         });
     }
 
+    public async Task<Result<IDictionary<ChecksumKind, byte[]>>> GetChecksums(ZafiroPath path)
+    {
+        var pathToFileSystem = PathToFileSystem(path);
+        byte[] md5;
+        await using (var fileSystemStream = FileSystem.File.OpenRead(pathToFileSystem))
+        {
+            md5 = await MD5.HashDataAsync(fileSystemStream);
+        }
+
+        byte[] sha256;
+        await using (var fileSystemStream = FileSystem.File.OpenRead(pathToFileSystem))
+        {
+            sha256 = await SHA256.HashDataAsync(fileSystemStream);
+        }
+
+        return new Dictionary<ChecksumKind, byte[]>()
+        {
+            [ChecksumKind.Md5] = md5,
+            [ChecksumKind.Sha256] = sha256,
+        };
+    }
+
     public virtual async Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path)
     {
         return Result.Try(() =>
@@ -89,6 +112,11 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
 
     private void EnsureExist(string path)
     {
+        if (path == "")
+        {
+            return;
+        }
+
         if (!FileSystem.Directory.Exists(path))
         {
             FileSystem.Directory.CreateDirectory(path);

@@ -1,9 +1,10 @@
 ﻿using System.IO.Abstractions.TestingHelpers;
 using CSharpFunctionalExtensions;
 using Serilog;
+using Zafiro.FileSystem;
 using Zafiro.FileSystem.Local;
 
-namespace Zafiro.FileSystem.Tests;
+namespace Zafiro.FileSystem.Tests.Old;
 
 public class ZafiroDirectoryMixinTests
 {
@@ -14,11 +15,11 @@ public class ZafiroDirectoryMixinTests
         {
             ["C:\\Dir1\\Dir2\\File.txt"] = new(""),
         });
-        
+
         var fileSystem = new LocalFileSystem(mockFileSystem, Maybe<ILogger>.None);
         var result = await fileSystem.GetDirectory("C:/Dir1")
             .Bind(directory => directory.DescendantFile("Dir2/File.txt"));
-        
+
         result.Should().Succeed().And.Subject.Value.Value.Should().BeAssignableTo<IZafiroFile>();
     }
 

@@ -12,7 +12,7 @@ public class LinuxZafiroFileSystem : ZafiroFileSystemBase
     public override async Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path, CancellationToken ct = default) => Result.Try(() => FileSystem.Directory.GetFiles(PathToFileSystem(path)).Select(s => (ZafiroPath) s));
     public override async Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path, CancellationToken ct = default)
     {
-        return Result.Try(() => FileSystem.Directory.GetDirectories(path).Select(x => x.ToZafiroPath()));
+        return Result.Try(() => FileSystem.Directory.GetDirectories(path).Select(FileSystemToZafiroPath));
     }
 
     public override async Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path)
