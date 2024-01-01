@@ -30,4 +30,9 @@ public static class ZafiroFileExtensions
     {
         return file.FileSystem.GetDirectory(file.Path.Parent());
     }
+
+    public static Task<Result<bool>> AreEqual(this IZafiroFile one, IZafiroFile two, IFileCompareStrategy strategy)
+    {
+        return strategy.Compare(one, two);
+    }
 }
