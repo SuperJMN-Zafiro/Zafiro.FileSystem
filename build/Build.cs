@@ -73,7 +73,7 @@ class Build : NukeBuild
     Target Publish => _ => _
         .DependsOn(Pack)
         .Requires(() => NuGetApiKey)
-        .OnlyWhenStatic(() => Repository.IsOnMasterBranch())
+        .OnlyWhenStatic(() => Repository.IsOnMainOrMasterBranch())
         .Executes(() =>
         {
             DotNetNuGetPush(settings => settings

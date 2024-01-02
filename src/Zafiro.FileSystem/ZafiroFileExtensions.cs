@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.Actions;
 using Zafiro.CSharpFunctionalExtensions;
-using Zafiro.Mixins;
+using Zafiro.Reactive;
 
 namespace Zafiro.FileSystem;
 
@@ -29,5 +29,10 @@ public static class ZafiroFileExtensions
     public static IZafiroDirectory Parent(this IZafiroFile file)
     {
         return file.FileSystem.GetDirectory(file.Path.Parent());
+    }
+
+    public static Task<Result<bool>> AreEqual(this IZafiroFile one, IZafiroFile two, IFileCompareStrategy strategy)
+    {
+        return strategy.Compare(one, two);
     }
 }
