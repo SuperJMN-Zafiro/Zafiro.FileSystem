@@ -1,7 +1,6 @@
 ﻿using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using Renci.SshNet;
-using Zafiro.Mixins;
 using Zafiro.Reactive;
 
 namespace Zafiro.FileSystem.Sftp;
