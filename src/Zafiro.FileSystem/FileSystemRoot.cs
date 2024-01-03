@@ -24,7 +24,7 @@ public class FileSystemRoot : IFileSystemRoot
     public Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes) => fs.SetFileContents(path, bytes);
     public Task<Result> CreateDirectory(ZafiroPath path) => fs.CreateDirectory(path);
     public Task<Result<FileProperties>> GetFileProperties(ZafiroPath path) => fs.GetFileProperties(path);
-    public Task<Result<IDictionary<ChecksumKind, byte[]>>> GetChecksums(ZafiroPath path) => fs.GetChecksums(path);
+    public Task<Result<IDictionary<HashMethod, byte[]>>> GetHashes(ZafiroPath path) => fs.GetHashes(path);
 
     public Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path) => fs.GetDirectoryProperties(path);
     public Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path, CancellationToken ct = default) => fs.GetFilePaths(path, ct);

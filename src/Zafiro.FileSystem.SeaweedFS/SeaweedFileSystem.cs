@@ -58,17 +58,17 @@ public class SeaweedFileSystem : IZafiroFileSystem
             .Map(f => new FileProperties(false, f.Crtime, f.FileSize));
     }
 
-    public async Task<Result<IDictionary<ChecksumKind, byte[]>>> GetChecksums(ZafiroPath path) => await GetChecksumData(path);
+    public async Task<Result<IDictionary<HashMethod, byte[]>>> GetHashes(ZafiroPath path) => await GetHashData(path);
 
-    private async Task<Result<IDictionary<ChecksumKind, byte[]>>> GetChecksumData(ZafiroPath path)
+    private async Task<Result<IDictionary<HashMethod, byte[]>>> GetHashData(ZafiroPath path)
     {
         var result = await Result
             .Try(() => seaweedFSClient.GetFileMetadata(ToServicePath(path)))
             .Map(metadata => Maybe.From(metadata.Md5))
-            .Map(maybeMd5 => maybeMd5.Map(s => (IDictionary<ChecksumKind, byte[]>) new Dictionary<ChecksumKind, byte[]>
+            .Map(maybeMd5 => maybeMd5.Map(s => (IDictionary<HashMethod, byte[]>) new Dictionary<HashMethod, byte[]>
             {
-                [ChecksumKind.Md5] = Convert.FromBase64String(s!),
-            }).GetValueOrDefault(new Dictionary<ChecksumKind, byte[]>()));
+                [HashMethod.Md5] = Convert.FromBase64String(s!),
+            }).GetValueOrDefault(new Dictionary<HashMethod, byte[]>()));
 
         return result;
     }

@@ -56,7 +56,7 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
         });
     }
 
-    public async Task<Result<IDictionary<ChecksumKind, byte[]>>> GetChecksums(ZafiroPath path)
+    public async Task<Result<IDictionary<HashMethod, byte[]>>> GetHashes(ZafiroPath path)
     {
         var pathToFileSystem = PathToFileSystem(path);
         byte[] md5;
@@ -71,10 +71,10 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
             sha256 = await SHA256.HashDataAsync(fileSystemStream);
         }
 
-        return new Dictionary<ChecksumKind, byte[]>()
+        return new Dictionary<HashMethod, byte[]>()
         {
-            [ChecksumKind.Md5] = md5,
-            [ChecksumKind.Sha256] = sha256,
+            [HashMethod.Md5] = md5,
+            [HashMethod.Sha256] = sha256,
         };
     }
 

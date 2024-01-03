@@ -9,7 +9,7 @@ public interface IZafiroFileSystem
     Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes);
     Task<Result> CreateDirectory(ZafiroPath path);
     Task<Result<FileProperties>> GetFileProperties(ZafiroPath path);
-    Task<Result<IDictionary<ChecksumKind, byte[]>>> GetChecksums(ZafiroPath path);
+    Task<Result<IDictionary<HashMethod, byte[]>>> GetHashes(ZafiroPath path);
     Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path);
     Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path, CancellationToken ct = default);
     Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path, CancellationToken ct = default);
