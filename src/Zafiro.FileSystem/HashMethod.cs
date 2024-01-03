@@ -1,6 +1,6 @@
 ﻿namespace Zafiro.FileSystem;
 
-public enum ChecksumKind
+public enum HashMethod
 {
     Invalid = 0,
     Md5,
