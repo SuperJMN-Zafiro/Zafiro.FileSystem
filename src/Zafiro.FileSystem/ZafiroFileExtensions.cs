@@ -11,7 +11,7 @@ public static class ZafiroFileExtensions
     {
         var maybeLength = source.Properties.Map(f => f.Length).AsMaybe();
         var contents = await maybeLength
-            .Map(l => source.Contents.ProgressDo(l, longProgress => progress.Execute(observer => observer.OnNext(longProgress))))
+            .Map(l => source.Contents.ProgressDo(longProgress => progress.Execute(observer => observer.OnNext(longProgress)), l, TimeSpan.FromSeconds(1)))
             .GetValueOrDefault(() => source.Contents)
             .ConfigureAwait(false);
 
