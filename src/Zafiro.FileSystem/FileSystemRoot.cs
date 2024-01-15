@@ -21,7 +21,7 @@ public class FileSystemRoot : IFileSystemRoot
     public Task<Result<bool>> ExistDirectory(ZafiroPath path) => fs.ExistDirectory(path);
     public Task<Result> CreateFile(ZafiroPath path) => fs.CreateFile(path);
     public IObservable<byte> GetFileContents(ZafiroPath path) => fs.GetFileContents(path);
-    public Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes) => fs.SetFileContents(path, bytes);
+    public Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes, CancellationToken cancellationToken) => fs.SetFileContents(path, bytes, cancellationToken);
     public Task<Result> CreateDirectory(ZafiroPath path) => fs.CreateDirectory(path);
     public Task<Result<FileProperties>> GetFileProperties(ZafiroPath path) => fs.GetFileProperties(path);
     public Task<Result<IDictionary<HashMethod, byte[]>>> GetHashes(ZafiroPath path) => fs.GetHashes(path);

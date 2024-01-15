@@ -52,7 +52,7 @@ public class AndroidFileSystem : ZafiroFileSystemBase
 
     public override Task<Result<FileProperties>> GetFileProperties(ZafiroPath path) => AndroidPermissions.Request().Bind(() => base.GetFileProperties(path));
 
-    public override Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes) => AndroidPermissions.Request().Bind(() => base.SetFileContents(path, bytes));
+    public override Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes, CancellationToken cancellationToken) => AndroidPermissions.Request().Bind(() => base.SetFileContents(path, bytes));
 
     public override string PathToFileSystem(ZafiroPath path) => "/" + path;
 

@@ -44,7 +44,7 @@ public class SeaweedFileSystem : IZafiroFileSystem
         return path.ToString()[1..];
     }
 
-    public async Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes)
+    public async Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes, CancellationToken cancellationToken)
     {
         return await Observable.Using(() => bytes.ToStream(), stream => Observable.FromAsync(ct => Result.Try(() => seaweedFSClient.Upload(ToServicePath(path), stream, ct))));
     }

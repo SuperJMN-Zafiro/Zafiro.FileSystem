@@ -31,7 +31,7 @@ public class SftpFileSystem : IZafiroFileSystem
         return Observable.Using(() => sftpClient.OpenRead(FromZafiroToFileSystem(path)), stream => stream.ToObservable());
     }
 
-    public Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes)
+    public Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes, CancellationToken cancellationToken)
     {
         return EnsureDirectoryExists(path.Parent())
             .Bind(async () => await Observable.Using(() => bytes.ToStream(), stream => Observable.FromAsync(ct => Result.Try(() => sftpClient.UploadFileAsync(FromFileSystemToZafiroPath(path), stream)))));

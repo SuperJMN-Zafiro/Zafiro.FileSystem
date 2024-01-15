@@ -37,12 +37,12 @@ public class ObservableFileSystem : IObservableFileSystem
 
     public IObservable<byte> GetFileContents(ZafiroPath path) => fs.GetFileContents(path);
 
-    public async Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes)
+    public async Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes, CancellationToken cancellationToken)
     {
         var changes = await Notifications.BeforeFileCreate(fs, changed, path).ConfigureAwait(false);
 
         return await fs
-            .SetFileContents(path, bytes)
+            .SetFileContents(path, bytes, cancellationToken)
             .Tap(() => changes.ForEach(r => changed.OnNext(r)))
             .ConfigureAwait(false);
     }

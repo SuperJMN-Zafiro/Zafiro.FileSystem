@@ -11,5 +11,5 @@ public interface IZafiroFile
     Task<Result<IDictionary<HashMethod, byte[]>>> Hashes { get; }
     IFileSystemRoot FileSystem { get; }
     Task<Result> Delete();
-    Task<Result> SetContents(IObservable<byte> contents);
+    Task<Result> SetContents(IObservable<byte> contents, CancellationToken cancellationToken = default);
 }

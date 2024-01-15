@@ -25,7 +25,7 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
         return Observable.Using(() => FileSystem.File.OpenRead(PathToFileSystem(path)), f => f.ToObservable());
     }
 
-    public virtual Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes)
+    public virtual Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes, CancellationToken cancellationToken = default)
     {
         return Result
             .Try(() =>
@@ -37,7 +37,7 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
             {
                 using (stream)
                 {
-                    await bytes.ToStream().CopyToAsync(stream);
+                    await bytes.ToStream().CopyToAsync(stream, cancellationToken);
                 }
             }));
     }
