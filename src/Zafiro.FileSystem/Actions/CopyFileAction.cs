@@ -33,8 +33,8 @@ public class CopyFileAction : IFileAction
         return Source.Copy(Destination, Maybe<IObserver<LongProgress>>.From(progress), progressScheduler, timeoutScheduler, readTimeout: readTimeout, cancellationToken: cancellationToken);
     }
 
-    public static Task<Result<CopyFileAction>> Create(IZafiroFile source, IZafiroFile destination)
+    public static Task<Result<CopyFileAction>> Create(IZafiroFile source, IZafiroFile destination, IScheduler? timeoutScheduler = default, IScheduler? progressScheduler = default, TimeSpan? readTimeout = default)
     {
-        return source.Properties.Map(p => new CopyFileAction(source, destination, p.Length));
+        return source.Properties.Map(p => new CopyFileAction(source, destination, p.Length, timeoutScheduler, progressScheduler, readTimeout));
     }
 }

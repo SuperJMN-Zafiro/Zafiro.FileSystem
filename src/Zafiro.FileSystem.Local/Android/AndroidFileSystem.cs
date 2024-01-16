@@ -40,7 +40,7 @@ public class AndroidFileSystem : ZafiroFileSystemBase
                     .Map(list => list.Select(volume => FileSystemToZafiroPath(volume.Directory!.Path)));
             }
 
-            return await base.GetDirectoryPaths(path, ct);
+            return await base.GetDirectoryPaths(path, ct).ConfigureAwait(false);
         });
     }
 
