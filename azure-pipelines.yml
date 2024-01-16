@@ -4,6 +4,8 @@ variables:
 steps:
 - checkout: self
 
+- script: /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=/usr/local/lib/android/sdk \"platform-tools\"
+
 - powershell: .\build.ps1
   env:
     NuGetApiKey: $(NuGetApiKey)
