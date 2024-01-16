@@ -29,7 +29,7 @@ public class WindowsZafiroFileSystem : ZafiroFileSystemBase
             return Result.Try(() => FileSystem.DriveInfo.GetDrives().Select(i => i.RootDirectory.FullName[..^1]).Select(x => x.ToZafiroPath()));
         }
 
-        return await base.GetDirectoryPaths(path, ct);
+        return await base.GetDirectoryPaths(path, ct).ConfigureAwait(false);
     }
 
     public override async Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path)

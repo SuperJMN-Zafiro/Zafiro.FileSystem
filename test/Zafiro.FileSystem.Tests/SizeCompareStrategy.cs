@@ -51,6 +51,6 @@ public class SizeCompareStrategyTests
         public IFileSystemRoot FileSystem { get; }
         public Task<Result> Delete() => throw new NotImplementedException();
 
-        public Task<Result> SetContents(IObservable<byte> contents) => throw new NotImplementedException();
+        public Task<Result> SetContents(IObservable<byte> contents, CancellationToken cancellationToken = default) => throw new NotImplementedException();
     }
 }

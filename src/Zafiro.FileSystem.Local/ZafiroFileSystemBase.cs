@@ -25,7 +25,7 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
         return Observable.Using(() => FileSystem.File.OpenRead(PathToFileSystem(path)), f => f.ToObservable());
     }
 
-    public virtual Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes)
+    public virtual Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes, CancellationToken cancellationToken = default)
     {
         return Result
             .Try(() =>
@@ -33,11 +33,12 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
                 EnsureExist(PathToFileSystem(path.Parent()));
                 return FileSystem.File.Open(PathToFileSystem(path), FileMode.Create);
             })
-            .Bind(stream => Result.Try(async () =>
+            .Bind(destinationStream => Result.Try(async () =>
             {
-                using (stream)
+                await using (destinationStream.ConfigureAwait(false))
                 {
-                    await bytes.ToStream().CopyToAsync(stream);
+                    var sourceStream = bytes.ToStream();
+                    await sourceStream.CopyToAsync(destinationStream, cancellationToken).ConfigureAwait(false);
                 }
             }));
     }
@@ -62,13 +63,13 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
         byte[] md5;
         await using (var fileSystemStream = FileSystem.File.OpenRead(pathToFileSystem))
         {
-            md5 = await MD5.HashDataAsync(fileSystemStream);
+            md5 = await MD5.HashDataAsync(fileSystemStream).ConfigureAwait(false);
         }
 
         byte[] sha256;
         await using (var fileSystemStream = FileSystem.File.OpenRead(pathToFileSystem))
         {
-            sha256 = await SHA256.HashDataAsync(fileSystemStream);
+            sha256 = await SHA256.HashDataAsync(fileSystemStream).ConfigureAwait(false);
         }
 
         return new Dictionary<HashMethod, byte[]>()

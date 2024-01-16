@@ -6,7 +6,7 @@ public interface IZafiroFileSystem
 {
     Task<Result> CreateFile(ZafiroPath path);
     IObservable<byte> GetFileContents(ZafiroPath path);
-    Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes);
+    Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes, CancellationToken cancellationToken);
     Task<Result> CreateDirectory(ZafiroPath path);
     Task<Result<FileProperties>> GetFileProperties(ZafiroPath path);
     Task<Result<IDictionary<HashMethod, byte[]>>> GetHashes(ZafiroPath path);

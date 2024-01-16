@@ -16,7 +16,7 @@ public class ZafiroFile : IZafiroFile
     public ZafiroPath Path { get; }
     public Task<Result<IDictionary<HashMethod, byte[]>>> Hashes => FileSystem.GetHashes(Path);
     public Task<Result> Delete() => FileSystem.DeleteFile(Path);
-    public Task<Result> SetContents(IObservable<byte> contents) => FileSystem.SetFileContents(Path, contents);
+    public Task<Result> SetContents(IObservable<byte> contents, CancellationToken cancellationToken = default) => FileSystem.SetFileContents(Path, contents, cancellationToken);
     public Task<Result<FileProperties>> Properties => FileSystem.GetFileProperties(Path);
     public override string ToString() => Path;
 }
