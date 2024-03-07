@@ -22,7 +22,7 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
 
     public virtual IObservable<byte> GetFileContents(ZafiroPath path)
     {
-        return Observable.Using(() => FileSystem.File.OpenRead(PathToFileSystem(path)), f => f.ToObservable());
+        return Observable.Using(() => FileSystem.File.OpenRead(PathToFileSystem(path)), f => f.ToObservable(bufferSize: 1024 * 64));
     }
 
     public virtual Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes, CancellationToken cancellationToken = default)
