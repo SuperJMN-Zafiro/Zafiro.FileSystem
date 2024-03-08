@@ -17,7 +17,7 @@ public static class ZafiroFileExtensions
             .GetValueOrDefault(() => source.Contents)
             .ConfigureAwait(false);
 
-        var contentsWithTimeout = contents.Timeout(readTimeout ?? TimeSpan.MaxValue, scheduler: timeoutScheduler ?? Scheduler.Default);
+        var contentsWithTimeout = contents.Timeout(readTimeout ?? TimeSpan.FromMinutes(1), scheduler: timeoutScheduler ?? Scheduler.Default);
         var result = await destination.SetContents(contentsWithTimeout, cancellationToken).ConfigureAwait(false);
         result.Tap(() => progress.Execute(observer => observer.OnCompleted()));
         result.TapError(() => progress.Execute(observer => observer.OnCompleted()));
