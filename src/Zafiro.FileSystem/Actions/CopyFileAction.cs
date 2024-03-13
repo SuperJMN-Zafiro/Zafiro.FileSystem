@@ -30,7 +30,7 @@ public class CopyFileAction : IFileAction
 
     public Task<Result> Execute(CancellationToken cancellationToken = default)
     {
-        return Source.Copy2(Destination, Maybe<IObserver<LongProgress>>.From(progress), progressScheduler, timeoutScheduler, readTimeout: readTimeout, cancellationToken: cancellationToken);
+        return Source.Copy(Destination, Maybe<IObserver<LongProgress>>.From(progress), progressScheduler, timeoutScheduler, readTimeout: readTimeout, cancellationToken: cancellationToken);
     }
 
     public static Task<Result<CopyFileAction>> Create(IZafiroFile source, IZafiroFile destination, IScheduler? timeoutScheduler = default, IScheduler? progressScheduler = default, TimeSpan? readTimeout = default)
