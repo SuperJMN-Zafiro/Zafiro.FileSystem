@@ -34,4 +34,7 @@ public class TestZafiroFile : IZafiroFile
     public Task<Result> Delete() => throw new NotImplementedException();
 
     public Task<Result> SetContents(IObservable<byte> contents, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+    public Task<Result<Stream>> GetData() => throw new NotImplementedException();
+
+    public Task<Result> SetData(Stream data) => throw new NotImplementedException();
 }

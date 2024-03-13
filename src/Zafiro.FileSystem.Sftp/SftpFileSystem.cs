@@ -1,6 +1,8 @@
-﻿using System.Reactive.Linq;
+﻿using System.Reactive;
+using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using Renci.SshNet;
+using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.Reactive;
 
 namespace Zafiro.FileSystem.Sftp;
@@ -81,6 +83,13 @@ public class SftpFileSystem : IZafiroFileSystem
     public async  Task<Result> DeleteFile(ZafiroPath path) => Result.Try(() => sftpClient.DeleteFile(FromFileSystemToZafiroPath(path)));
 
     public async Task<Result> DeleteDirectory(ZafiroPath path) => Result.Try(() => sftpClient.DeleteDirectory(FromFileSystemToZafiroPath(path)));
+    public Task<Result<Stream>> GetFileData(ZafiroPath path) => Task.FromResult(Result.Try(() => (Stream)sftpClient.OpenRead(FromZafiroToFileSystem(path))));
+
+    public Task<Result> SetFileData(ZafiroPath path, Stream stream, CancellationToken ct = default)
+    {
+        return EnsureDirectoryExists(path.Parent())
+            .Map(() => sftpClient.UploadFileAsync(FromFileSystemToZafiroPath(path), stream));
+    }
 
     private Result EnsureDirectoryExists(ZafiroPath path)
     {

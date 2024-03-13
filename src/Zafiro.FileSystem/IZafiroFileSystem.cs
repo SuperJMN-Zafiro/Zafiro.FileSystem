@@ -17,4 +17,6 @@ public interface IZafiroFileSystem
     Task<Result<bool>> ExistFile(ZafiroPath path);
     Task<Result> DeleteFile(ZafiroPath path);
     Task<Result> DeleteDirectory(ZafiroPath path);
+    Task<Result<Stream>> GetFileData(ZafiroPath path);
+    Task<Result> SetFileData(ZafiroPath path, Stream stream, CancellationToken ct = default);
 }

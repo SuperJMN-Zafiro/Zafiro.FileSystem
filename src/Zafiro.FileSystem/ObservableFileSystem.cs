@@ -20,6 +20,8 @@ public class ObservableFileSystem : IObservableFileSystem
     public Task<Result<bool>> ExistFile(ZafiroPath path) => fs.ExistFile(path);
     public Task<Result> DeleteFile(ZafiroPath path) => fs.DeleteFile(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.FileDeleted)));
     public Task<Result> DeleteDirectory(ZafiroPath path) => fs.DeleteDirectory(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.DirectoryDeleted)));
+    public Task<Result<Stream>> GetFileData(ZafiroPath path) => fs.GetFileData(path);
+    public Task<Result> SetFileData(ZafiroPath path, Stream stream, CancellationToken cancellationToken) => fs.SetFileData(path, stream, cancellationToken);
 
     public async Task<Result> CreateFile(ZafiroPath path)
     {

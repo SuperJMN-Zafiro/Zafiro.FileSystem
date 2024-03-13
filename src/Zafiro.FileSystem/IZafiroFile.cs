@@ -12,4 +12,6 @@ public interface IZafiroFile
     IFileSystemRoot FileSystem { get; }
     Task<Result> Delete();
     Task<Result> SetContents(IObservable<byte> contents, CancellationToken cancellationToken = default);
+    Task<Result<Stream>> GetData();
+    Task<Result> SetData(Stream stream, CancellationToken cancellationToken = default);
 }

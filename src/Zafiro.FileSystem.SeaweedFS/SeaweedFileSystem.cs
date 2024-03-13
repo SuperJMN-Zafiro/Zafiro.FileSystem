@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Serilog;
+using System.Threading;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 using Zafiro.Reactive;
 using Directory = Zafiro.FileSystem.SeaweedFS.Filer.Client.Directory;
@@ -8,8 +9,8 @@ namespace Zafiro.FileSystem.SeaweedFS;
 
 public class SeaweedFileSystem : IZafiroFileSystem
 {
-    private readonly ISeaweedFS seaweedFSClient;
     private readonly Maybe<ILogger> logger;
+    private readonly ISeaweedFS seaweedFSClient;
 
     public SeaweedFileSystem(ISeaweedFS seaweedFSClient, Maybe<ILogger> logger)
     {
@@ -20,24 +21,7 @@ public class SeaweedFileSystem : IZafiroFileSystem
     // TODO: Implement create file
     public Task<Result> CreateFile(ZafiroPath path) => throw new NotImplementedException();
 
-    public IObservable<byte> GetFileContents(ZafiroPath path)
-    {
-        return ObservableFactory.UsingAsync(() => seaweedFSClient.GetFileContent(ToServicePath(path)), stream => stream.ToObservable());
-    }
-
-    private static string ToServicePath(ZafiroPath path)
-    {
-        if (path == "")
-        {
-            return "/";
-        }
-        return path;
-    }
-
-    private static ZafiroPath ToZafiroPath(ZafiroPath path)
-    {
-        return path.ToString()[1..];
-    }
+    public IObservable<byte> GetFileContents(ZafiroPath path) => throw new NotSupportedException();
 
     public Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes, CancellationToken cancellationToken)
     {
@@ -59,24 +43,8 @@ public class SeaweedFileSystem : IZafiroFileSystem
 
     public async Task<Result<IDictionary<HashMethod, byte[]>>> GetHashes(ZafiroPath path) => await GetHashData(path);
 
-    private async Task<Result<IDictionary<HashMethod, byte[]>>> GetHashData(ZafiroPath path)
-    {
-        var result = await Result
-            .Try(() => seaweedFSClient.GetFileMetadata(ToServicePath(path)))
-            .Map(metadata => Maybe.From(metadata.Md5))
-            .Map(maybeMd5 => maybeMd5.Map(s => (IDictionary<HashMethod, byte[]>)new Dictionary<HashMethod, byte[]>
-            {
-                [HashMethod.Md5] = Convert.FromBase64String(s!),
-            }).GetValueOrDefault(new Dictionary<HashMethod, byte[]>()));
-
-        return result;
-    }
-
-    public async Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path)
-    {
-        return Result
-            .Success(new DirectoryProperties(false, DateTimeOffset.MinValue));
-    }
+    public async Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path) => Result
+        .Success(new DirectoryProperties(false, DateTimeOffset.MinValue));
 
     public Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path, CancellationToken ct = default)
     {
@@ -99,4 +67,37 @@ public class SeaweedFileSystem : IZafiroFileSystem
     public Task<Result> DeleteFile(ZafiroPath path) => Result.Try(() => seaweedFSClient.DeleteFile(ToServicePath(path)), e => RefitBasedAccessExceptionHandler.HandlePathAccessError(path, e, logger));
 
     public Task<Result> DeleteDirectory(ZafiroPath path) => Result.Try(() => seaweedFSClient.DeleteFolder(ToServicePath(path)), e => RefitBasedAccessExceptionHandler.HandlePathAccessError(path, e, logger));
+    public Task<Result<Stream>> GetFileData(ZafiroPath path) => seaweedFSClient.GetFileContents(path);
+    public Task<Result> SetFileData(ZafiroPath path, Stream stream, CancellationToken ct = default)
+    {
+        return Result.Try(async () =>
+        {
+            await seaweedFSClient.Upload(ToServicePath(path), stream, ct);
+        });
+    }
+
+    private static string ToServicePath(ZafiroPath path)
+    {
+        if (path == "")
+        {
+            return "/";
+        }
+
+        return path;
+    }
+
+    private static ZafiroPath ToZafiroPath(ZafiroPath path) => path.ToString()[1..];
+
+    private async Task<Result<IDictionary<HashMethod, byte[]>>> GetHashData(ZafiroPath path)
+    {
+        var result = await Result
+            .Try(() => seaweedFSClient.GetFileMetadata(ToServicePath(path)))
+            .Map(metadata => Maybe.From(metadata.Md5))
+            .Map(maybeMd5 => maybeMd5.Map(s => (IDictionary<HashMethod, byte[]>) new Dictionary<HashMethod, byte[]>
+            {
+                [HashMethod.Md5] = Convert.FromBase64String(s!)
+            }).GetValueOrDefault(new Dictionary<HashMethod, byte[]>()));
+
+        return result;
+    }
 }

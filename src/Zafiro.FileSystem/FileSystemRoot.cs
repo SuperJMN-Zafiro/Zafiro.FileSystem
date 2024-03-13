@@ -15,6 +15,9 @@ public class FileSystemRoot : IFileSystemRoot
     public IZafiroDirectory GetDirectory(ZafiroPath path) => new ZafiroDirectory(path, this);
     public Task<Result<IEnumerable<IZafiroFile>>> GetFiles(ZafiroPath path, CancellationToken ct = default) => fs.GetFilePaths(path, ct).Map(paths => paths.Select(zafiroPath => (IZafiroFile) new ZafiroFile(zafiroPath, this)));
     public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories(ZafiroPath path, CancellationToken ct = default) => fs.GetDirectoryPaths(path, ct).Map(paths => paths.Select(zafiroPath => (IZafiroDirectory) new ZafiroDirectory(zafiroPath, this)));
+    public Task<Result<Stream>> GetFileData(ZafiroPath path) => fs.GetFileData(path);
+    public Task<Result> SetFileData(ZafiroPath path, Stream stream, CancellationToken ct = default) => fs.SetFileData(path, stream, ct);
+
     public Task<Result<bool>> ExistFile(ZafiroPath path) => fs.ExistFile(path);
     public Task<Result> DeleteFile(ZafiroPath path) => fs.DeleteFile(path);
     public Task<Result> DeleteDirectory(ZafiroPath path) => fs.DeleteDirectory(path);
