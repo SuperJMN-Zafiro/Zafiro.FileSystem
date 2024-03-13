@@ -1,12 +1,11 @@
-﻿using System.Reactive.Subjects;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using Zafiro.CSharpFunctionalExtensions;
 
 namespace Zafiro.FileSystem;
 
 public class Notifications
 {
-    public static  Task<IEnumerable<FileSystemChange>> BeforeFileCreate(IZafiroFileSystem fs, ISubject<FileSystemChange> changes, ZafiroPath path)
+    public static Task<IEnumerable<FileSystemChange>> BeforeFileCreate(IZafiroFileSystem fs, ZafiroPath path)
     {
         var fileExist = fs.ExistFile(path).Not().Map(b => b ? new[] { new FileSystemChange(path, Change.FileCreated)} : Enumerable.Empty<FileSystemChange>());
 

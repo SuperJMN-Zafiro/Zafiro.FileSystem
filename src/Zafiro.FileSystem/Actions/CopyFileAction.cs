@@ -11,7 +11,7 @@ public class CopyFileAction : IFileAction
     private readonly BehaviorSubject<LongProgress> progress;
     private readonly TimeSpan? readTimeout;
     private readonly IScheduler? timeoutScheduler;
-    private IScheduler? progressScheduler;
+    private readonly IScheduler? progressScheduler;
 
     public CopyFileAction(IZafiroFile source, IZafiroFile destination, long fileSize, IScheduler? timeoutScheduler = default, IScheduler? progressScheduler = default, TimeSpan? readTimeout = default)
     {

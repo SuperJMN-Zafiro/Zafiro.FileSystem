@@ -1,6 +1,7 @@
 using System.Net;
 using System.Runtime.Caching;
 using System.Text.Json;
+using CSharpFunctionalExtensions;
 using Refit;
 
 namespace Zafiro.FileSystem.SeaweedFS.Filer.Client;
@@ -59,9 +60,9 @@ public class SeaweedFSClient : ISeaweedFS
         return inner.DeleteFolder(directoryPath, cancellationToken);
     }
 
-    public Task<Stream> GetFileContent(string filePath, CancellationToken cancellationToken = default)
+    public Task<Result<Stream>> GetFileContents(string filePath, CancellationToken cancellationToken = default)
     {
-        return httpClient.GetStreamAsync(filePath, cancellationToken);
+        return Result.Try(() => httpClient.GetStreamAsync(filePath, cancellationToken));
     }
 
     public Task DeleteFile(string filePath, CancellationToken cancellationToken = default)
