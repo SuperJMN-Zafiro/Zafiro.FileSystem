@@ -2,15 +2,19 @@
 using CSharpFunctionalExtensions;
 using System.Reactive.Linq;
 using Zafiro.Actions;
+using Zafiro.CSharpFunctionalExtensions;
+using Zafiro.Patterns.Either;
 
 namespace Zafiro.FileSystem;
 
 public static class ZafiroFileExtensions
 {
-    public static Task<Result> Copy(this IZafiroFile source, IZafiroFile destination, Maybe<IObserver<LongProgress>> progress, IScheduler? progressScheduler = default, IScheduler? timeoutScheduler = default, TimeSpan? readTimeout = default, CancellationToken cancellationToken = default)
+    public static Task<Result> Copy(this IZafiroFile source, IZafiroFile destination, Maybe<IObserver<LongProgress>> progress, IScheduler? progressScheduler = default, TimeSpan? readTimeout = default, CancellationToken cancellationToken = default)
     {
-        return source.GetData()
-            .Map(s => new PositionReportingStream(s))
+        
+        
+        return 
+            ResultFactory.CombineAndMap(source.GetData(), source.Properties, (st, pr) => CreateCompatibleStream(st, pr))
             .Bind(async stream =>
             {
                 var subscription = progress.Map(p => stream.Positions.Select(x => new LongProgress(x, stream.Length)).Subscribe(p));
@@ -18,6 +22,16 @@ public static class ZafiroFileExtensions
                 subscription.Execute(d => d.Dispose());
                 return result;
             });
+    }
+
+    private static PositionReportingStream CreateCompatibleStream(Stream original, FileProperties pr)
+    {
+        if (original.CanSeek)
+        {
+            return new PositionReportingStream(original);
+        }
+
+        return new PositionReportingStream(new AlwaysForwardStream(original, pr.Length));
     }
 
     public static IZafiroFile Mirror(this IZafiroFile file, ZafiroPath root, IZafiroDirectory destinationRoot)
