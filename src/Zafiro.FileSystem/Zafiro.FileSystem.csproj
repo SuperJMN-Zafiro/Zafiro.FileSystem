@@ -12,6 +12,6 @@
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="System.IO.Abstractions" Version="19.2.69" />
     <PackageReference Include="System.Reactive" Version="6.0.0" />
-    <PackageReference Include="Zafiro" Version="4.0.22" />
+    <PackageReference Include="Zafiro" Version="4.0.23" />
   </ItemGroup>
 </Project>
