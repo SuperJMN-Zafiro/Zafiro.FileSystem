@@ -1,10 +1,28 @@
-﻿using ClassLibrary1;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
+using Zafiro.FileSystem;
 
-namespace Zafiro.FileSystem.Tests;
+namespace ClassLibrary1;
 
 public static class Mixin
 {
+    public static Task<Result<IEnumerable<IFile>>> GetFilesInTree(this IDirectory directory)
+    {
+        return directory.GetDirectories()
+            .Bind(async dirsResult =>
+            {
+                var tasks = dirsResult.Select(GetAll);
+                var results = await Task.WhenAll(tasks);
+                var combined = results.Combine();
+                var merged = combined.Map(x => x.SelectMany(a => a));
+                return merged;
+            });
+    }
+
+    private static Task<Result<IEnumerable<IFile>>> GetAll(IDirectory d)
+    {
+        return d.GetFilesInTree().Bind(children => d.GetFiles().Map(children.Concat));
+    }
+
     public static Task<Result<ZafiroPath>> GetPath(this IFile file)
     {
         var path = file.Parent.Bind(m => MaybeParent(file, m));
