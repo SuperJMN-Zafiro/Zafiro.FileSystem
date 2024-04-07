@@ -2,13 +2,16 @@
 
 namespace ClassLibrary1;
 
-public class InMemoryData : IData
+public class InMemoryBlob : IBlob
 {
 
-    public InMemoryData(Func<Task<Result<Stream>>> streamFactory)
+    public InMemoryBlob(string name, Func<Task<Result<Stream>>> streamFactory)
     {
         StreamFactory = streamFactory;
+        Name = name;
     }
 
     public Func<Task<Result<Stream>>> StreamFactory { get; }
+
+    public string Name { get; }
 }

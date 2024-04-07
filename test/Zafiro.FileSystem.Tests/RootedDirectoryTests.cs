@@ -23,7 +23,7 @@ public class RootedDirectoryTests
         var windowsZafiroFileSystem = new WindowsZafiroFileSystem(mockFileSystem);
         var fs = new FileSystemRoot(windowsZafiroFileSystem);
         var dir = fs.GetDirectory("c:/Dir").AsRooted();
-        var result = await dir.GetFilesInTree().MapMany(file => file.Path.ToString());
+        var result = await dir.GetFilesInTree().Map(file => file.Path.ToString());
         result.Should().Succeed().And.Subject.Value.Should().BeEquivalentTo(["File1", "File2", "Level1/File3", "Level1/Level2/File4"]);
     }
 }

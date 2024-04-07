@@ -22,11 +22,11 @@ public class RootedDirectory : IZafiroDirectory
     public IObservable<FileSystemChange> Changed => root.Changed.Select(change => change with { Path = Path.MakeRelativeTo(root.Path) });
     public Task<Result> Create() => root.Create();
 
-    public Task<Result<IEnumerable<IZafiroFile>>> GetFiles() => dir.GetFiles().MapMany(file => (IZafiroFile) new RootedFile(file, root));
+    public Task<Result<IEnumerable<IZafiroFile>>> GetFiles() => dir.GetFiles().Map(file => (IZafiroFile) new RootedFile(file, root));
 
     public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories() => dir
         .GetDirectories()
-        .MapMany(directory => (IZafiroDirectory) new RootedDirectory(directory, root));
+        .Map(directory => (IZafiroDirectory) new RootedDirectory(directory, root));
 
     public Task<Result> Delete() => dir.Delete();
 }

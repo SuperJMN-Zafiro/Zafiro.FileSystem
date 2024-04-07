@@ -1,5 +1,7 @@
-﻿namespace ClassLibrary1;
+﻿using Zafiro.FileSystem;
 
-public record DataEntry(string Path, IData Data)
+namespace ClassLibrary1;
+
+public record DataEntry(ZafiroPath Path, IBlob Blob)
 {
 }

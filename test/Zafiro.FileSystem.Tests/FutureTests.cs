@@ -10,21 +10,20 @@ public class FutureTests
     [Fact]
     public async Task Custom()
     {
-        var subdirs = new List<DataNode>
+        var subdirs = new List<IBlobContainer>
         {
-            new("Subdir", new InMemoryDataTree(
+            new InMemoryBlobContainer("Subdir",
             [
-                new DataEntry("File3.txt", new InMemoryData(() => Task.FromResult(Result.Success("".ToStream())))),
-                new DataEntry("File4.txt", new InMemoryData(() => Task.FromResult(Result.Success("".ToStream()))))
-            ], new List<DataNode>()))
+                new InMemoryBlob("File3.txt", () => Task.FromResult(Result.Success("".ToStream()))),
+                new InMemoryBlob("File4.txt", () => Task.FromResult(Result.Success("".ToStream())))
+            ], new List<IBlobContainer>())
         };
-        var sut = new InMemoryDataTree(
-            [
-                new DataEntry("File1.txt", new InMemoryData(() => Task.FromResult(Result.Success("".ToStream())))),
-                new DataEntry("File2.txt", new InMemoryData(() => Task.FromResult(Result.Success("".ToStream()))))
+        var sut = new InMemoryBlobContainer([
+                new InMemoryBlob("File1.txt", () => Task.FromResult(Result.Success("".ToStream()))),
+                new InMemoryBlob("File2.txt", () => Task.FromResult(Result.Success("".ToStream())))
             ]
             , subdirs);
 
-        var allDirs = await sut.GetAllEntries("root");
+        var allDirs = await sut.GetBlobsInTree("root");
     }
 }

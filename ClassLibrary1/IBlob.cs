@@ -2,7 +2,10 @@
 
 namespace ClassLibrary1;
 
-public interface IData : IGetStream;
+public interface IBlob : IGetStream
+{
+    public string Name { get; }
+}
 
 public interface IGetStream
 {

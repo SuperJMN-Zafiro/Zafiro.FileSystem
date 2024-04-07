@@ -7,8 +7,8 @@ public class FileSystemComparer
 {
     public Task<Result<IEnumerable<FileDiff>>> Diff(IZafiroDirectory origin, IZafiroDirectory destination)
     {
-        var sourceFiles = FilesWithMetadata(origin).MapMany(fwm => (Key: GetKey(origin, fwm), File: fwm));
-        var destinationFiles = FilesWithMetadata(destination).MapMany(fwm => (Key: GetKey(destination, fwm), File: fwm));;
+        var sourceFiles = FilesWithMetadata(origin).Map(fwm => (Key: GetKey(origin, fwm), File: fwm));
+        var destinationFiles = FilesWithMetadata(destination).Map(fwm => (Key: GetKey(destination, fwm), File: fwm));;
 
         var diff = from s in sourceFiles from d in destinationFiles select GetDiffs(s, d);
         return diff;
