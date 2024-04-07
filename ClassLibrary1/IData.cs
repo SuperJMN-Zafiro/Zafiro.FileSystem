@@ -2,10 +2,9 @@
 
 namespace ClassLibrary1;
 
-public interface IFile : IGetStream
+public interface IData : IGetStream
 {
     public string Name { get; }
-    public Task<Result<Maybe<IDirectory>>> Parent { get; }
 }
 
 public interface IGetStream
