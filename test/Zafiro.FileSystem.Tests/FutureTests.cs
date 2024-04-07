@@ -1,6 +1,7 @@
 ﻿using ClassLibrary1;
 using CSharpFunctionalExtensions;
 using Xunit;
+using Zafiro.Mixins;
 
 namespace Zafiro.FileSystem.Tests;
 
@@ -9,19 +10,21 @@ public class FutureTests
     [Fact]
     public async Task Custom()
     {
-        var root = new InMemoryDirectory("Root", Maybe<IDirectory>.None, parent => new List<IFile>
+        var subdirs = new List<DataNode>
         {
-            new InMemoryFile("File2.txt", Maybe<IDirectory>.From(parent)),
-        }, directory =>
-        [
-            new InMemoryDirectory("Subdir", Maybe<IDirectory>.From(directory), parent =>
+            new("Subdir", new InMemoryDataTree(
             [
-                new InMemoryFile("File2.txt", Maybe<IDirectory>.From(parent))
-            ], _ => Enumerable.Empty<IDirectory>())
-        ]);
+                new DataEntry("File3.txt", new InMemoryData(() => Task.FromResult(Result.Success("".ToStream())))),
+                new DataEntry("File4.txt", new InMemoryData(() => Task.FromResult(Result.Success("".ToStream()))))
+            ], new List<DataNode>()))
+        };
+        var sut = new InMemoryDataTree(
+            [
+                new DataEntry("File1.txt", new InMemoryData(() => Task.FromResult(Result.Success("".ToStream())))),
+                new DataEntry("File2.txt", new InMemoryData(() => Task.FromResult(Result.Success("".ToStream()))))
+            ]
+            , subdirs);
 
-        var files = await root.GetFiles();
-        var f = files.Value.First();
-        var path = await f.GetPath();
+        var allDirs = await sut.GetAllEntries("root");
     }
 }

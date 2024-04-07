@@ -4,14 +4,14 @@ namespace ClassLibrary1;
 
 public class InMemoryDataTree : IDataTree
 {
-    private readonly IEnumerable<IData> files;
-    private readonly IEnumerable<IDataTree> directories;
+    private readonly IEnumerable<DataEntry> files;
+    private readonly IEnumerable<DataNode> directories;
 
-    public InMemoryDataTree(IEnumerable<IData> files, IEnumerable<IDataTree> directories) : this("", files, directories)
+    public InMemoryDataTree(IEnumerable<DataEntry> files, IEnumerable<DataNode> directories) : this("", files, directories)
     {
     }
 
-    public InMemoryDataTree(string name, IEnumerable<IData> files, IEnumerable<IDataTree> directories)
+    public InMemoryDataTree(string name, IEnumerable<DataEntry> files, IEnumerable<DataNode> directories)
     {
         Name = name;
         this.files = files;
@@ -19,8 +19,8 @@ public class InMemoryDataTree : IDataTree
     }
 
     public string Name { get; }
-    public Task<Result<IEnumerable<IData>>> GetFiles() => Task.FromResult(Result.Success(files));
+    public Task<Result<IEnumerable<DataEntry>>> GetFiles() => Task.FromResult(Result.Success(files));
 
-    public Task<Result<IEnumerable<IDataTree>>> GetDirectories() => Task.FromResult(Result.Success(directories));
+    public Task<Result<IEnumerable<DataNode>>> GetDirectories() => Task.FromResult(Result.Success(directories));
 
 }
