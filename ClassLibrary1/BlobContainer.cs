@@ -2,16 +2,16 @@
 
 namespace ClassLibrary1;
 
-public class InMemoryBlobContainer : IBlobContainer
+public class BlobContainer : IBlobContainer
 {
     private readonly IEnumerable<IBlob> files;
     private readonly IEnumerable<IBlobContainer> children;
 
-    public InMemoryBlobContainer(IEnumerable<IBlob> files, IEnumerable<IBlobContainer> children) : this("", files, children)
+    public BlobContainer(IEnumerable<IBlob> files, IEnumerable<IBlobContainer> children) : this("", files, children)
     {
     }
 
-    public InMemoryBlobContainer(string name, IEnumerable<IBlob> files, IEnumerable<IBlobContainer> children)
+    public BlobContainer(string name, IEnumerable<IBlob> files, IEnumerable<IBlobContainer> children)
     {
         Name = name;
         this.files = files;

@@ -2,10 +2,10 @@
 
 namespace ClassLibrary1;
 
-public class InMemoryBlob : IBlob
+public class Blob : IBlob
 {
 
-    public InMemoryBlob(string name, Func<Task<Result<Stream>>> streamFactory)
+    public Blob(string name, Func<Task<Result<Stream>>> streamFactory)
     {
         StreamFactory = streamFactory;
         Name = name;
