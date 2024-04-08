@@ -36,7 +36,7 @@ public static class Mixin
         foreach (var child in children)
         {
             var childPath = currentPath.Combine(child.Name);
-            var result = await Traverse(blobContainer, childPath, onNode);
+            var result = await Traverse(child, childPath, onNode);
             if (result.IsFailure)
             {
                 return Result.Failure<IEnumerable<T>>(result.Error);
