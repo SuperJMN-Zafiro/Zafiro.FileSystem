@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary1;
+﻿namespace Zafiro.FileSystem.Lightweight;
 
 public interface IBlob : IGetStream
 {

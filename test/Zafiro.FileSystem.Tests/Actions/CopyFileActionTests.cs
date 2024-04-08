@@ -1,9 +1,6 @@
 ﻿using System.IO.Abstractions.TestingHelpers;
 using System.Reactive.Linq;
 using System.Text;
-using CSharpFunctionalExtensions;
-using FluentAssertions;
-using Xunit;
 using Zafiro.FileSystem.Actions;
 using Zafiro.FileSystem.Local;
 

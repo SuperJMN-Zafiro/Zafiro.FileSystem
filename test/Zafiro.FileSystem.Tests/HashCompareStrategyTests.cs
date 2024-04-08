@@ -1,8 +1,5 @@
 ﻿using System.Text;
 using System.Threading;
-using CSharpFunctionalExtensions;
-using FluentAssertions;
-using Xunit;
 
 namespace Zafiro.FileSystem.Tests;
 

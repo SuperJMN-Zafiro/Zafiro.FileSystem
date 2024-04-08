@@ -1,7 +1,7 @@
 ﻿using System.IO.Abstractions;
 using CSharpFunctionalExtensions;
 
-namespace ClassLibrary1;
+namespace Zafiro.FileSystem.Lightweight;
 
 public class DirectoryBlobContainer(Maybe<string> name, IDirectoryInfo directory) : IBlobContainer
 {

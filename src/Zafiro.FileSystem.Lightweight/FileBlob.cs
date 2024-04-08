@@ -2,7 +2,7 @@
 using System.IO.Abstractions;
 using CSharpFunctionalExtensions;
 
-namespace ClassLibrary1;
+namespace Zafiro.FileSystem.Lightweight;
 
 public class FileBlob(IFileInfo file): IBlob
 {

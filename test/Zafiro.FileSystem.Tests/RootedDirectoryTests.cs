@@ -1,6 +1,4 @@
 ﻿using System.IO.Abstractions.TestingHelpers;
-using FluentAssertions;
-using Xunit;
 using Zafiro.FileSystem.Comparer;
 using Zafiro.FileSystem.Local;
 

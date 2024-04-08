@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace ClassLibrary1;
+namespace Zafiro.FileSystem.Lightweight;
 
 public class BlobContainer : IBlobContainer
 {
