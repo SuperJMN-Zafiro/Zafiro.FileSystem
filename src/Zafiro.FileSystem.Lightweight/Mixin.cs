@@ -4,7 +4,7 @@ namespace Zafiro.FileSystem.Lightweight;
 
 public static class Mixin
 {
-    public static async Task<Result<IEnumerable<(ZafiroPath path, IBlob blob)>>> GetBlobsInTree(this IBlobContainer blobContainer, ZafiroPath currentPath)
+    public static async Task<Result<IEnumerable<(ZafiroPath Path, IBlob Blob)>>> GetBlobsInTree(this IBlobContainer blobContainer, ZafiroPath currentPath)
     {
         var traverse = await blobContainer.Traverse(currentPath, (tree, path) =>
         {
