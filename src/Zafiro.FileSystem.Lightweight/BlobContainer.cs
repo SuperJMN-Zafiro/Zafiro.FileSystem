@@ -4,23 +4,24 @@ namespace Zafiro.FileSystem.Lightweight;
 
 public class BlobContainer : IBlobContainer
 {
-    private readonly IEnumerable<IBlob> files;
-    private readonly IEnumerable<IBlobContainer> children;
+    private readonly Task<Result<IEnumerable<IBlob>>> blobs;
+    private readonly Task<Result<IEnumerable<IBlobContainer>>> children;
 
-    public BlobContainer(IEnumerable<IBlob> files, IEnumerable<IBlobContainer> children) : this("", files, children)
+    public BlobContainer(string name, IEnumerable<IBlob> blobs, IEnumerable<IBlobContainer> children) 
+        : this(name, Task.FromResult(Result.Success(blobs)),  Task.FromResult(Result.Success(children)))
     {
     }
-
-    public BlobContainer(string name, IEnumerable<IBlob> files, IEnumerable<IBlobContainer> children)
+    
+    public BlobContainer(string name, Task<Result<IEnumerable<IBlob>>> blobs, Task<Result<IEnumerable<IBlobContainer>>> children)
     {
         Name = name;
-        this.files = files;
+        this.blobs = blobs;
         this.children = children;
     }
 
     public string Name { get; }
-    public Task<Result<IEnumerable<IBlob>>> Blobs() => Task.FromResult(Result.Success(files));
 
-    public Task<Result<IEnumerable<IBlobContainer>>> Children() => Task.FromResult(Result.Success(children));
+    public Task<Result<IEnumerable<IBlob>>> Blobs() => blobs;
 
+    public Task<Result<IEnumerable<IBlobContainer>>> Children() => children;
 }
