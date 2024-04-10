@@ -8,7 +8,7 @@ public static class Mixin
     {
         var traverse = await blobContainer.Traverse(currentPath, (tree, path) =>
         {
-            return tree.Blobs().Map(datas => datas.Select(r => (path.Combine(r.Name), r)));
+            return tree.Blobs().Map(datas => datas.Select(r => (new ZafiroPath(path.RouteFragments.SkipLast(1)).Combine(r.Name), r)));
         });
 
         Result<IEnumerable<(ZafiroPath, IBlob blob)>> paths = traverse.Map(enumerable => enumerable.SelectMany(x => x));
@@ -23,12 +23,10 @@ public static class Mixin
     {
         return await onNode(blobContainer, currentPath)
             .Bind(currentNode => blobContainer.Children()
-                .Bind(children => TraverseChildren(blobContainer, children, currentPath, onNode, new List<T> { currentNode })));
+                .Bind(children => TraverseChildren(children, currentPath, onNode, new List<T> { currentNode })));
     }
 
-    private static async Task<Result<IEnumerable<T>>> TraverseChildren<T>(
-        IBlobContainer blobContainer, 
-        IEnumerable<IBlobContainer> children, 
+    private static async Task<Result<IEnumerable<T>>> TraverseChildren<T>(IEnumerable<IBlobContainer> children, 
         ZafiroPath currentPath, 
         Func<IBlobContainer, ZafiroPath, Task<Result<T>>> onNode,
         List<T> acc)
