@@ -6,10 +6,6 @@ public class FileSystemRoot : IFileSystemRoot
 {
     private readonly IObservableFileSystem fs;
 
-    public FileSystemRoot(IZafiroFileSystem fs) : this(new ObservableFileSystem(fs))
-    {
-    }
-
     public FileSystemRoot(IObservableFileSystem fs)
     {
         this.fs = fs;
