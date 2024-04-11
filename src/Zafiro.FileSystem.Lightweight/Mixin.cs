@@ -8,7 +8,7 @@ public static class Mixin
     {
         var traverse = await blobContainer.Traverse(currentPath, (tree, path) =>
         {
-            return tree.Blobs().Map(datas => datas.Select(r => (new ZafiroPath(path.RouteFragments.SkipLast(1)).Combine(r.Name), r)));
+            return tree.Blobs().Map(datas => datas.Select(r => (path, r)));
         });
 
         Result<IEnumerable<(ZafiroPath, IBlob blob)>> paths = traverse.Map(enumerable => enumerable.SelectMany(x => x));
