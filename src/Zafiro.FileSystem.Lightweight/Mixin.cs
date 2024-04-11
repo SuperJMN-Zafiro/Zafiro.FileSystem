@@ -4,31 +4,31 @@ namespace Zafiro.FileSystem.Lightweight;
 
 public static class Mixin
 {
-    public static async Task<Result<IEnumerable<(ZafiroPath Path, IBlob Blob)>>> GetBlobsInTree(this IBlobContainer blobContainer, ZafiroPath currentPath)
+    public static async Task<Result<IEnumerable<(ZafiroPath Path, IFile Blob)>>> GetFilesInTree(this IDirectory directory, ZafiroPath currentPath)
     {
-        var traverse = await blobContainer.Traverse(currentPath, (tree, path) =>
+        var traverse = await directory.Traverse(currentPath, (tree, path) =>
         {
-            return tree.Blobs().Map(datas => datas.Select(r => (path, r)));
+            return tree.Files().Map(datas => datas.Select(r => (path, r)));
         });
 
-        Result<IEnumerable<(ZafiroPath, IBlob blob)>> paths = traverse.Map(enumerable => enumerable.SelectMany(x => x));
+        Result<IEnumerable<(ZafiroPath, IFile blob)>> paths = traverse.Map(enumerable => enumerable.SelectMany(x => x));
 
         return paths;
     }
 
     public static async Task<Result<IEnumerable<T>>> Traverse<T>(
-        this IBlobContainer blobContainer, 
+        this IDirectory directory, 
         ZafiroPath currentPath, 
-        Func<IBlobContainer, ZafiroPath, Task<Result<T>>> onNode)
+        Func<IDirectory, ZafiroPath, Task<Result<T>>> onNode)
     {
-        return await onNode(blobContainer, currentPath)
-            .Bind(currentNode => blobContainer.Children()
+        return await onNode(directory, currentPath)
+            .Bind(currentNode => directory.Directories()
                 .Bind(children => TraverseChildren(children, currentPath, onNode, new List<T> { currentNode })));
     }
 
-    private static async Task<Result<IEnumerable<T>>> TraverseChildren<T>(IEnumerable<IBlobContainer> children, 
+    private static async Task<Result<IEnumerable<T>>> TraverseChildren<T>(IEnumerable<IDirectory> children, 
         ZafiroPath currentPath, 
-        Func<IBlobContainer, ZafiroPath, Task<Result<T>>> onNode,
+        Func<IDirectory, ZafiroPath, Task<Result<T>>> onNode,
         List<T> acc)
     {
         foreach (var child in children)

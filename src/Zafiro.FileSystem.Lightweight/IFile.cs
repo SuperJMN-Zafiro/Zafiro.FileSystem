@@ -1,6 +1,6 @@
 ﻿namespace Zafiro.FileSystem.Lightweight;
 
-public interface IBlob : IGetStream
+public interface IFile : IStreamOpen
 {
     public string Name { get; }
 }
