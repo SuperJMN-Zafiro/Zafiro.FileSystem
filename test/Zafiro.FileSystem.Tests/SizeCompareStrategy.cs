@@ -1,8 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using FluentAssertions;
-using Xunit;
-
-namespace Zafiro.FileSystem.Tests;
+﻿namespace Zafiro.FileSystem.Tests;
 
 public class SizeCompareStrategyTests
 {

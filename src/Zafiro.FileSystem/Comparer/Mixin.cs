@@ -9,7 +9,7 @@ public static class Mixin
         return taskResult.Bind(inputs => inputs.Select(selector).Combine());
     }
 
-    public static Task<Result<IEnumerable<TResult>>> MapMany<TInput, TResult>(this Task<Result<IEnumerable<TInput>>> taskResult, Func<TInput, TResult> selector)
+    public static Task<Result<IEnumerable<TResult>>> Map<TInput, TResult>(this Task<Result<IEnumerable<TInput>>> taskResult, Func<TInput, TResult> selector)
     {
         return taskResult.Map(inputs => inputs.Select(selector));
     }
