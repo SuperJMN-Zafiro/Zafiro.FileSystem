@@ -43,5 +43,4 @@ public static class Mixin
         }
         return Result.Success(acc.AsEnumerable());
     }
-
 }
