@@ -1,4 +1,6 @@
-﻿namespace Zafiro.FileSystem.Lightweight;
+﻿using CSharpFunctionalExtensions;
+
+namespace Zafiro.FileSystem.Lightweight;
 
 public class RootedFile : IRootedFile
 {
@@ -15,4 +17,6 @@ public class RootedFile : IRootedFile
     }
 
     public override string ToString() => this.FullPath();
+    public Func<Task<Result<Stream>>> Open => File.Open;
+    public string Name => File.Name;
 }

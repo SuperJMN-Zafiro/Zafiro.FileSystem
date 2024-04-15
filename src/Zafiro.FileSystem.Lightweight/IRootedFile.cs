@@ -1,3 +1,3 @@
 ﻿namespace Zafiro.FileSystem.Lightweight;
 
-public interface IRootedFile : IRooted<IFile>;
+public interface IRootedFile : IFile, IRooted<IFile>;
