@@ -1,6 +1,3 @@
 ﻿namespace Zafiro.FileSystem.Lightweight;
 
-public interface IFile : IStreamOpen
-{
-    public string Name { get; }
-}
+public interface IFile : IStreamOpen, INamed;

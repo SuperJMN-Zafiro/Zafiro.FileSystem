@@ -23,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.Lightweight", "src\Zafiro.FileSystem.Lightweight\Zafiro.FileSystem.Lightweight.csproj", "{0F39374B-8287-4BEC-B3E1-DC1B3E7E6180}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zafiro.FileSystem.VNext", "..\src\Zafiro.FileSystem\Zafiro.FileSystem.VNext\Zafiro.FileSystem.VNext.csproj", "{F875A7F4-ABDA-4A4C-9364-BC387C79F213}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zafiro.FileSystem.VNext.Tests", "test\Zafiro.FileSystem.VNext.Tests\Zafiro.FileSystem.VNext.Tests.csproj", "{333D8BDC-1A13-4223-BC33-0C30A20D9F47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +71,14 @@ Global
 		{0F39374B-8287-4BEC-B3E1-DC1B3E7E6180}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F39374B-8287-4BEC-B3E1-DC1B3E7E6180}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F39374B-8287-4BEC-B3E1-DC1B3E7E6180}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F875A7F4-ABDA-4A4C-9364-BC387C79F213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F875A7F4-ABDA-4A4C-9364-BC387C79F213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F875A7F4-ABDA-4A4C-9364-BC387C79F213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F875A7F4-ABDA-4A4C-9364-BC387C79F213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{333D8BDC-1A13-4223-BC33-0C30A20D9F47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{333D8BDC-1A13-4223-BC33-0C30A20D9F47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{333D8BDC-1A13-4223-BC33-0C30A20D9F47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{333D8BDC-1A13-4223-BC33-0C30A20D9F47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
