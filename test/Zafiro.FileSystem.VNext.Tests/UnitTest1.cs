@@ -8,7 +8,7 @@ namespace Zafiro.FileSystem.VNext.Tests
         public async Task Test1()
         {
             var fs = new RegularFileSystem(new System.IO.Abstractions.FileSystem());
-            var dir = await fs.GetDirectories("E:/").ToList();
+            var dir = await fs.GetFile("C:\\Users\\JMN\\Desktop\\AppDir\\AvaloniaSyncer\\Avalonia.Base.dl".Replace("\\", "/"));
         }
     }
 }

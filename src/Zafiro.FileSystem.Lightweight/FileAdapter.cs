@@ -13,4 +13,6 @@ public class RootedFile : IRootedFile
         Path = path;
         File = file;
     }
+
+    public override string ToString() => this.FullPath();
 }
