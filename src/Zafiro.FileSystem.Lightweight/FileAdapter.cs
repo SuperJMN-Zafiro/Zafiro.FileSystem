@@ -17,6 +17,6 @@ public class RootedFile : IRootedFile
     }
 
     public override string ToString() => this.FullPath();
-    public Func<Task<Result<Stream>>> Open => File.Open;
+    public Task<Result<Stream>> Open() => File.Open();
     public string Name => File.Name;
 }
