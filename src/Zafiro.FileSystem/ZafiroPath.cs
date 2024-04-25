@@ -1,7 +1,9 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Diagnostics;
+using CSharpFunctionalExtensions;
 
 namespace Zafiro.FileSystem;
 
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public sealed class ZafiroPath : ValueObject
 {
     public const char ChunkSeparator = '/';
@@ -62,7 +64,7 @@ public sealed class ZafiroPath : ValueObject
 
     public override string ToString()
     {
-        return Path == string.Empty ? "<root>" : Path;
+        return Path;
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
@@ -74,4 +76,6 @@ public sealed class ZafiroPath : ValueObject
     {
         return path.Split(ChunkSeparator).ToArray();
     }
+    
+    private string DebuggerDisplay => RouteFragments.Any() ? Path : "<root>";
 }
