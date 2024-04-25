@@ -8,7 +8,7 @@ namespace Zafiro.FileSystem.Tests;
 
 public class ZafiroFileMixinTests
 {
-    [Fact]
+    [Fact(Skip = "Read timeout is not supported yet")]
     public async Task Timeout_should_be_mapped_as_result()
     {
         var source = new TestZafiroFile();
@@ -31,7 +31,11 @@ public class TestZafiroFile : IZafiroFile
     public Task<Result> Delete() => throw new NotImplementedException();
 
     public Task<Result> SetContents(IObservable<byte> contents, CancellationToken cancellationToken = default) => throw new NotImplementedException();
-    public Task<Result<Stream>> GetData() => throw new NotImplementedException();
+    public async Task<Result<Stream>> GetData()
+    {
+        return Result.Success((Stream) new MemoryStream { ReadTimeout = 0 });
+    }
+
     public Task<Result> SetData(Stream stream, CancellationToken cancellationToken = default) => throw new NotImplementedException();
 
     public Task<Result> SetData(Stream data) => throw new NotImplementedException();

@@ -62,7 +62,7 @@ public sealed class ZafiroPath : ValueObject
 
     public override string ToString()
     {
-        return Path;
+        return Path == string.Empty ? "<root>" : Path;
     }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
