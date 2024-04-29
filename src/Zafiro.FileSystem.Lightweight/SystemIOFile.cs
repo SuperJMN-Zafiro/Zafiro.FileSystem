@@ -1,10 +1,19 @@
 ﻿using System.IO.Abstractions;
-using CSharpFunctionalExtensions;
 
 namespace Zafiro.FileSystem.Lightweight;
 
-public class SystemIOFile(IFileInfo file): IFile
+public class SystemIOFile: IFile
 {
-    public Func<Task<Result<Stream>>> Open => () => Task.FromResult(Result.Try(() => (Stream) file.OpenRead()));
+    private readonly IFileInfo file;
+    private readonly FileByteProvider byteProvider;
+
+    public SystemIOFile(IFileInfo file)
+    {
+        this.file = file;
+        byteProvider = new FileByteProvider(file);
+    }
+
     public string Name => file.Name;
+    public IObservable<byte[]> Bytes => byteProvider.Bytes;
+    public long Length => byteProvider.Length;
 }

@@ -7,8 +7,8 @@ public class Directory : IDirectory
     private readonly Task<Result<IEnumerable<IFile>>> files;
     private readonly Task<Result<IEnumerable<IDirectory>>> directories;
 
-    public Directory(string name, IEnumerable<IFile> blobs, IEnumerable<IDirectory> children) 
-        : this(name, Task.FromResult(Result.Success(blobs)),  Task.FromResult(Result.Success(children)))
+    public Directory(string name, IEnumerable<IFile> files, IEnumerable<IDirectory> children) 
+        : this(name, Task.FromResult(Result.Success(files)),  Task.FromResult(Result.Success(children)))
     {
     }
     

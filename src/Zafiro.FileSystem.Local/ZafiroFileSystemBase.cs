@@ -49,13 +49,13 @@ public abstract class ZafiroFileSystemBase : IZafiroFileSystem
                 EnsureExist(PathToFileSystem(path.Parent()));
                 return FileSystem.File.Open(PathToFileSystem(path), FileMode.Create);
             })
-            .Bind(destinationStream => Result.Try(async () =>
+            .Bind(async destinationStream =>
             {
                 await using (destinationStream.ConfigureAwait(false))
                 {
-                    await bytes.DumpTo(destinationStream, bufferSize: 10 * 1014 * 1014);
+                    return (await bytes.DumpTo(destinationStream, bufferSize: 10 * 1014 * 1014).ToList()).Combine();
                 }
-            }));
+            });
     }
 
     public virtual async Task<Result> CreateDirectory(ZafiroPath path)

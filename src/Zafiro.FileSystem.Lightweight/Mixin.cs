@@ -4,11 +4,11 @@ namespace Zafiro.FileSystem.Lightweight;
 
 public static class Mixin
 {
-    public static async Task<Result<IEnumerable<RootedFile>>> GetFilesInTree(this IDirectory directory, ZafiroPath currentPath)
+    public static async Task<Result<IEnumerable<IRootedFile>>> GetFilesInTree(this IDirectory directory, ZafiroPath currentPath)
     {
         var traverse = await directory.Traverse(currentPath, (tree, path) =>
         {
-            return tree.Files().Map(datas => datas.Select(r => new RootedFile(path, r)));
+            return tree.Files().Map(datas => datas.Select(r => (IRootedFile) new RootedFile(path, r)));
         });
 
         var paths = traverse.Map(enumerable => enumerable.SelectMany(x => x));
@@ -44,8 +44,8 @@ public static class Mixin
         return Result.Success(acc.AsEnumerable());
     }
 
-    public static ZafiroPath FullPath(this RootedFile rootedFile)
+    public static ZafiroPath FullPath<T>(this IRooted<T> rootedFile) where T : INamed
     {
-        return rootedFile.Path.Combine(rootedFile.File.Name);
+        return rootedFile.Path.Combine(rootedFile.Rooted.Name);
     }
 }

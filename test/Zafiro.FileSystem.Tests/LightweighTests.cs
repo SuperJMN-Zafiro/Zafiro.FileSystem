@@ -14,14 +14,14 @@ public class LightweighTests
         {
             new Directory("Subdir",
             [
-                new File("File3.txt", () => Task.FromResult(Result.Success("".ToStream()))),
-                new File("File4.txt", () => Task.FromResult(Result.Success("".ToStream())))
+                new File("File3.txt", ""),
+                new File("File4.txt", "")
             ], new List<IDirectory>())
         };
         var sut =
             new Directory("root", [
-                    new File("File1.txt", () => Task.FromResult(Result.Success("".ToStream()))),
-                    new File("File2.txt", () => Task.FromResult(Result.Success("".ToStream())))
+                    new File("File1.txt", ""),
+                    new File("File2.txt", "")
                 ], 
                 subdirs);
 
