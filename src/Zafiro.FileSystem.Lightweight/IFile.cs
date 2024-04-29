@@ -1,3 +1,3 @@
 ﻿namespace Zafiro.FileSystem.Lightweight;
 
-public interface IFile : IStreamOpen, INamed;
+public interface IFile : INamed, IByteProvider;

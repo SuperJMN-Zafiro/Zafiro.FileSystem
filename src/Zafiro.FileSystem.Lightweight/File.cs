@@ -1,23 +1,19 @@
 ﻿using System.Text;
-using CSharpFunctionalExtensions;
 
 namespace Zafiro.FileSystem.Lightweight;
 
 public class File : IFile
 {
-    private readonly Func<Task<Result<Stream>>> streamFactory;
+    private readonly StringByteProvider byteProvider;
 
-    public File(string name, string content) : this(name, () => Task.FromResult(Result.Success((Stream)new MemoryStream(Encoding.UTF8.GetBytes(content)))))
+    public File(string name, string content)
     {
-    }
-    
-    public File(string name, Func<Task<Result<Stream>>> streamFactory)
-    {
-        this.streamFactory = streamFactory;
+        byteProvider = new StringByteProvider(content, Encoding.UTF8);
         Name = name;
     }
 
-    public Task<Result<Stream>> Open() => streamFactory();
-
     public string Name { get; }
+
+    public IObservable<byte[]> Bytes => byteProvider.Bytes;
+    public long Length => byteProvider.Length;
 }

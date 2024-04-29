@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Zafiro.FileSystem\Zafiro.FileSystem.VNext\Zafiro.FileSystem.VNext.csproj" />
+    <ProjectReference Include="..\..\src\Zafiro.FileSystem.VNext\Zafiro.FileSystem.VNext.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,6 @@
-﻿using System.IO.Abstractions;
+﻿using System.IO;
+using System.IO.Abstractions;
+using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Lightweight;
 using Zafiro.Mixins;
@@ -50,12 +52,12 @@ public class FileSystemRepository : IFileRepository
     public async Task<Result<IFile>> AddOrUpdate(ZafiroPath path, IFile data)
     {
         var result = path.Combine(data.Name);
-        return await ResultMixin.Using(data.Open(), stream => WriteStream(result.ToString().Replace("/", "\\"), stream))
+        return await WriteStream(result.ToString().Replace("/", "\\"), data)
             .Bind(() => GetFile(result)
                 .Bind(r => r.ToResult("Could not retrieve the file")));
     }
     
-    public async Task WriteStream(string ruta, Stream stream)
+    public async Task<Result> WriteStream(string ruta, IByteProvider byteProvider)
     {
         // Extraer el directorio padre de la ruta proporcionada
         var directorio = Path.GetDirectoryName(ruta);
@@ -68,9 +70,9 @@ public class FileSystemRepository : IFileRepository
 
         // Crear el archivo en la ruta especificada, FileMode.Create crea un nuevo archivo
         // o sobrescribe uno existente
-        using (var fs = fileSystem.File.Create(ruta))
+        await using (var fs = fileSystem.File.Create(ruta))
         {
-            await stream.CopyToAsync(fs);
+            return (await byteProvider.DumpTo(fs).ToList()).Combine();
         }
     }
 }
