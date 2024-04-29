@@ -8,8 +8,10 @@
 
   <ItemGroup>
 	  <PackageReference Include="CSharpFunctionalExtensions.FluentAssertions" Version="2.0.0" />
-	  <ProjectReference Include="..\..\..\Zafiro.FileSystem\src\Zafiro.FileSystem.Lightweight\Zafiro.FileSystem.Lightweight.csproj" />
-    <ProjectReference Include="..\..\..\Zafiro.FileSystem\src\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zafiro.FileSystem.Lightweight\Zafiro.FileSystem.Lightweight.csproj" />
   </ItemGroup>
 
 </Project>
