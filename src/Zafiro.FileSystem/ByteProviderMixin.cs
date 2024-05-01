@@ -1,7 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
+using Zafiro.FileSystem.Lightweight;
 using Zafiro.Reactive;
 
-namespace Zafiro.FileSystem.Lightweight;
+namespace Zafiro.FileSystem;
 
 public static class ByteProviderMixin
 {
