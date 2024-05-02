@@ -4,9 +4,9 @@ using Zafiro.Mixins;
 
 namespace Zafiro.FileSystem.Lightweight;
 
-public class StringByteProvider : IByteProvider
+public class StringObservableDataStream : IObservableDataStream
 {
-    public StringByteProvider(string content, Encoding encoding)
+    public StringObservableDataStream(string content, Encoding encoding)
     {
         Bytes = content.ToBytes(encoding).ToObservable().Buffer(1024).Select(list => list.ToArray());
         Length = content.Length;

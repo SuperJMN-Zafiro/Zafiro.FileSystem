@@ -1,6 +1,6 @@
-﻿namespace Zafiro.FileSystem.Lightweight;
+﻿namespace Zafiro.FileSystem;
 
-public interface IByteProvider
+public interface IObservableDataStream
 {
     public IObservable<byte[]> Bytes { get; }
     public long Length { get; }

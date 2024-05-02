@@ -1,13 +1,12 @@
 ﻿using System.IO.Abstractions;
 using System.Reactive.Linq;
-using Zafiro.FileSystem.Lightweight;
 using Zafiro.Reactive;
 
 namespace Zafiro.FileSystem;
 
-public class FileByteProvider : IByteProvider
+public class FileObservableDataStream : IObservableDataStream
 {
-    public FileByteProvider(IFileInfo file)
+    public FileObservableDataStream(IFileInfo file)
     {
         Bytes = Observable.Using(file.OpenRead, stream => stream.ToObservableChunked());
         Length = file.Length;
