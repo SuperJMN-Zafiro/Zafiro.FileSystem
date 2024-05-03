@@ -7,19 +7,19 @@ namespace Zafiro.FileSystem;
 
 public static class ByteProviderMixin
 {
-    public static IObservable<Result> ChunkedDump(this IObservableDataStream observableDataStream, Stream stream)
+    public static IObservable<Result> ChunkedDump(this IData data, Stream stream)
     {
-        return observableDataStream.Bytes.DumpTo(stream);
+        return data.Bytes.DumpTo(stream);
     }
     
-    public static async Task<Result> DumpTo(this IObservableDataStream observableDataStream, Stream stream)
+    public static async Task<Result> DumpTo(this IData data, Stream stream)
     {
-        var chuckResults = await observableDataStream.ChunkedDump(stream).ToList();
+        var chuckResults = await data.ChunkedDump(stream).ToList();
         return chuckResults.Combine();
     }
     
-    public static byte[] Bytes(this IObservableDataStream observableDataStream)
+    public static byte[] Bytes(this IData data)
     {
-        return observableDataStream.Bytes.ToEnumerable().Flatten().ToArray();
+        return data.Bytes.ToEnumerable().Flatten().ToArray();
     }
 }

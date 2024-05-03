@@ -4,16 +4,16 @@ namespace Zafiro.FileSystem.Lightweight;
 
 public class File : IFile
 {
-    private readonly StringObservableDataStream observableDataStream;
+    private readonly StringData data;
 
     public File(string name, string content)
     {
-        observableDataStream = new StringObservableDataStream(content, Encoding.UTF8);
+        data = new StringData(content, Encoding.UTF8);
         Name = name;
     }
 
     public string Name { get; }
 
-    public IObservable<byte[]> Bytes => observableDataStream.Bytes;
-    public long Length => observableDataStream.Length;
+    public IObservable<byte[]> Bytes => data.Bytes;
+    public long Length => data.Length;
 }

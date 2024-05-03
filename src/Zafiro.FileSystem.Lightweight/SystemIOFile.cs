@@ -5,15 +5,15 @@ namespace Zafiro.FileSystem.Lightweight;
 public class SystemIOFile: IFile
 {
     private readonly IFileInfo file;
-    private readonly FileObservableDataStream observableDataStream;
+    private readonly FileData data;
 
     public SystemIOFile(IFileInfo file)
     {
         this.file = file;
-        observableDataStream = new FileObservableDataStream(file);
+        data = new FileData(file);
     }
 
     public string Name => file.Name;
-    public IObservable<byte[]> Bytes => observableDataStream.Bytes;
-    public long Length => observableDataStream.Length;
+    public IObservable<byte[]> Bytes => data.Bytes;
+    public long Length => data.Length;
 }

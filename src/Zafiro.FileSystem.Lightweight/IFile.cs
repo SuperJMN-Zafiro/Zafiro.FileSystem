@@ -1,3 +1,3 @@
 ﻿namespace Zafiro.FileSystem.Lightweight;
 
-public interface IFile : INamed, IObservableDataStream;
+public interface IFile : INamed, IData;

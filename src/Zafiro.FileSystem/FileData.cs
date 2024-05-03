@@ -4,9 +4,9 @@ using Zafiro.Reactive;
 
 namespace Zafiro.FileSystem;
 
-public class FileObservableDataStream : IObservableDataStream
+public class FileData : IData
 {
-    public FileObservableDataStream(IFileInfo file)
+    public FileData(IFileInfo file)
     {
         Bytes = Observable.Using(file.OpenRead, stream => stream.ToObservableChunked());
         Length = file.Length;
