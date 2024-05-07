@@ -1,7 +1,5 @@
 using System.IO.Abstractions.TestingHelpers;
-using CSharpFunctionalExtensions;
 using FluentAssertions;
-using Zafiro.FileSystem.Lightweight;
 using File = Zafiro.FileSystem.Lightweight.File;
 
 namespace Zafiro.FileSystem.VNext.Tests;

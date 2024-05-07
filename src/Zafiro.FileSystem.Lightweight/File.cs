@@ -13,7 +13,6 @@ public class File : IFile
     }
 
     public string Name { get; }
-
     public IObservable<byte[]> Bytes => data.Bytes;
     public long Length => data.Length;
 }

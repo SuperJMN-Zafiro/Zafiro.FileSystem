@@ -1,3 +1,4 @@
+using System.Transactions;
 using Zafiro.FileSystem.Unix;
 
 namespace Zafiro.FileSystem.VNext.Tests;
@@ -12,5 +13,7 @@ public class DirectoryTests
             new UnixDir("Hi"), 
             new UnixFile("Filecito")
         });
+
+        var root = new UnixRoot();
     }
 }
