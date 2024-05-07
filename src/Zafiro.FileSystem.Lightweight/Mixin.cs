@@ -4,6 +4,16 @@ namespace Zafiro.FileSystem.Lightweight;
 
 public static class Mixin
 {
+    public static Task<Result<IEnumerable<IFile>>> Files(this IDirectory directory)
+    {
+        return directory.Children().Map(nodes => nodes.OfType<IFile>());
+    }
+    
+    public static Task<Result<IEnumerable<IDirectory>>> Directories(this IDirectory directory)
+    {
+        return directory.Children().Map(nodes => nodes.OfType<IDirectory>());
+    }
+    
     public static async Task<Result<IEnumerable<IRootedFile>>> GetFilesInTree(this IDirectory directory, ZafiroPath currentPath)
     {
         var traverse = await directory.Traverse(currentPath, (tree, path) =>

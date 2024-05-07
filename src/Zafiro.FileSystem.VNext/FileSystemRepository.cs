@@ -57,7 +57,7 @@ public class FileSystemRepository : IFileRepository
                 .Bind(r => r.ToResult("Could not retrieve the file")));
     }
     
-    public async Task<Result> WriteStream(string ruta, IByteProvider byteProvider)
+    public async Task<Result> WriteStream(string ruta, IData byteProvider)
     {
         // Extraer el directorio padre de la ruta proporcionada
         var directorio = Path.GetDirectoryName(ruta);
@@ -72,7 +72,7 @@ public class FileSystemRepository : IFileRepository
         // o sobrescribe uno existente
         await using (var fs = fileSystem.File.Create(ruta))
         {
-            return (await byteProvider.DumpTo(fs).ToList()).Combine();
+            return await byteProvider.DumpTo(fs);
         }
     }
 }
