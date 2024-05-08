@@ -6,6 +6,10 @@ namespace Zafiro.FileSystem.Lightweight;
 
 public class StringData : IData
 {
+    public StringData(string content) : this(content, Encoding.Default)
+    {
+    }
+    
     public StringData(string content, Encoding encoding)
     {
         Content = content;
