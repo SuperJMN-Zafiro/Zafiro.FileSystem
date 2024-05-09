@@ -18,6 +18,14 @@ public static class ByteProviderMixin
         return chuckResults.Combine();
     }
     
+    public static async Task<Result> DumpTo(this IData data, string path)
+    {
+        using (var stream = File.Open(path, FileMode.Create))
+        {
+            return await data.DumpTo(stream);
+        }
+    }
+    
     public static byte[] Bytes(this IData data)
     {
         return data.Bytes.ToEnumerable().Flatten().ToArray();
