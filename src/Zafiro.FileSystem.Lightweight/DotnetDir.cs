@@ -10,15 +10,15 @@ public class DotnetDir : IDirectory
     {
         this.directoryInfo = directoryInfo;
         Name = directoryInfo.Name;
-        Children = directoryInfo.GetFileSystemInfos().Select(info => Create(info));
+        Children = directoryInfo.GetFileSystemInfos().Select(Create);
     }
 
     private INode Create(IFileSystemInfo info)
     {
         return info switch
         {
-            IDirectoryInfo directoryInfo => new DotnetDir(directoryInfo),
-            IFileInfo fileInfo => new DotnetFile(fileInfo),
+            IDirectoryInfo di => new DotnetDir(di),
+            IFileInfo fi => new DotnetFile(fi),
             _ => throw new ArgumentOutOfRangeException(nameof(info))
         };
     }
