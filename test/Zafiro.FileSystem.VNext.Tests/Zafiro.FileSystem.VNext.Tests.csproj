@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\SuperJMN\DotnetPackaging\Zafiro.FileSystem.Unix\Zafiro.FileSystem.Unix.csproj" />
+    <ProjectReference Include="..\..\src\Zafiro.FileSystem.Unix\Zafiro.FileSystem.Unix.csproj" />
     <ProjectReference Include="..\..\src\Zafiro.FileSystem.VNext\Zafiro.FileSystem.VNext.csproj" />
   </ItemGroup>
 

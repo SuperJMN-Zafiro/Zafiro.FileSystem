@@ -11,7 +11,7 @@ public static class ZafiroFileExtensions
     public static Task<Result> Copy(this IZafiroFile source, IZafiroFile destination, Maybe<IObserver<LongProgress>> progress, IScheduler? progressScheduler = default, TimeSpan? readTimeout = default, CancellationToken cancellationToken = default)
     {
         return 
-            ResultFactory.CombineAndMap(source.GetData(), source.Properties, (st, pr) => CreateCompatibleStream(st, pr))
+            source.GetData().CombineAndMap(source.Properties, (st, pr) => CreateCompatibleStream(st, pr))
             .Bind(async stream =>
             {
                 var subscription = progress.Map(p => stream.Positions.Select(x => new LongProgress(x, stream.Length)).Subscribe(p));
