@@ -1,11 +1,7 @@
-﻿using System.IO;
-using System.IO.Abstractions;
-using System.Reactive.Linq;
+﻿using System.IO.Abstractions;
 using CSharpFunctionalExtensions;
 using Zafiro.DataModel;
 using Zafiro.FileSystem.Lightweight;
-using Zafiro.Mixins;
-using IFile = Zafiro.FileSystem.IFile;
 
 namespace Zafiro.FileSystem.VNext;
 
