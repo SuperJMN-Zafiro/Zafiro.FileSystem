@@ -4,19 +4,19 @@ namespace Zafiro.FileSystem.Lightweight;
 
 public static class Mixin
 {
-    public static Task<Result<IEnumerable<IFile>>> Files(this IDirectory directory)
+    public static Task<Result<IEnumerable<IFile>>> Files(this IHeavyDirectory heavyDirectory)
     {
-        return directory.Children().Map(nodes => nodes.OfType<IFile>());
+        return heavyDirectory.Children().Map(nodes => nodes.OfType<IFile>());
     }
     
-    public static Task<Result<IEnumerable<IDirectory>>> Directories(this IDirectory directory)
+    public static Task<Result<IEnumerable<IHeavyDirectory>>> Directories(this IHeavyDirectory heavyDirectory)
     {
-        return directory.Children().Map(nodes => nodes.OfType<IDirectory>());
+        return heavyDirectory.Children().Map(nodes => nodes.OfType<IHeavyDirectory>());
     }
     
-    public static async Task<Result<IEnumerable<IRootedFile>>> GetFilesInTree(this IDirectory directory, ZafiroPath currentPath)
+    public static async Task<Result<IEnumerable<IRootedFile>>> GetFilesInTree(this IHeavyDirectory heavyDirectory, ZafiroPath currentPath)
     {
-        var traverse = await directory.Traverse(currentPath, (tree, path) =>
+        var traverse = await heavyDirectory.Traverse(currentPath, (tree, path) =>
         {
             return tree.Files().Map(datas => datas.Select(r => (IRootedFile) new RootedFile(path, r)));
         });
@@ -27,18 +27,18 @@ public static class Mixin
     }
 
     public static Task<Result<IEnumerable<T>>> Traverse<T>(
-        this IDirectory directory, 
+        this IHeavyDirectory heavyDirectory, 
         ZafiroPath currentPath, 
-        Func<IDirectory, ZafiroPath, Task<Result<T>>> onNode)
+        Func<IHeavyDirectory, ZafiroPath, Task<Result<T>>> onNode)
     {
-        return onNode(directory, currentPath)
-            .Bind(currentNode => directory.Directories()
+        return onNode(heavyDirectory, currentPath)
+            .Bind(currentNode => heavyDirectory.Directories()
                 .Bind(children => TraverseChildren(children, currentPath, onNode, [currentNode])));
     }
 
-    private static async Task<Result<IEnumerable<T>>> TraverseChildren<T>(IEnumerable<IDirectory> children, 
+    private static async Task<Result<IEnumerable<T>>> TraverseChildren<T>(IEnumerable<IHeavyDirectory> children, 
         ZafiroPath currentPath, 
-        Func<IDirectory, ZafiroPath, Task<Result<T>>> onNode,
+        Func<IHeavyDirectory, ZafiroPath, Task<Result<T>>> onNode,
         List<T> acc)
     {
         foreach (var child in children)

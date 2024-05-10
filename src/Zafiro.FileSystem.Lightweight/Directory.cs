@@ -1,8 +1,8 @@
 ﻿namespace Zafiro.FileSystem.Lightweight;
 
-public class SlimDirectory : ISlimDirectory
+public class Directory : IDirectory
 {
-    public SlimDirectory(string name, IEnumerable<INode> children)
+    public Directory(string name, IEnumerable<INode> children)
     {
         Name = name;
         Children = children;

@@ -2,10 +2,10 @@
 using System.IO.Abstractions;
 using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
+using Zafiro.DataModel;
 using Zafiro.FileSystem.Lightweight;
 using Zafiro.Mixins;
-using IDirectory = Zafiro.FileSystem.Lightweight.IDirectory;
-using IFile = Zafiro.FileSystem.Lightweight.IFile;
+using IFile = Zafiro.FileSystem.IFile;
 
 namespace Zafiro.FileSystem.VNext;
 
@@ -23,7 +23,7 @@ public class FileSystemRepository : IFileRepository
         return GetFiles(path.Parent()).Map(files => files.TryFirst(file => file.Name == path.Name()));
     }
 
-    public Task<Result<Maybe<IDirectory>>> GetDirectory(ZafiroPath path)
+    public Task<Result<Maybe<IHeavyDirectory>>> GetDirectory(ZafiroPath path)
     {
         return GetDirectories(path.Parent()).Map(files => files.TryFirst(file => file.Name == path.Name()));
     }
@@ -38,14 +38,14 @@ public class FileSystemRepository : IFileRepository
         }));
     }
 
-    public Task<Result<IEnumerable<IDirectory>>> GetDirectories(ZafiroPath path)
+    public Task<Result<IEnumerable<IHeavyDirectory>>> GetDirectories(ZafiroPath path)
     {
         return Task.FromResult(Result.Try(() =>
         {
             var rootDir = path == ZafiroPath.Empty ? fileSystem.DriveInfo.GetDrives().Select(r => r.RootDirectory) : fileSystem.DirectoryInfo.New(path).GetDirectories();
         
             return rootDir
-                .Select(s => (IDirectory) new SystemIODirectory(s)); 
+                .Select(s => (IHeavyDirectory) new SystemIOHeavyDirectory(s)); 
         }));
     }
 

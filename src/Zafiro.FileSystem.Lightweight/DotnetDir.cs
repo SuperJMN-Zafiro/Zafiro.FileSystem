@@ -2,7 +2,7 @@
 
 namespace Zafiro.FileSystem.Lightweight;
 
-public class DotnetDir : ISlimDirectory
+public class DotnetDir : IDirectory
 {
     private readonly IDirectoryInfo directoryInfo;
 

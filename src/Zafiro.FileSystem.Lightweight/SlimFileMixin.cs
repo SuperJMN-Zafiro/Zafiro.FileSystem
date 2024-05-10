@@ -2,13 +2,13 @@
 
 public static class SlimFileMixin
 {
-    public static IEnumerable<IFile> Files(this ISlimDirectory directory)
+    public static IEnumerable<IFile> Files(this IDirectory directory)
     {
         return directory.Children.OfType<IFile>();
     }
     
-    public static IEnumerable<ISlimDirectory> Directories(this ISlimDirectory directory)
+    public static IEnumerable<IDirectory> Directories(this IDirectory directory)
     {
-        return directory.Children.OfType<ISlimDirectory>();
+        return directory.Children.OfType<IDirectory>();
     }
 }
