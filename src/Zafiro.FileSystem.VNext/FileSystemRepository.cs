@@ -72,17 +72,3 @@ public class FileSystemRepository : IFileRepository
         }
     }
 }
-
-public static class ResultMixin
-{
-    public static async Task<Result> Using(this Task<Result<Stream>> streamResult, Func<Stream, Task> useStream)
-    {
-        return await streamResult.Tap(async stream =>
-        {
-            await using (stream)
-            {
-                await useStream(stream);
-            }
-        });
-    }
-}
