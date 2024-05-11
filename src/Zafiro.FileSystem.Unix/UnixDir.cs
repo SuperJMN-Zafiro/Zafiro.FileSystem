@@ -1,6 +1,8 @@
-﻿namespace Zafiro.FileSystem.Unix;
+﻿using Zafiro.FileSystem.Lightweight;
 
-public class UnixDir : UnixNode
+namespace Zafiro.FileSystem.Unix;
+
+public class UnixDir : UnixNode,  IDirectory
 {
     public UnixFileProperties Properties { get; }
 
@@ -17,4 +19,6 @@ public class UnixDir : UnixNode
     }
 
     public IEnumerable<UnixNode> Nodes { get; }
+
+    public IEnumerable<INode> Children => Nodes;
 }

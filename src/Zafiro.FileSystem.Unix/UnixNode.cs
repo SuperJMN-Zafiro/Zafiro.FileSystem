@@ -1,12 +1,6 @@
-﻿using Zafiro.FileSystem;
-using Zafiro.FileSystem.Lightweight;
+﻿namespace Zafiro.FileSystem.Unix;
 
-public class UnixNode : INode
+public abstract class UnixNode(string name) : INode
 {
-    public UnixNode(string name)
-    {
-        Name = name;
-    }
-
-    public string Name { get; }
+    public string Name { get; } = name;
 }
