@@ -7,10 +7,10 @@ public static class Mixin
         return directory.Children.OfType<IFile>();
     }
     
-    public static IEnumerable<IFile> FilesInTree(this IDirectory directory)
+    public static IEnumerable<IRootedFile> FilesInTree(this IDirectory directory, ZafiroPath path)
     {
-        var myFiles = directory.Children.OfType<IFile>();
-        var filesInSubDirs = directory.Directories().SelectMany(d => d.FilesInTree());
+        var myFiles = directory.Children.OfType<IFile>().Select(file => new RootedFile(path, file));
+        var filesInSubDirs = directory.Directories().SelectMany(d => d.FilesInTree(path.Combine(d.Name)));
         
         return myFiles.Concat(filesInSubDirs);
     }
