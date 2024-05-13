@@ -2,7 +2,7 @@
 
 namespace Zafiro.FileSystem.Unix;
 
-public class UnixFile : UnixNode, IData
+public class UnixFile : UnixNode, IFile
 {
     public UnixFile(IFile file, UnixFileProperties properties) : this(file.Name, file, properties)
     {
