@@ -39,11 +39,6 @@ public static class ZafiroFileExtensions
         return equivalentIn;
     }
 
-    public static IZafiroDirectory Parent(this IZafiroFile file)
-    {
-        return file.FileSystem.GetDirectory(file.Path.Parent());
-    }
-
     public static Task<Result<bool>> AreEqual(this IZafiroFile one, IZafiroFile two, IFileCompareStrategy strategy)
     {
         return strategy.Compare(one, two);

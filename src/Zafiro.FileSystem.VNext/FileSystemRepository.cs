@@ -16,12 +16,14 @@ public class FileSystemRepository : IFileRepository
 
     public Task<Result<Maybe<IFile>>> GetFile(ZafiroPath path)
     {
-        return GetFiles(path.Parent()).Map(files => files.TryFirst(file => file.Name == path.Name()));
+        throw new NotImplementedException();
+        //return GetFiles(path.Parent()).Map(files => files.TryFirst(file => file.Name == path.Name()));
     }
 
     public Task<Result<Maybe<IHeavyDirectory>>> GetDirectory(ZafiroPath path)
     {
-        return GetDirectories(path.Parent()).Map(files => files.TryFirst(file => file.Name == path.Name()));
+        throw new NotImplementedException();
+        //return GetDirectories(path.Parent()).Map(files => files.TryFirst(file => file.Name == path.Name()));
     }
 
     public Task<Result<IEnumerable<IFile>>> GetFiles(ZafiroPath path)

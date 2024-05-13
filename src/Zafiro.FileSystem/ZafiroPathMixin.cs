@@ -24,8 +24,13 @@ public static class ZafiroPathMixin
         return new ZafiroPath(self.RouteFragments.Concat(path.RouteFragments));
     }
     
-    public static ZafiroPath Parent(this ZafiroPath path)
-    { 
+    public static Maybe<ZafiroPath> Parent(this ZafiroPath path)
+    {
+        if (path == ZafiroPath.Empty)
+        {
+            return Maybe<ZafiroPath>.None;
+        }
+        
         return new ZafiroPath(path.RouteFragments.SkipLast(1));
     }
 
@@ -56,6 +61,7 @@ public static class ZafiroPathMixin
             return Enumerable.Empty<ZafiroPath>();
         }
 
-        return new[] { path.Parent() }.Concat(path.Parent().Parents()).Append(ZafiroPath.Empty);
+        //return new[] { path.Parent() }.Concat(path.Parent().Match(zafiroPath => zafiroPath.Parents()), () => empty).Append(ZafiroPath.Empty);
+        throw new NotImplementedException();
     }
 }

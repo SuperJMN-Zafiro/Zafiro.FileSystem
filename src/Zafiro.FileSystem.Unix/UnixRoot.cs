@@ -10,3 +10,15 @@ public class UnixRoot : UnixDir
     {
     }
 }
+
+public class RootedUnixFile
+{
+    public RootedUnixFile(ZafiroPath parent, UnixFile unixFile)
+    {
+        UnixFile = unixFile;
+        Parent = parent;
+    }
+
+    public UnixFile UnixFile { get;  }
+    public ZafiroPath Parent { get; }
+}
