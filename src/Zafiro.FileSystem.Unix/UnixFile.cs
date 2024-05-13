@@ -7,7 +7,7 @@ public class UnixFile : UnixNode, IData
     public UnixFile(IFile file, UnixFileProperties properties) : this(file.Name, file, properties)
     {
     }
-    
+
     public UnixFile(string name, IData data) : this(name, data, Maybe<UnixFileProperties>.None)
     {
     }
