@@ -56,12 +56,16 @@ public static class ZafiroPathMixin
 
     public static IEnumerable<ZafiroPath> Parents(this ZafiroPath path)
     {
-        if (path.RouteFragments.Count() <= 1)
+        if (path == ZafiroPath.Empty)
         {
             return Enumerable.Empty<ZafiroPath>();
         }
 
-        //return new[] { path.Parent() }.Concat(path.Parent().Match(zafiroPath => zafiroPath.Parents()), () => empty).Append(ZafiroPath.Empty);
-        throw new NotImplementedException();
+        return path.Parent().Match(parent => parent.Parents().Append(parent), Enumerable.Empty<ZafiroPath>);
+    }
+    
+    public static IEnumerable<ZafiroPath> ParentsAndSelf(this ZafiroPath path)
+    {
+        return path.Parents().Append(path);
     }
 }

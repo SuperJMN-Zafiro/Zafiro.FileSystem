@@ -2,12 +2,10 @@ namespace Zafiro.FileSystem.Unix;
 
 public class RootedUnixFile : RootedFile
 {
-    public RootedUnixFile(ZafiroPath parent, UnixFile unixFile) : base(parent, unixFile)
+    public RootedUnixFile(ZafiroPath path, UnixFile unixFile) : base(path, unixFile)
     {
         UnixFile = unixFile;
-        Parent = parent;
     }
 
     public UnixFile UnixFile { get;  }
-    public ZafiroPath Parent { get; }
 }
