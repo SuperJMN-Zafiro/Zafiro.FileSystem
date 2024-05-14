@@ -1,27 +1,13 @@
-﻿using CSharpFunctionalExtensions;
-
-namespace Zafiro.FileSystem.Lightweight;
+﻿namespace Zafiro.FileSystem.Lightweight;
 
 public class Directory : IDirectory
 {
-    private readonly Task<Result<IEnumerable<IFile>>> files;
-    private readonly Task<Result<IEnumerable<IDirectory>>> directories;
-
-    public Directory(string name, IEnumerable<IFile> files, IEnumerable<IDirectory> children) 
-        : this(name, Task.FromResult(Result.Success(files)),  Task.FromResult(Result.Success(children)))
-    {
-    }
-    
-    public Directory(string name, Task<Result<IEnumerable<IFile>>> files, Task<Result<IEnumerable<IDirectory>>> directories)
+    public Directory(string name, IEnumerable<INode> children)
     {
         Name = name;
-        this.files = files;
-        this.directories = directories;
+        Children = children;
     }
 
     public string Name { get; }
-
-    public Task<Result<IEnumerable<IFile>>> Files() => files;
-
-    public Task<Result<IEnumerable<IDirectory>>> Directories() => directories;
+    public IEnumerable<INode> Children { get; }
 }

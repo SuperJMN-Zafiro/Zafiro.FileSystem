@@ -44,13 +44,6 @@ public static class ZafiroDirectoryMixin
         return maybeGetFile;
     }
 
-    public static Task<Result<Maybe<IZafiroFile>>> DescendantFile(this IZafiroDirectory dir, ZafiroPath file)
-    {
-        return dir
-            .DescendantDirectory(file.Parent())
-            .Bind(maybe => maybe.Match(directory => directory.GetFile(file.Name()), () => Task.FromResult(Result.Success(Maybe<IZafiroFile>.None))));
-    }
-
     public static Task<Result<IZafiroFile>> GetFromPath(this IZafiroDirectory origin, ZafiroPath path)
     {
         return Task.FromResult(Result.Success(origin.FileSystem.GetFile(origin.Path.Combine(path))));

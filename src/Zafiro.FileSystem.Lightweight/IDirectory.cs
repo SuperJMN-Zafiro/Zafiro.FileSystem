@@ -1,9 +1,6 @@
-﻿using CSharpFunctionalExtensions;
+﻿namespace Zafiro.FileSystem.Lightweight;
 
-namespace Zafiro.FileSystem.Lightweight;
-
-public interface IDirectory : INamed
+public interface IDirectory : INode
 {
-    Task<Result<IEnumerable<IFile>>> Files();
-    Task<Result<IEnumerable<IDirectory>>> Directories();
+    public IEnumerable<INode> Children { get; }
 }

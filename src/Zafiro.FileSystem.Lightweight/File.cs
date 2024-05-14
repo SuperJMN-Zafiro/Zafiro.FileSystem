@@ -1,19 +1,21 @@
-﻿using System.Text;
+﻿using Zafiro.DataModel;
 
 namespace Zafiro.FileSystem.Lightweight;
 
 public class File : IFile
 {
-    private readonly StringByteProvider byteProvider;
-
-    public File(string name, string content)
+    public File(string name, string data) : this(name, new StringData(data))
     {
-        byteProvider = new StringByteProvider(content, Encoding.UTF8);
-        Name = name;
     }
 
-    public string Name { get; }
+    public File(string name, IData data)
+    {
+        Name = name;
+        Data = data;
+    }
 
-    public IObservable<byte[]> Bytes => byteProvider.Bytes;
-    public long Length => byteProvider.Length;
+    public IData Data { get; }
+    public string Name { get; }
+    public IObservable<byte[]> Bytes => Data.Bytes;
+    public long Length => Data.Length;
 }

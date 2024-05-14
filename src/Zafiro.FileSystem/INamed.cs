@@ -1,4 +1,4 @@
-﻿namespace Zafiro.FileSystem.Lightweight;
+﻿namespace Zafiro.FileSystem;
 
 public interface INamed
 {

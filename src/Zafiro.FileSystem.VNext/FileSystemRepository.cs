@@ -1,11 +1,7 @@
-﻿using System.IO;
-using System.IO.Abstractions;
-using System.Reactive.Linq;
+﻿using System.IO.Abstractions;
 using CSharpFunctionalExtensions;
+using Zafiro.DataModel;
 using Zafiro.FileSystem.Lightweight;
-using Zafiro.Mixins;
-using IDirectory = Zafiro.FileSystem.Lightweight.IDirectory;
-using IFile = Zafiro.FileSystem.Lightweight.IFile;
 
 namespace Zafiro.FileSystem.VNext;
 
@@ -20,12 +16,14 @@ public class FileSystemRepository : IFileRepository
 
     public Task<Result<Maybe<IFile>>> GetFile(ZafiroPath path)
     {
-        return GetFiles(path.Parent()).Map(files => files.TryFirst(file => file.Name == path.Name()));
+        throw new NotImplementedException();
+        //return GetFiles(path.Parent()).Map(files => files.TryFirst(file => file.Name == path.Name()));
     }
 
-    public Task<Result<Maybe<IDirectory>>> GetDirectory(ZafiroPath path)
+    public Task<Result<Maybe<IHeavyDirectory>>> GetDirectory(ZafiroPath path)
     {
-        return GetDirectories(path.Parent()).Map(files => files.TryFirst(file => file.Name == path.Name()));
+        throw new NotImplementedException();
+        //return GetDirectories(path.Parent()).Map(files => files.TryFirst(file => file.Name == path.Name()));
     }
 
     public Task<Result<IEnumerable<IFile>>> GetFiles(ZafiroPath path)
@@ -38,14 +36,14 @@ public class FileSystemRepository : IFileRepository
         }));
     }
 
-    public Task<Result<IEnumerable<IDirectory>>> GetDirectories(ZafiroPath path)
+    public Task<Result<IEnumerable<IHeavyDirectory>>> GetDirectories(ZafiroPath path)
     {
         return Task.FromResult(Result.Try(() =>
         {
             var rootDir = path == ZafiroPath.Empty ? fileSystem.DriveInfo.GetDrives().Select(r => r.RootDirectory) : fileSystem.DirectoryInfo.New(path).GetDirectories();
         
             return rootDir
-                .Select(s => (IDirectory) new SystemIODirectory(s)); 
+                .Select(s => (IHeavyDirectory) new SystemIOHeavyDirectory(s)); 
         }));
     }
 
@@ -57,7 +55,7 @@ public class FileSystemRepository : IFileRepository
                 .Bind(r => r.ToResult("Could not retrieve the file")));
     }
     
-    public async Task<Result> WriteStream(string ruta, IByteProvider byteProvider)
+    public async Task<Result> WriteStream(string ruta, IData byteProvider)
     {
         // Extraer el directorio padre de la ruta proporcionada
         var directorio = Path.GetDirectoryName(ruta);
@@ -72,21 +70,7 @@ public class FileSystemRepository : IFileRepository
         // o sobrescribe uno existente
         await using (var fs = fileSystem.File.Create(ruta))
         {
-            return (await byteProvider.DumpTo(fs).ToList()).Combine();
+            return await byteProvider.DumpTo(fs);
         }
-    }
-}
-
-public static class ResultMixin
-{
-    public static async Task<Result> Using(this Task<Result<Stream>> streamResult, Func<Stream, Task> useStream)
-    {
-        return await streamResult.Tap(async stream =>
-        {
-            await using (stream)
-            {
-                await useStream(stream);
-            }
-        });
     }
 }
