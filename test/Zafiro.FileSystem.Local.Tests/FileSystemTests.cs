@@ -424,6 +424,10 @@ public class LinuxFile : IFile
     {
         throw new NotImplementedException();
     }
+
+    public IObservable<byte[]> Bytes { get; }
+    public long Length { get; }
+    public string Name { get; }
 }
 
 public class LinuxSystemStream : FileSystemStream
