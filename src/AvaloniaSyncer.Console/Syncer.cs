@@ -43,6 +43,7 @@ public class Syncer
         switch (diff)
         {
             case BothDiff bothDiff:
+                return await OnBothDiff(bothDiff);
                 break;
             case LeftOnlyDiff leftOnlyDiff:
                 return await LeftOnly(leftOnlyDiff);
@@ -54,6 +55,12 @@ public class Syncer
                 throw new ArgumentOutOfRangeException(nameof(diff));
         }
 
+        return Result.Success();
+    }
+
+    private async Task<Result> OnBothDiff(BothDiff bothDiff)
+    {
+        logger.Execute(l => l.Information("Both Left and Right for {Path}", bothDiff.Path));
         return Result.Success();
     }
 
