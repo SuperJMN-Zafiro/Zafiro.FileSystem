@@ -1,6 +1,6 @@
 ﻿namespace Zafiro.FileSystem.Lightweight;
 
-public static class Mixin
+public static class LightMixin
 {
     public static IEnumerable<IFile> Files(this IDirectory directory)
     {

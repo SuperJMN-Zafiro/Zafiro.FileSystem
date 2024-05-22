@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.VNext", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.Unix", "src\Zafiro.FileSystem.Unix\Zafiro.FileSystem.Unix.csproj", "{3534BB0E-F6FC-4331-BC57-6E8DBAECC3C3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.Local", "src\Zafiro.FileSystem.Local\Zafiro.FileSystem.Local.csproj", "{EDA2B759-EFF9-4C14-8C40-16F9FA0239DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{3534BB0E-F6FC-4331-BC57-6E8DBAECC3C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3534BB0E-F6FC-4331-BC57-6E8DBAECC3C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3534BB0E-F6FC-4331-BC57-6E8DBAECC3C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDA2B759-EFF9-4C14-8C40-16F9FA0239DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDA2B759-EFF9-4C14-8C40-16F9FA0239DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDA2B759-EFF9-4C14-8C40-16F9FA0239DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDA2B759-EFF9-4C14-8C40-16F9FA0239DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

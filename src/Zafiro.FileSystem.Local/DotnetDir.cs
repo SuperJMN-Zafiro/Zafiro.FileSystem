@@ -1,4 +1,5 @@
 ﻿using System.IO.Abstractions;
+using Zafiro.FileSystem.Local;
 
 namespace Zafiro.FileSystem.Lightweight;
 
@@ -18,7 +19,7 @@ public class DotnetDir : IDirectory
         return info switch
         {
             IDirectoryInfo di => new DotnetDir(di),
-            IFileInfo fi => new DotnetFile(fi),
+            IFileInfo fi => new DotNetFile(fi),
             _ => throw new ArgumentOutOfRangeException(nameof(info))
         };
     }

@@ -16,4 +16,10 @@
 		<ProjectReference Include="..\Zafiro.FileSystem.Lightweight\Zafiro.FileSystem.Lightweight.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Dotnet\" />
+	  <Folder Include="Interfaces\" />
+	  <Folder Include="SeaweedFS\" />
+	</ItemGroup>
+
 </Project>

@@ -1,14 +1,14 @@
 ﻿using System.IO.Abstractions;
 using Zafiro.DataModel;
 
-namespace Zafiro.FileSystem.Lightweight;
+namespace Zafiro.FileSystem.Local;
 
-internal class DotnetFile : IFile
+public class DotNetFile : IFile
 {
     private readonly IFileInfo fileInfo;
     private readonly FileInfoData infoData;
 
-    public DotnetFile(IFileInfo fileInfo)
+    public DotNetFile(IFileInfo fileInfo)
     {
         infoData = new FileInfoData(fileInfo);
         this.fileInfo = fileInfo;
