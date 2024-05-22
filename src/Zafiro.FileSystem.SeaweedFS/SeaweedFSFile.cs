@@ -28,4 +28,6 @@ public class SeaweedFSFile : IFile
         return Result.Try(() => fs.GetFileMetadata(path), ex => RefitBasedAccessExceptionHandler.HandlePathAccessError(path, ex, Maybe<ILogger>.None))
             .Map(metadata => new SeaweedFSFile(metadata, fs));
     }
+
+    public override string ToString() => File.FullPath;
 }
