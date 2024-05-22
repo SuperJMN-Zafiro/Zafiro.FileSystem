@@ -1,4 +1,6 @@
-﻿namespace Zafiro.FileSystem.Lightweight;
+﻿using Zafiro.FileSystem.Lightweight;
+
+namespace Zafiro.FileSystem;
 
 public static class LightMixin
 {

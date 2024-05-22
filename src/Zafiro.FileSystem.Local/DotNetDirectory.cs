@@ -1,5 +1,4 @@
 ﻿using System.IO.Abstractions;
-using Zafiro.FileSystem.Lightweight;
 using Zafiro.FileSystem.VNext.Interfaces;
 
 namespace Zafiro.FileSystem.Local;
@@ -15,13 +14,15 @@ public class DotNetDirectory : IAsyncDir
 
     public async Task<Result<IEnumerable<INode>>> Children()
     {
-        var fileNodes = DirectoryInfo.GetFiles().Select(info => (INode)new DotNetFile(info)).Concat(DirectoryInfo.GetDirectories().Select(x => (INode)new DotNetDirectory(x)));
-        return Result.Success(fileNodes);
+        var files = DirectoryInfo.GetFiles().Select(info => (INode)new DotNetFile(info));
+        var dirs = DirectoryInfo.GetDirectories().Select(x => (INode)new DotNetDirectory(x));
+        var nodes = files.Concat(dirs);
+        return Result.Success(nodes);
     }
 
-    public static async Task<Result<IAsyncDir>> From(ZafiroPath path)
+    public static async Task<Result<IAsyncDir>> From(ZafiroPath path, IFileSystem fileSystem)
     {
-        return Result.Success((IAsyncDir)new DotNetDirectory(new System.IO.Abstractions.FileSystem().DirectoryInfo.New(path)));
+        return Result.Success((IAsyncDir)new DotNetDirectory(fileSystem.DirectoryInfo.New(path)));
     }
 
     public string Name => DirectoryInfo.Name;

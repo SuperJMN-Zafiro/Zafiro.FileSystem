@@ -57,6 +57,6 @@ public static class Mixin
 
     public static ZafiroPath FullPath<T>(this IRooted<T> rootedFile) where T : INamed
     {
-        return rootedFile.Path.Combine(rootedFile.Rooted.Name);
+        return rootedFile.Path.Combine(rootedFile.Value.Name);
     }
 }

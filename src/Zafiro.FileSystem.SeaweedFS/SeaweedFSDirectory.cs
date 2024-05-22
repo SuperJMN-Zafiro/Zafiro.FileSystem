@@ -1,14 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 using Zafiro.FileSystem.VNext.Interfaces;
-using Directory = Zafiro.FileSystem.SeaweedFS.Filer.Client.Directory;
+using ClientDirectory = Zafiro.FileSystem.SeaweedFS.Filer.Client.Directory;
 using ILogger = Serilog.ILogger;
 
 namespace Zafiro.FileSystem.SeaweedFS;
 
 public class SeaweedFSDirectory : IAsyncDir
 {
-    public SeaweedFSDirectory(Directory dir, ISeaweedFS api)
+    public SeaweedFSDirectory(ClientDirectory dir, ISeaweedFS api)
     {
         Dir = dir;
         Api = api;
@@ -17,7 +17,7 @@ public class SeaweedFSDirectory : IAsyncDir
 
     public string QueryablePath => Path == ZafiroPath.Empty ? "/" : Path;
     public ZafiroPath Path { get; }
-    public Directory Dir { get; }
+    public ClientDirectory Dir { get; }
     public ISeaweedFS Api { get; }
     public string Name => Path.Name();
 
@@ -33,7 +33,7 @@ public class SeaweedFSDirectory : IAsyncDir
             .Try(() => seaweedFSClient.GetContents(path, CancellationToken.None), e => RefitBasedAccessExceptionHandler.HandlePathAccessError(path, e, Maybe<ILogger>.None))
             .Map(directory =>
             {
-                var dir = new Directory()
+                var dir = new ClientDirectory()
                 {
                     FullPath = directory.Path
                 };
@@ -48,7 +48,7 @@ public class SeaweedFSDirectory : IAsyncDir
         {
             yield return directoryEntry switch
             {
-                Directory dir => new SeaweedFSDirectory(dir, Api),
+                ClientDirectory dir => new SeaweedFSDirectory(dir, Api),
                 FileMetadata file => new SeaweedFSFile(file, Api),
                 _ => throw new ArgumentOutOfRangeException(nameof(directoryEntry))
             };

@@ -1,7 +1,7 @@
 ﻿using System.IO.Abstractions;
-using Zafiro.FileSystem.Local;
+using IDirectory = Zafiro.FileSystem.Lightweight.IDirectory;
 
-namespace Zafiro.FileSystem.Lightweight;
+namespace Zafiro.FileSystem.Local;
 
 public class DotnetDir : IDirectory
 {

@@ -1,6 +1,5 @@
 ﻿using System.IO.Abstractions;
 using CSharpFunctionalExtensions;
-using IFile = Zafiro.FileSystem.IFile;
 
 namespace Zafiro.FileSystem;
 

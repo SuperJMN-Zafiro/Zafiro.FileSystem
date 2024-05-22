@@ -1,7 +1,7 @@
 using Zafiro.FileSystem.Local;
 using Zafiro.FileSystem.Unix;
 using Zafiro.FileSystem.VNext.Interfaces;
-using Directory = Zafiro.FileSystem.Lightweight.Directory;
+using Directory = Zafiro.FileSystem.Directory;
 
 namespace Zafiro.FileSystem.VNext.Tests;
 
@@ -22,7 +22,7 @@ public class DirectoryTests
     [Fact]
     public async Task TestDir()
     {
-        var maybeDir = await DotNetDirectory.From("C:/Users/JMN/Desktop");
+        var maybeDir = await DotNetDirectory.From("C:/Users/JMN/Desktop", new System.IO.Abstractions.FileSystem());
         var dir = await maybeDir
             .Bind(d => d.ToLightweight());
     }

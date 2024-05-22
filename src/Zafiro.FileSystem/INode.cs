@@ -1,3 +1,3 @@
 ﻿namespace Zafiro.FileSystem;
 
-public interface INode : INamed {}
+public interface INode : INamed;
