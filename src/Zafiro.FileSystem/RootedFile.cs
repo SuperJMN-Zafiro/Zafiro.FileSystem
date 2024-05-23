@@ -13,7 +13,7 @@ public class RootedFile : IRootedFile
     public IFile File { get; }
     public ZafiroPath Path { get; }
 
-    public IFile Rooted => File;
+    public IFile Value => File;
     public string Name => File.Name;
     public IObservable<byte[]> Bytes => File.Bytes;
     public long Length => File.Length;

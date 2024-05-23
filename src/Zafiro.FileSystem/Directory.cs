@@ -1,4 +1,6 @@
-﻿namespace Zafiro.FileSystem.Lightweight;
+﻿using Zafiro.FileSystem.Lightweight;
+
+namespace Zafiro.FileSystem;
 
 public class Directory : IDirectory
 {
@@ -10,4 +12,5 @@ public class Directory : IDirectory
 
     public string Name { get; }
     public IEnumerable<INode> Children { get; }
+    public override string ToString() => Name;
 }

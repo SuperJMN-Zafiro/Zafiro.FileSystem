@@ -1,7 +1,7 @@
-﻿namespace Zafiro.FileSystem.Lightweight;
+﻿namespace Zafiro.FileSystem;
 
 public interface IRooted<out T>
 {
     ZafiroPath Path { get; }
-    T Rooted { get; }
+    T Value { get; }
 }

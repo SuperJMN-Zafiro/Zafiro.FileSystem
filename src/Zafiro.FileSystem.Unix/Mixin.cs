@@ -7,7 +7,7 @@ public static class Mixin
 {
     public static TDir ToRoot<TDir>(this ICollection<IRootedFile> allFiles, ZafiroPath parent, Func<string, IEnumerable<INode>, TDir> createDir) where TDir : IDirectory
     {
-        var files = allFiles.Where(x => x.Path == parent).Select(x => (INode)x.Rooted);
+        var files = allFiles.Where(x => x.Path == parent).Select(x => (INode)x.Value);
         var allParents = allFiles.Select(x => x.Path.ParentsAndSelf()).Flatten();
 
         var nextLevelPaths = allParents
