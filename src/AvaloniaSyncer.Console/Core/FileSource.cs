@@ -17,5 +17,5 @@ public record FileSource
 
     public Task<Result<IDirectory>> GetFiles() => Plugin.GetFiles(Path);
 
-    public override string ToString() => Plugin + ":" + Path;
+    public override string ToString() => Plugin + "[" + Path + "]";
 }

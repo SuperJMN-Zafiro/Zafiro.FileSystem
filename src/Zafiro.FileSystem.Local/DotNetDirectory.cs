@@ -1,5 +1,4 @@
 ﻿using System.IO.Abstractions;
-using Zafiro.FileSystem.VNext.Interfaces;
 
 namespace Zafiro.FileSystem.Local;
 

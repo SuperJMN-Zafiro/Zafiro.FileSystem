@@ -8,11 +8,16 @@ public static class LightMixin
     {
         return directory.Children.OfType<IFile>();
     }
+
+    public static IEnumerable<IRootedFile> RootedFiles(this IDirectory directory)
+    {
+        return directory.RootedFilesRelativeTo(ZafiroPath.Empty);
+    }
     
-    public static IEnumerable<IRootedFile> FilesInTree(this IDirectory directory, ZafiroPath path)
+    public static IEnumerable<IRootedFile> RootedFilesRelativeTo(this IDirectory directory, ZafiroPath path)
     {
         var myFiles = directory.Children.OfType<IFile>().Select(file => new RootedFile(path, file));
-        var filesInSubDirs = directory.Directories().SelectMany(d => d.FilesInTree(path.Combine(d.Name)));
+        var filesInSubDirs = directory.Directories().SelectMany(d => d.RootedFilesRelativeTo(path.Combine(d.Name)));
         
         return myFiles.Concat(filesInSubDirs);
     }

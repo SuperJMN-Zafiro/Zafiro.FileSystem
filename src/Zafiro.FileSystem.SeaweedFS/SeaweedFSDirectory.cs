@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
-using Zafiro.FileSystem.VNext.Interfaces;
 using ClientDirectory = Zafiro.FileSystem.SeaweedFS.Filer.Client.Directory;
 using ILogger = Serilog.ILogger;
 

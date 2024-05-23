@@ -3,21 +3,20 @@ using Zafiro.FileSystem;
 using Zafiro.FileSystem.Lightweight;
 using Zafiro.FileSystem.SeaweedFS;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
-using Zafiro.FileSystem.VNext.Tests;
 
 namespace AvaloniaSyncer.Console;
 
-public class FileSystemPlugin : IFileSystemPlugin
+public class SeaweedFSPlugin : IFileSystemPlugin
 {
     private readonly ISeaweedFS seaweedFSClient;
 
-    private FileSystemPlugin(ISeaweedFS seaweedFSClient)
+    private SeaweedFSPlugin(ISeaweedFS seaweedFSClient)
     {
         this.seaweedFSClient = seaweedFSClient;
     }
 
-    public string Name { get; set; }
-    public string DisplayName { get; set; }
+    public string Name => "seaweedfs";
+    public string DisplayName => "SeaweedFS";
 
     public Task<Result<IDirectory>> GetFiles(ZafiroPath path)
     {
@@ -25,12 +24,23 @@ public class FileSystemPlugin : IFileSystemPlugin
             .Bind(x => x.ToLightweight());
     }
 
-    public static async Task<Result<FileSystemPlugin>> Create(string https)
+    public Task<Result> Copy(IFile left, ZafiroPath destinationFileName)
+    {
+        return Result.Try(async () =>
+        {
+            using var stream = left.ToStream();
+            await seaweedFSClient.Upload(destinationFileName, stream);
+        });
+    }
+
+    public static async Task<Result<SeaweedFSPlugin>> Create(string https)
     {
         return Result.Try(() =>
         {
             var seaweedFSClient = new SeaweedFSClient(new HttpClient() { BaseAddress = new Uri(https) });
-            return new FileSystemPlugin(seaweedFSClient);
+            return new SeaweedFSPlugin(seaweedFSClient);
         });
     }
+
+    public override string ToString() => DisplayName;
 }

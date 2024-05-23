@@ -1,11 +1,13 @@
-﻿namespace Zafiro.FileSystem.NewComparer;
+﻿using Zafiro.FileSystem.Lightweight;
+
+namespace Zafiro.FileSystem.NewComparer;
 
 public record BothDiff : FileDiff
 {
-    public IFile Left { get; }
-    public IFile Right { get; }
+    public IRootedFile Left { get; }
+    public IRootedFile Right { get; }
 
-    public BothDiff(IFile left, IFile right)
+    public BothDiff(IRootedFile left, IRootedFile right)
     {
         Left = left;
         Right = right;

@@ -6,7 +6,8 @@ namespace AvaloniaSyncer.Console;
 
 public interface IFileSystemPlugin
 {
-    string Name { get; set; }
-    string DisplayName { get; set; }
+    string Name { get; }
+    string DisplayName { get; }
     Task<Result<IDirectory>> GetFiles(ZafiroPath path);
+    Task<Result> Copy(IFile left, ZafiroPath destination);
 }

@@ -2,27 +2,35 @@
 using CSharpFunctionalExtensions;
 using Zafiro.FileSystem;
 using Zafiro.FileSystem.Local;
-using Zafiro.FileSystem.VNext.Tests;
 using IDirectory = Zafiro.FileSystem.Lightweight.IDirectory;
+using IFile = Zafiro.FileSystem.IFile;
 
-namespace AvaloniaSyncer.Console;
+namespace AvaloniaSyncer.Console.Plugins;
 
 public class DotnetFsPlugin : IFileSystemPlugin
 {
-    public IFileSystem FileSystem { get; }
-
     private DotnetFsPlugin(IFileSystem fileSystem)
     {
         FileSystem = fileSystem;
     }
 
-    public string Name { get; set; }
-    public string DisplayName { get; set; }
+    public IFileSystem FileSystem { get; }
+
+    public string Name => "local";
+    public string DisplayName => "Local Filesystem";
 
     public Task<Result<IDirectory>> GetFiles(ZafiroPath path)
     {
         return DotNetDirectory.From(path, new FileSystem())
             .Bind(x => x.ToLightweight());
+    }
+
+    public async Task<Result> Copy(IFile left, ZafiroPath destination)
+    {
+        using (var stream = FileSystem.File.Open(destination, FileMode.Create))
+        {
+            return await left.DumpTo(stream);
+        }
     }
 
     public static async Task<Result<DotnetFsPlugin>> Create()
@@ -33,4 +41,6 @@ public class DotnetFsPlugin : IFileSystemPlugin
             return new DotnetFsPlugin(fs);
         });
     }
+
+    public override string ToString() => DisplayName;
 }

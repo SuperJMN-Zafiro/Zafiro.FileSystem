@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Lightweight;
+using Zafiro.Reactive;
 
 namespace Zafiro.FileSystem;
 
@@ -58,5 +59,24 @@ public static class Mixin
     public static ZafiroPath FullPath<T>(this IRooted<T> rootedFile) where T : INamed
     {
         return rootedFile.Path.Combine(rootedFile.Value.Name);
+    }
+    
+    public static Task<Result<IDirectory>> ToLightweight(this IAsyncDir asyncDir)
+    {
+        return asyncDir.Children()
+            .Map(nodes => nodes.ToList())
+            .Bind(async nodes =>
+            {
+                var dirs = nodes.OfType<IAsyncDir>();
+                var files = nodes.OfType<IFile>().Cast<INode>();
+                var dirResults = await Task.WhenAll(dirs.Select(ToLightweight));
+                return dirResults.Combine().Map(d => d.Concat(files));
+            })
+            .Map(enumerable => (IDirectory)new Directory(asyncDir.Name, enumerable));
+    }
+
+    public static Stream ToStream(this IFile file)
+    {
+        return file.Bytes.ToStream();
     }
 }

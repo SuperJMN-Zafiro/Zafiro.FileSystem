@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Zafiro.FileSystem.VNext.Interfaces;
+namespace Zafiro.FileSystem;
 
 public interface IAsyncDir : INode
 {
