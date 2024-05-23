@@ -1,4 +1,6 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Diagnostics;
+using AvaloniaSyncer.Console.Core;
+using CSharpFunctionalExtensions;
 using Serilog;
 using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem;
@@ -17,6 +19,7 @@ public class Syncer
 
     public Task<Result> Sync(FileSource left, FileSource right)
     {
+        Debugger.Launch();
         logger.Execute(l => l.Information("Syncing {Left} and {Right}", left, right));
 
         var leftResult = left.GetFiles().Map(x => x.RootedFiles());

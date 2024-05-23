@@ -1,46 +1,10 @@
-﻿using System.IO.Abstractions;
-using CSharpFunctionalExtensions;
-using Zafiro.FileSystem;
-using Zafiro.FileSystem.Local;
-using IDirectory = Zafiro.FileSystem.Lightweight.IDirectory;
-using IFile = Zafiro.FileSystem.IFile;
+﻿using CSharpFunctionalExtensions;
 
-namespace AvaloniaSyncer.Console.Plugins;
+namespace AvaloniaSyncer.Console.Core;
 
-public class DotnetFsPlugin : IFileSystemPlugin
+public class DotnetFsPlugin : IPlugin
 {
-    private DotnetFsPlugin(IFileSystem fileSystem)
-    {
-        FileSystem = fileSystem;
-    }
-
-    public IFileSystem FileSystem { get; }
-
     public string Name => "local";
-    public string DisplayName => "Local Filesystem";
-
-    public Task<Result<IDirectory>> GetFiles(ZafiroPath path)
-    {
-        return DotNetDirectory.From(path, new FileSystem())
-            .Bind(x => x.ToLightweight());
-    }
-
-    public async Task<Result> Copy(IFile left, ZafiroPath destination)
-    {
-        using (var stream = FileSystem.File.Open(destination, FileMode.Create))
-        {
-            return await left.DumpTo(stream);
-        }
-    }
-
-    public static async Task<Result<DotnetFsPlugin>> Create()
-    {
-        return Result.Try(() =>
-        {
-            var fs = new FileSystem();
-            return new DotnetFsPlugin(fs);
-        });
-    }
-
-    public override string ToString() => DisplayName;
+    public string FriendlyName => "Local Filesystem";
+    public Task<Result<ISyncFileSystem>> Create(string args) => DotnetFs.Create().Map(x => (ISyncFileSystem)x);
 }

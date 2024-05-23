@@ -1,22 +1,28 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using AvaloniaSyncer.Console;
-using AvaloniaSyncer.Console.Plugins;
+using AvaloniaSyncer.Console.Core;
+using CommandLine;
 using CSharpFunctionalExtensions;
 using Serilog;
+using Zafiro.CSharpFunctionalExtensions;
 
-Console.WriteLine("Hello, World!");
+Console.WriteLine("Starting Syncer");
+var plugins = new IPlugin[] { new DotnetFsPlugin(), new SeaweedFSPlugin() };
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-var leftPluginResult = await SeaweedFSPlugin.Create("http://192.168.1.29:8888").Map(plugin => (IFileSystemPlugin)plugin);
-var rightPluginResult = await DotnetFsPlugin.Create().Map(plugin => (IFileSystemPlugin)plugin);
+await Parser.Default
+    .ParseArguments<Options>(args)
+    .WithParsedAsync(options =>
+    {
+        var factory = new FileSourceFactory(plugins);
+        var leftPlugin = factory.GetFileSource(options.Left);
+        var rightPlugin = factory.GetFileSource(options.Right);
 
-var syncer = new Syncer(Maybe<ILogger>.From(Log.Logger));
-
-var op = from leftPlugin in leftPluginResult from rightPlugin in rightPluginResult 
-    select syncer.Sync(new FileSource(rightPlugin, "D:/OneDrive/Juegos/ROMs"), new FileSource(leftPlugin, "Juegos/ROMs"));
-
-await op.Bind(x => x);
+        return leftPlugin
+            .CombineAndBind(rightPlugin, (left, right) => new Syncer(Maybe.From(Log.Logger)).Sync(left, right))
+            .Log();
+    });

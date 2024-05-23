@@ -4,7 +4,7 @@ using Zafiro.FileSystem.Lightweight;
 
 namespace AvaloniaSyncer.Console;
 
-public interface IFileSystemPlugin
+public interface ISyncFileSystem
 {
     string Name { get; }
     string DisplayName { get; }
