@@ -13,15 +13,22 @@ public class DotNetDirectory : IAsyncDir
 
     public async Task<Result<IEnumerable<INode>>> Children()
     {
-        var files = DirectoryInfo.GetFiles().Select(info => (INode)new DotNetFile(info));
-        var dirs = DirectoryInfo.GetDirectories().Select(x => (INode)new DotNetDirectory(x));
-        var nodes = files.Concat(dirs);
-        return Result.Success(nodes);
+        return Result.Try(() =>
+        {
+            var files = DirectoryInfo.GetFiles().Select(info => (INode) new DotNetFile(info));
+            var dirs = DirectoryInfo.GetDirectories().Select(x => (INode) new DotNetDirectory(x));
+            var nodes = files.Concat(dirs);
+            return nodes;
+        });
     }
 
     public static async Task<Result<IAsyncDir>> From(ZafiroPath path, IFileSystem fileSystem)
     {
-        return Result.Success((IAsyncDir)new DotNetDirectory(fileSystem.DirectoryInfo.New(path)));
+        return Result.Try(() =>
+        {
+            var directoryInfo = fileSystem.DirectoryInfo.New(path);
+            return (IAsyncDir) new DotNetDirectory(directoryInfo);
+        });
     }
 
     public string Name => DirectoryInfo.Name;
