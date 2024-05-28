@@ -1,7 +1,6 @@
 ﻿using System.IO.Abstractions;
 using CSharpFunctionalExtensions;
 using Zafiro.DataModel;
-using Zafiro.FileSystem.Lightweight;
 
 namespace Zafiro.FileSystem.VNext;
 

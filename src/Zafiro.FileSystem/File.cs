@@ -1,6 +1,6 @@
 ﻿using Zafiro.DataModel;
 
-namespace Zafiro.FileSystem.Lightweight;
+namespace Zafiro.FileSystem;
 
 public class File : IFile
 {

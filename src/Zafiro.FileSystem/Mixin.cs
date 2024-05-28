@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Zafiro.FileSystem.Lightweight;
 using Zafiro.Reactive;
 
 namespace Zafiro.FileSystem;

@@ -1,6 +1,4 @@
-﻿using Zafiro.FileSystem.Lightweight;
-
-namespace Zafiro.FileSystem.NewComparer;
+﻿namespace Zafiro.FileSystem.NewComparer;
 
 public record LeftOnlyDiff : FileDiff
 {

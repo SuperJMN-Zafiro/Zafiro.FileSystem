@@ -1,6 +1,4 @@
-﻿using Zafiro.FileSystem.Lightweight;
-
-namespace Zafiro.FileSystem.Unix;
+﻿namespace Zafiro.FileSystem.Unix;
 
 public class UnixDir : UnixNode, IDirectory
 {

@@ -1,4 +1,3 @@
-using Zafiro.FileSystem.Lightweight;
 using Zafiro.Mixins;
 
 namespace Zafiro.FileSystem.Unix;
