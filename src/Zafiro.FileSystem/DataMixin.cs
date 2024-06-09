@@ -6,7 +6,7 @@ using Zafiro.Reactive;
 
 namespace Zafiro.FileSystem;
 
-public static class ByteProviderMixin
+public static class DataMixin
 {
     public static IObservable<Result> ChunkedDump(this IData data, Stream stream)
     {
@@ -21,7 +21,7 @@ public static class ByteProviderMixin
     
     public static async Task<Result> DumpTo(this IData data, string path)
     {
-        using (var stream = File.Open(path, FileMode.Create))
+        using (var stream = System.IO.File.Open(path, FileMode.Create))
         {
             return await data.DumpTo(stream);
         }

@@ -1,5 +1,3 @@
-using Zafiro.FileSystem.Lightweight;
-
 namespace Zafiro.FileSystem.Unix;
 
 public class UnixRoot : UnixDir

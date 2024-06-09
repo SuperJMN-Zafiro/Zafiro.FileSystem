@@ -1,6 +1,6 @@
 ﻿using Zafiro.DataModel;
 
-namespace Zafiro.FileSystem.Lightweight;
+namespace Zafiro.FileSystem;
 
 public class File : IFile
 {
@@ -18,4 +18,6 @@ public class File : IFile
     public string Name { get; }
     public IObservable<byte[]> Bytes => Data.Bytes;
     public long Length => Data.Length;
+
+    public override string ToString() => Name;
 }

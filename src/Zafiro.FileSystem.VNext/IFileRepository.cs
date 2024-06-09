@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Zafiro.FileSystem.Lightweight;
 
 namespace Zafiro.FileSystem.VNext
 {
