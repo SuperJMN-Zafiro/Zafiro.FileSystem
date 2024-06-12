@@ -19,13 +19,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.Lightweig
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.VNext.Tests", "test\Zafiro.FileSystem.VNext.Tests\Zafiro.FileSystem.VNext.Tests.csproj", "{333D8BDC-1A13-4223-BC33-0C30A20D9F47}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.VNext", "src\Zafiro.FileSystem.VNext\Zafiro.FileSystem.VNext.csproj", "{A2D9E0B2-C155-4955-9931-B53FBC8B3D0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.DynamicData", "src\Zafiro.FileSystem.DynamicData\Zafiro.FileSystem.DynamicData.csproj", "{A2D9E0B2-C155-4955-9931-B53FBC8B3D0D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.Unix", "src\Zafiro.FileSystem.Unix\Zafiro.FileSystem.Unix.csproj", "{3534BB0E-F6FC-4331-BC57-6E8DBAECC3C3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.Local", "src\Zafiro.FileSystem.Local\Zafiro.FileSystem.Local.csproj", "{EDA2B759-EFF9-4C14-8C40-16F9FA0239DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zafiro.FileSystem.Mutable", "src\Zafiro.FileSystem.Mutable\Zafiro.FileSystem.Mutable.csproj", "{5F5CE53F-EAFD-4309-A690-9ABD4C73766C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaApplication1", "AvaloniaApplication1\AvaloniaApplication1.csproj", "{6328E40E-AC25-44DB-9EBB-7829820D6C68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,10 @@ Global
 		{5F5CE53F-EAFD-4309-A690-9ABD4C73766C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F5CE53F-EAFD-4309-A690-9ABD4C73766C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F5CE53F-EAFD-4309-A690-9ABD4C73766C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6328E40E-AC25-44DB-9EBB-7829820D6C68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6328E40E-AC25-44DB-9EBB-7829820D6C68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6328E40E-AC25-44DB-9EBB-7829820D6C68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6328E40E-AC25-44DB-9EBB-7829820D6C68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

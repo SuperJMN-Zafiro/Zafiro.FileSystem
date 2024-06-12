@@ -7,4 +7,5 @@ public interface IMutableFile : IMutableNode
 {
     Task<Result> SetContents(IData data);
     Task<Result<IData>> GetContents();
+    Task<Result> Delete();
 }
