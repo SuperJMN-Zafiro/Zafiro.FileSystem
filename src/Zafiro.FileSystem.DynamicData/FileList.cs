@@ -19,7 +19,7 @@ public class FileList : IDisposable
     {
         DirectoryInfo = directoryInfo;
         filesCache = new SourceCache<IFile, string>(x => x.Name);
-        filesCache.AddOrUpdate(Update());
+        filesCache.AddOrUpdate(Update(), new LambdaComparer<IFile>((a, b) => Equals(a.Name, b.Name)));
         TimeBasedUpdater()
             .DisposeWith(disposable);
     }
@@ -58,7 +58,7 @@ public class FileList : IDisposable
             .Repeat()
             .Do(_ =>
             {
-                filesCache.Edit(updater => updater.Load(Update()));
+                filesCache.EditDiff(Update(), (a, b) => Equals(a.Name, b.Name));
             })
             .Subscribe();
     }

@@ -5,7 +5,7 @@ using DynamicData;
 
 namespace Zafiro.FileSystem.DynamicData;
 
-public class DynamicDirectory
+public class DynamicDirectory : INamed
 {
     private readonly CompositeDisposable disposable = new();
     private readonly FileList fileList;

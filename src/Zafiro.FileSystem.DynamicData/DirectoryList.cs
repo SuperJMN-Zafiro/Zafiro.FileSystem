@@ -4,7 +4,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using DynamicData;
-using Zafiro.FileSystem.Local;
 
 namespace Zafiro.FileSystem.DynamicData;
 
@@ -18,7 +17,7 @@ public class DirectoryList : IDisposable
     {
         DirectoryInfo = directoryInfo;
         dirsCache = new SourceCache<DynamicDirectory, string>(x => x.Name);
-        dirsCache.AddOrUpdate(Update());
+        dirsCache.AddOrUpdate(Update(), new LambdaComparer<DynamicDirectory>((a, b) => Equals(a.Name, b.Name)));
         TimeBasedUpdater()
             .DisposeWith(disposable);
     }
@@ -51,7 +50,7 @@ public class DirectoryList : IDisposable
             .Repeat()
             .Do(_ =>
             {
-                dirsCache.Edit(updater => updater.Load(Update()));
+                dirsCache.EditDiff(Update(), (a, b) => Equals(a.Name, b.Name));
             })
             .Subscribe();
     }

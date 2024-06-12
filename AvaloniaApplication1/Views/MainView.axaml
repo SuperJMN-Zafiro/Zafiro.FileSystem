@@ -6,27 +6,24 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaApplication1.Views.MainView"
              x:DataType="viewModels:MainViewModel">
-    <Grid RowDefinitions="Auto * *">
+    
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="viewModels:FileViewModel">
+            <DockPanel>
+                <Button Command="{Binding Delete}" DockPanel.Dock="Right" Content="Delete"></Button>
+                <TextBlock Text="{Binding Name}"></TextBlock>
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate DataType="viewModels:DirectoryViewModel">
+            <DockPanel>
+                <!-- <Button Command="{Binding Delete}" DockPanel.Dock="Right" Content="Delete"></Button> -->
+                <TextBlock Text="{Binding Name}"></TextBlock>
+            </DockPanel>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+    
+    <Grid RowDefinitions="Auto *">
         <Button Content="Create file" Command="{Binding CreateFile}"/>
-        <ListBox Grid.Row="1" ItemsSource="{Binding Files}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel>
-                        <Button Command="{Binding Delete}" DockPanel.Dock="Right" Content="Delete"></Button>
-                        <TextBlock Text="{Binding Name}"></TextBlock>
-                    </DockPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <ListBox Grid.Row="2" ItemsSource="{Binding Directories}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel>
-                        <!-- <Button Command="{Binding Delete}" DockPanel.Dock="Right" Content="Delete"></Button> -->
-                        <TextBlock Text="{Binding Name}"></TextBlock>
-                    </DockPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Items}" />
     </Grid>
 </UserControl>
