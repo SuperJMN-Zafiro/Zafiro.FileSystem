@@ -10,7 +10,6 @@ using ReactiveUI;
 using Zafiro.Avalonia.Notifications;
 using Zafiro.FileSystem;
 using Zafiro.FileSystem.DynamicData;
-using Zafiro.FileSystem.Mutable;
 using Zafiro.FileSystem.VNext;
 using Zafiro.UI;
 using IFile = Zafiro.FileSystem.IFile;
@@ -33,14 +32,36 @@ public class MainViewModel : ViewModelBase
             .Bind(out var files)
             .Subscribe();
         
+        folder.Directories
+            .Select(x => new DirectoryViewModel(folder, x))
+            .Bind(out var directories)
+            .Subscribe();
+        
         Files = files;
-        CreateFile = ReactiveCommand.CreateFromTask(() => folder.AddOrUpdate(new File("Random", "Content")));
+        Directories = directories;
+        CreateFile = ReactiveCommand.CreateFromTask(() => folder.AddOrUpdateFile(new File("Random", "Content")));
         CreateFile.HandleErrorsWith(notificationService);
     }
+
+    public ReadOnlyObservableCollection<DirectoryViewModel> Directories { get; set; }
 
     public ReactiveCommand<Unit,Result> CreateFile { get; set; }
 
     public ReadOnlyObservableCollection<FileViewModel> Files { get; set; }
+}
+
+public class DirectoryViewModel
+{
+    public DynamicDirectory Parent { get; }
+    public DynamicDirectory Directory { get; }
+
+    public DirectoryViewModel(DynamicDirectory parent, DynamicDirectory directory)
+    {
+        Parent = parent;
+        Directory = directory;
+    }
+
+    public string Name => Directory.Name;
 }
 
 public class FileViewModel
@@ -50,7 +71,7 @@ public class FileViewModel
     public FileViewModel(DynamicDirectory directory, IFile file)
     {
         File = file;
-        Delete = ReactiveCommand.CreateFromTask(() => directory.Delete(Name));
+        Delete = ReactiveCommand.CreateFromTask(() => directory.DeleteFile(Name));
     }
 
     public string Name => File.Name;
