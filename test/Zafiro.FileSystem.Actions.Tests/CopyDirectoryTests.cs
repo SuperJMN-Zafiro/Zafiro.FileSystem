@@ -2,7 +2,6 @@ using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
 using FluentAssertions;
 using Zafiro.Actions;
-using Zafiro.DataModel;
 using Zafiro.FileSystem.Local;
 using Zafiro.FileSystem.Local.Mutable;
 
