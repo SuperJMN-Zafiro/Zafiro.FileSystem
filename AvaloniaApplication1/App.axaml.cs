@@ -30,7 +30,7 @@ public partial class App : Application
                 var notificationService = new NotificationService(new WindowNotificationManager(TopLevel.GetTopLevel(mv)));
                 var fs = new LocalFileSystem(new FileSystem());
                 var folder = fs.GetFolder("home/jmn/Escritorio");
-                return new MainViewModel(notificationService, folder);
+                return new DirectoryContentsViewModel(notificationService, folder);
             }, () => new MainWindow());
     }
 }

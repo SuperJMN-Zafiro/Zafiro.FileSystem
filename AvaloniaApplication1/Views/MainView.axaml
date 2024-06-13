@@ -3,21 +3,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:AvaloniaApplication1.ViewModels"
+             xmlns:vm="clr-namespace:AvaloniaApplication1.ViewModels;assembly=Zafiro.Avalonia.FileExplorer.NextGen"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaApplication1.Views.MainView"
-             x:DataType="viewModels:MainViewModel">
+             x:DataType="vm:DirectoryContentsViewModel">
     
     <UserControl.DataTemplates>
-        <DataTemplate DataType="viewModels:FileViewModel">
+        <DataTemplate DataType="vm:FileViewModel">
             <DockPanel>
                 <Button Command="{Binding Delete}" DockPanel.Dock="Right" Content="Delete"></Button>
                 <TextBlock Text="{Binding Name}"></TextBlock>
             </DockPanel>
         </DataTemplate>
-        <DataTemplate DataType="viewModels:DirectoryViewModel">
+        <DataTemplate DataType="vm:DirectoryViewModel">
             <DockPanel>
                 <!-- <Button Command="{Binding Delete}" DockPanel.Dock="Right" Content="Delete"></Button> -->
-                <TextBlock Text="{Binding Name}"></TextBlock>
+                <TextBlock Text="{Binding Name}" />
             </DockPanel>
         </DataTemplate>
     </UserControl.DataTemplates>

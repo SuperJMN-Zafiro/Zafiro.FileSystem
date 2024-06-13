@@ -3,9 +3,9 @@ using Zafiro.FileSystem.DynamicData;
 
 namespace Zafiro.FileSystem.VNext;
 
-public class LocalFileSystem(IFileSystem fileSystem)
+public class LocalFileSystem(System.IO.Abstractions.IFileSystem fileSystem)
 {
-    public IFileSystem FileSystem { get; } = fileSystem;
+    public System.IO.Abstractions.IFileSystem FileSystem { get; } = fileSystem;
 
     public DynamicDirectory GetFolder(ZafiroPath path)
     {
