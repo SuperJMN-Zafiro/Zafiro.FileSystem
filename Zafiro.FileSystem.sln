@@ -29,6 +29,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zafiro.FileSystem.Mutable",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaApplication1", "AvaloniaApplication1\AvaloniaApplication1.csproj", "{6328E40E-AC25-44DB-9EBB-7829820D6C68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zafiro.FileSystem.Local.Tests", "test\Zafiro.FileSystem.Local.Tests\Zafiro.FileSystem.Local.Tests.csproj", "{ADD7D636-ED3D-4630-AE6F-AD9DAAF8C2EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zafiro.FileSystem.Actions", "src\Zafiro.FileSystem.Actions\Zafiro.FileSystem.Actions.csproj", "{45D21A0B-51D2-4D99-A56B-E00DF42FB879}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zafiro.FileSystem.Actions.Tests", "test\Zafiro.FileSystem.Actions.Tests\Zafiro.FileSystem.Actions.Tests.csproj", "{CED4F0B7-9EBF-4DB5-B7AB-E743AC94FA59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +91,18 @@ Global
 		{6328E40E-AC25-44DB-9EBB-7829820D6C68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6328E40E-AC25-44DB-9EBB-7829820D6C68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6328E40E-AC25-44DB-9EBB-7829820D6C68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADD7D636-ED3D-4630-AE6F-AD9DAAF8C2EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADD7D636-ED3D-4630-AE6F-AD9DAAF8C2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADD7D636-ED3D-4630-AE6F-AD9DAAF8C2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADD7D636-ED3D-4630-AE6F-AD9DAAF8C2EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45D21A0B-51D2-4D99-A56B-E00DF42FB879}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45D21A0B-51D2-4D99-A56B-E00DF42FB879}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45D21A0B-51D2-4D99-A56B-E00DF42FB879}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45D21A0B-51D2-4D99-A56B-E00DF42FB879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CED4F0B7-9EBF-4DB5-B7AB-E743AC94FA59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CED4F0B7-9EBF-4DB5-B7AB-E743AC94FA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CED4F0B7-9EBF-4DB5-B7AB-E743AC94FA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CED4F0B7-9EBF-4DB5-B7AB-E743AC94FA59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

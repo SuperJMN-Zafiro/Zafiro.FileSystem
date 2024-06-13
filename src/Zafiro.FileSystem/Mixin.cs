@@ -60,7 +60,7 @@ public static class Mixin
         return rootedFile.Path.Combine(rootedFile.Value.Name);
     }
     
-    public static Task<Result<IDirectory>> ToLightweight(this IAsyncDir asyncDir)
+    public static Task<Result<IDirectory>> ToDirectory(this IAsyncDir asyncDir)
     {
         return asyncDir.Children()
             .Map(nodes => nodes.ToList())
@@ -68,7 +68,7 @@ public static class Mixin
             {
                 var dirs = nodes.OfType<IAsyncDir>();
                 var files = nodes.OfType<IFile>().Cast<INode>();
-                var dirResults = await Task.WhenAll(dirs.Select(ToLightweight));
+                var dirResults = await Task.WhenAll(dirs.Select(ToDirectory));
                 return dirResults.Combine().Map(d => d.Concat(files));
             })
             .Map(enumerable => (IDirectory)new Directory(asyncDir.Name, enumerable));

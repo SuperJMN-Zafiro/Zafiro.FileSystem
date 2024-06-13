@@ -1,0 +1,52 @@
+using System.Reactive.Subjects;
+using Zafiro.CSharpFunctionalExtensions;
+using Zafiro.FileSystem.Local.Mutable;
+using Zafiro.FileSystem.Mutable;
+
+namespace Zafiro.FileSystem.Local;
+
+public class DotNetMutableDirectory : IMutableDirectory
+{
+    public DotNetDirectory Directory { get; }
+
+    public DotNetMutableDirectory(DotNetDirectory directory)
+    {
+        Directory = directory;
+    }
+
+    public string Name => Directory.Name;
+
+    public Task<Result<IEnumerable<INode>>> Children()
+    {
+        return Directory.Children();
+    }
+
+    public Task<Result<IEnumerable<IMutableNode>>> MutableChildren()
+    {
+        var mutableChildren = Directory.Children().MapEach(x =>
+        {
+            if (x is DotNetDirectory d)
+            {
+                return (IMutableNode)new DotNetMutableDirectory(d);
+            }
+
+            if (x is DotNetFile f)
+            {
+                return new DotNetMutableFile(f);
+            }
+
+            throw new NotSupportedException();
+        });
+        
+        return mutableChildren;
+    }
+
+    public Task<Result> AddOrUpdate(IFile data, ISubject<double>? progress = null)
+    {
+        var path = Directory.DirectoryInfo.FileSystem.Path.Combine(Directory.DirectoryInfo.FullName, data.Name);
+        using (var stream = Directory.DirectoryInfo.FileSystem.File.Create(path))
+        {
+            return data.DumpTo(stream);
+        }
+    }
+}

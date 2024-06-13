@@ -3,7 +3,7 @@ using CSharpFunctionalExtensions;
 using Zafiro.Actions;
 using Zafiro.CSharpFunctionalExtensions;
 
-namespace Zafiro.FileSystem.Actions;
+namespace Zafiro.FileSystem.ObsoleteActions;
 
 public class CopyDirectoryAction : IFileAction
 {

@@ -4,7 +4,7 @@ using CSharpFunctionalExtensions;
 using JetBrains.Annotations;
 using Zafiro.Actions;
 
-namespace Zafiro.FileSystem.Actions;
+namespace Zafiro.FileSystem.ObsoleteActions;
 
 [PublicAPI]
 public class DeleteDirectoryAction : IFileAction

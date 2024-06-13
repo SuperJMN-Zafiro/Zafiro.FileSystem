@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
 using Zafiro.Actions;
 
-namespace Zafiro.FileSystem.Actions;
+namespace Zafiro.FileSystem.ObsoleteActions;
 
 public class DeleteFileAction : IFileAction
 {
