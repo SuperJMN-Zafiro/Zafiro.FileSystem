@@ -27,13 +27,13 @@ public class CopyFileAction : IFileAction
 
     public IObservable<LongProgress> Progress => progress.AsObservable();
 
-    public Task<Result> Execute(CancellationToken cancellationToken = default)
+    public async Task<Result> Execute(CancellationToken cancellationToken = default)
     {
         var progressObserver = new Subject<long>();
         using var longProgressSubscription = progressObserver.Select(l => new LongProgress(l, Source.Length)).Subscribe(progress);
         using (new ProgressWatcher(Source, progressObserver))
         {
-            var result = Destination.SetContents(Source, cancellationToken);
+            var result = await Destination.SetContents(Source, cancellationToken);
             return result;
         }
     }

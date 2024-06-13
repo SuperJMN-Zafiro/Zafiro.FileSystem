@@ -1,9 +1,8 @@
 using System.Reactive.Subjects;
 using Zafiro.CSharpFunctionalExtensions;
-using Zafiro.FileSystem.Local.Mutable;
 using Zafiro.FileSystem.Mutable;
 
-namespace Zafiro.FileSystem.Local;
+namespace Zafiro.FileSystem.Local.Mutable;
 
 public class DotNetMutableDirectory : IMutableDirectory
 {
@@ -48,5 +47,26 @@ public class DotNetMutableDirectory : IMutableDirectory
         {
             return data.DumpTo(stream);
         }
+    }
+
+    public async Task<Result<IMutableFile>> CreateFile(string name)
+    {
+        var path = Directory.DirectoryInfo.FileSystem.Path.Combine(Directory.DirectoryInfo.FullName, name);
+        return Result.Try(() => Directory.DirectoryInfo.FileSystem.FileInfo.New(path))
+            .TapTry(fi =>
+            {
+                var fileSystemStream = fi.Create();
+                fileSystemStream.Dispose();
+            })
+            .Map(fi => new DotNetFile(fi))
+            .Map(file => (IMutableFile)new DotNetMutableFile(file));
+    }
+
+    public async Task<Result<IMutableDirectory>> CreateDirectory(string name)
+    {
+        return Result.Try(() => Directory.DirectoryInfo.CreateSubdirectory(name))
+            .TapTry(fi => fi.Create())
+            .Map(fi => new DotNetDirectory(fi))
+            .Map(file => (IMutableDirectory)new DotNetMutableDirectory(file));
     }
 }

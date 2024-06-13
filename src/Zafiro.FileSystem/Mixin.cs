@@ -68,8 +68,8 @@ public static class Mixin
             {
                 var dirs = nodes.OfType<IAsyncDir>();
                 var files = nodes.OfType<IFile>().Cast<INode>();
-                var dirResults = await Task.WhenAll(dirs.Select(ToDirectory));
-                return dirResults.Combine().Map(d => d.Concat(files));
+                var dirResult = await dirs.Select(ToDirectory).Combine();
+                return dirResult.Map(d => d.Concat(files));
             })
             .Map(enumerable => (IDirectory)new Directory(asyncDir.Name, enumerable));
     }
