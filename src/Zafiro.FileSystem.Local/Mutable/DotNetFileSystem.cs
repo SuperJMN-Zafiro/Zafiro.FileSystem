@@ -12,11 +12,11 @@ public class DotNetFileSystem : Zafiro.FileSystem.DynamicData.IFileSystem
         FileSystem = fileSystem;
     }
 
-    public async Task<Result<IRooted<IDynamicDirectory>>> Get(ZafiroPath path)
+    public Task<Result<IRooted<IDynamicDirectory>>> Get(ZafiroPath path)
     {
-        return Result
+        return Task.FromResult(Result
             .Try(() => FileSystem.DirectoryInfo.New("/" + path))
             .Map(d => new LocalDynamicDirectory(d))
-            .Map(directory => (IRooted<IDynamicDirectory>)new Rooted<IDynamicDirectory>(path, directory));
+            .Map(directory => (IRooted<IDynamicDirectory>)new Rooted<IDynamicDirectory>(path, directory)));
     }
 }

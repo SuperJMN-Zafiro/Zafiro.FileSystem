@@ -24,8 +24,5 @@
         </DataTemplate>
     </UserControl.DataTemplates>
 
-    <StackPanel>
-        <TextBlock Text="{Binding FileExplorer.PathNavigator.CurrentDirectory^.Value.Path.Path}"></TextBlock>
-        <views:PathNavigatorView DataContext="{Binding FileExplorer.PathNavigator}" />
-    </StackPanel>
+    <views:FileExplorerView DataContext="{Binding FileExplorer}" />
 </UserControl>
