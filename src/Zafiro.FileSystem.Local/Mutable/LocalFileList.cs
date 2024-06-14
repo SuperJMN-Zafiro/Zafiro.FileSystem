@@ -25,7 +25,7 @@ public class LocalFileList : IDisposable
 
     public IObservable<IChangeSet<IFile, string>> Connect()
     {
-        return filesCache.Connect();
+        return filesCache.Connect().DisposeMany();
     }
     
     public Task<Result> AddOrUpdate(params IFile[] files)
@@ -51,7 +51,7 @@ public class LocalFileList : IDisposable
     
     private IDisposable TimeBasedUpdater()
     {
-        return Observable.Timer(TimeSpan.FromSeconds(10), scheduler: Scheduler)
+        return Observable.Timer(TimeSpan.FromSeconds(2), scheduler: Scheduler)
             .Repeat()
             .Do(_ =>
             {

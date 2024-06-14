@@ -26,7 +26,7 @@ public class LocalDirectoryList : IDisposable
 
     public IObservable<IChangeSet<IDynamicDirectory, string>> Connect()
     {
-        return dirsCache.Connect();
+        return dirsCache.Connect().DisposeMany();
     }
 
     public async Task<Result> Delete(string name)
@@ -46,7 +46,7 @@ public class LocalDirectoryList : IDisposable
     
     private IDisposable TimeBasedUpdater()
     {
-        return Observable.Timer(TimeSpan.FromSeconds(10), scheduler: Scheduler)
+        return Observable.Timer(TimeSpan.FromSeconds(2), scheduler: Scheduler)
             .Repeat()
             .Do(_ =>
             {

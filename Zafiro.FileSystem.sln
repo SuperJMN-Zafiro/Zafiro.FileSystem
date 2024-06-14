@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zafiro.FileSystem.Actions.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zafiro.Avalonia.FileExplorer.NextGen", "..\Zafiro.Avalonia.FileExplorer\src\Zafiro.Avalonia.FileExplorer.NextGen\Zafiro.Avalonia.FileExplorer.NextGen.csproj", "{542E7983-3680-4C44-9AE8-EC5BFECC297E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{D96180F5-C505-43AC-923F-6B6FB0E020B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{542E7983-3680-4C44-9AE8-EC5BFECC297E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{542E7983-3680-4C44-9AE8-EC5BFECC297E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{542E7983-3680-4C44-9AE8-EC5BFECC297E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D96180F5-C505-43AC-923F-6B6FB0E020B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D96180F5-C505-43AC-923F-6B6FB0E020B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D96180F5-C505-43AC-923F-6B6FB0E020B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D96180F5-C505-43AC-923F-6B6FB0E020B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

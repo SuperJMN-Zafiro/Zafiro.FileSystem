@@ -5,7 +5,13 @@ using Zafiro.FileSystem.DynamicData;
 
 namespace Zafiro.FileSystem.Local.Mutable;
 
-public class LocalDynamicDirectory : IDynamicDirectory
+public static class DynamicMixin
+{
+    public static IObservable<IChangeSet<IFile, string>> AllFiles(this IDynamicDirectory directory) => directory.Files.MergeChangeSets(directory.AllDirectories().MergeManyChangeSets(x => x.AllFiles()));
+    public static IObservable<IChangeSet<IDynamicDirectory, string>> AllDirectories(this IDynamicDirectory directory) => directory.Directories.MergeManyChangeSets(x => x.AllDirectories());
+}
+
+public class LocalDynamicDirectory : IDynamicDirectory, IDisposable
 {
     private readonly CompositeDisposable disposable = new();
     private readonly LocalFileList localFileList;
@@ -17,10 +23,13 @@ public class LocalDynamicDirectory : IDynamicDirectory
         DirectoryInfo = directoryInfo;
 
         localFileList = new LocalFileList(directoryInfo).DisposeWith(disposable);
-        Files = localFileList.Connect();
+        Files = localFileList
+            .Connect();
         
         localDirectoryList = new LocalDirectoryList(directoryInfo).DisposeWith(disposable);
-        Directories = localDirectoryList.Connect();
+        Directories = localDirectoryList
+            .Connect()
+            .DisposeMany();
     }
     
     public IObservable<IChangeSet<IDynamicDirectory,string>> Directories { get; }
@@ -28,7 +37,7 @@ public class LocalDynamicDirectory : IDynamicDirectory
     public IObservable<IChangeSet<IFile, string>> Files { get; }
 
     public string Name => DirectoryInfo.Name;
-
+    
     public Task<Result> DeleteFile(string name)
     {
         return localFileList.Delete(name);
@@ -37,6 +46,13 @@ public class LocalDynamicDirectory : IDynamicDirectory
     public Task<Result> AddOrUpdateFile(params IFile[]  files)
     {
         return localFileList.AddOrUpdate(files);
+    }
+
+    public void Dispose()
+    {
+        disposable.Dispose();
+        localFileList.Dispose();
+        localDirectoryList.Dispose();
     }
 }
 
