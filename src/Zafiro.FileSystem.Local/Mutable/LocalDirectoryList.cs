@@ -2,29 +2,29 @@ using System.IO.Abstractions;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using CSharpFunctionalExtensions;
 using DynamicData;
+using Zafiro.FileSystem.DynamicData;
 
-namespace Zafiro.FileSystem.DynamicData;
+namespace Zafiro.FileSystem.Local.Mutable;
 
-public class DirectoryList : IDisposable
+public class LocalDirectoryList : IDisposable
 {
     public IDirectoryInfo DirectoryInfo { get; }
-    private readonly SourceCache<DynamicDirectory,string> dirsCache;
+    private readonly SourceCache<IDynamicDirectory,string> dirsCache;
     private readonly CompositeDisposable disposable = new();
 
-    public DirectoryList(IDirectoryInfo directoryInfo)
+    public LocalDirectoryList(IDirectoryInfo directoryInfo)
     {
         DirectoryInfo = directoryInfo;
-        dirsCache = new SourceCache<DynamicDirectory, string>(x => x.Name);
-        dirsCache.AddOrUpdate(Update(), new LambdaComparer<DynamicDirectory>((a, b) => Equals(a.Name, b.Name)));
+        dirsCache = new SourceCache<IDynamicDirectory, string>(x => x.Name);
+        Update().Tap(files => dirsCache.AddOrUpdate(files, new LambdaComparer<INamed>((a, b) => Equals(a.Name, b.Name))));
         TimeBasedUpdater()
             .DisposeWith(disposable);
     }
 
     public IScheduler Scheduler { get; set; } = System.Reactive.Concurrency.Scheduler.Default;
 
-    public IObservable<IChangeSet<DynamicDirectory, string>> Connect()
+    public IObservable<IChangeSet<IDynamicDirectory, string>> Connect()
     {
         return dirsCache.Connect();
     }
@@ -40,7 +40,7 @@ public class DirectoryList : IDisposable
     {
         var path = DirectoryInfo.FileSystem.Path.Combine(DirectoryInfo.FullName, name);
         var result = Result.Try(() => DirectoryInfo.FileSystem.Directory.CreateDirectory(path));
-        result.Tap(d => dirsCache.AddOrUpdate(new DynamicDirectory(d)));
+        result.Tap(d => dirsCache.AddOrUpdate(new LocalDynamicDirectory(d)));
         return result;
     }
     
@@ -50,14 +50,14 @@ public class DirectoryList : IDisposable
             .Repeat()
             .Do(_ =>
             {
-                dirsCache.EditDiff(Update(), (a, b) => Equals(a.Name, b.Name));
+                Update().Tap(files => dirsCache.EditDiff(files, (a, b) => Equals(a.Name, b.Name)));
             })
             .Subscribe();
     }
 
-    private IEnumerable<DynamicDirectory> Update()
-    {
-        return DirectoryInfo.GetDirectories().Select(d => (DynamicDirectory)new DynamicDirectory(d));
+    private Result<IEnumerable<IDynamicDirectory>> Update()
+    { 
+        return Result.Try(() => DirectoryInfo.GetDirectories().Select(d => (IDynamicDirectory)new LocalDynamicDirectory(d)));
     }
 
     public void Dispose()

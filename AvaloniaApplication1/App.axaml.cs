@@ -1,14 +1,13 @@
 using System.IO.Abstractions;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using AvaloniaApplication1.ViewModels;
 using AvaloniaApplication1.Views;
 using Zafiro.Avalonia.Mixins;
 using Zafiro.Avalonia.Notifications;
-using Zafiro.FileSystem.VNext;
+using Zafiro.FileSystem.Local.Mutable;
 
 namespace AvaloniaApplication1;
 
@@ -28,9 +27,7 @@ public partial class App : Application
             mv =>
             {
                 var notificationService = new NotificationService(new WindowNotificationManager(TopLevel.GetTopLevel(mv)));
-                var fs = new LocalFileSystem(new FileSystem());
-                var folder = fs.GetFolder("home/jmn/Escritorio");
-                return new DirectoryContentsViewModel(notificationService, folder);
+                return new MainViewModel(new DotNetFileSystem(new FileSystem()), notificationService);
             }, () => new MainWindow());
     }
 }

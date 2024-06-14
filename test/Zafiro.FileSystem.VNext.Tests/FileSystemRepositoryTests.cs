@@ -1,5 +1,7 @@
 using System.IO.Abstractions.TestingHelpers;
 using DynamicData;
+using Zafiro.FileSystem.DynamicData;
+using Zafiro.FileSystem.Local.Mutable;
 using Zafiro.Reactive;
 
 namespace Zafiro.FileSystem.VNext.Tests;

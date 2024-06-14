@@ -27,5 +27,6 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Zafiro.Avalonia.FileExplorer\src\Zafiro.Avalonia.FileExplorer.NextGen\Zafiro.Avalonia.FileExplorer.NextGen.csproj" />
       <ProjectReference Include="..\src\Zafiro.FileSystem.DynamicData\Zafiro.FileSystem.DynamicData.csproj" />
+      <ProjectReference Include="..\src\Zafiro.FileSystem.Local\Zafiro.FileSystem.Local.csproj" />
     </ItemGroup>
 </Project>

@@ -16,7 +16,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Zafiro.FileSystem.Lightweight\Zafiro.FileSystem.Lightweight.csproj" />
-		<ProjectReference Include="..\Zafiro.FileSystem.Local\Zafiro.FileSystem.Local.csproj" />
 		<ProjectReference Include="..\Zafiro.FileSystem.Mutable\Zafiro.FileSystem.Mutable.csproj" />
 	</ItemGroup>
 

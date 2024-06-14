@@ -2,24 +2,21 @@ using System.IO.Abstractions;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using CSharpFunctionalExtensions;
 using DynamicData;
-using Zafiro.FileSystem.Local;
 
-namespace Zafiro.FileSystem.DynamicData;
+namespace Zafiro.FileSystem.Local.Mutable;
 
-public class FileList : IDisposable
+public class LocalFileList : IDisposable
 {
     public IDirectoryInfo DirectoryInfo { get; }
-    private readonly IDirectoryInfo dynamicDirectory;
     private readonly SourceCache<IFile,string> filesCache;
     private readonly CompositeDisposable disposable = new();
 
-    public FileList(IDirectoryInfo directoryInfo)
+    public LocalFileList(IDirectoryInfo directoryInfo)
     {
         DirectoryInfo = directoryInfo;
         filesCache = new SourceCache<IFile, string>(x => x.Name);
-        filesCache.AddOrUpdate(Update(), new LambdaComparer<IFile>((a, b) => Equals(a.Name, b.Name)));
+        Update().Tap(files => filesCache.AddOrUpdate(files, new LambdaComparer<IFile>((a, b) => Equals(a.Name, b.Name))));
         TimeBasedUpdater()
             .DisposeWith(disposable);
     }
@@ -58,14 +55,14 @@ public class FileList : IDisposable
             .Repeat()
             .Do(_ =>
             {
-                filesCache.EditDiff(Update(), (a, b) => Equals(a.Name, b.Name));
+                Update().Tap(files => filesCache.EditDiff(files, (a, b) => Equals(a.Name, b.Name)));
             })
             .Subscribe();
     }
 
-    private IEnumerable<IFile> Update()
-    {
-        return DirectoryInfo.GetFiles().Select(d => (IFile)new DotNetFile(d));
+    private Result<IEnumerable<IFile>> Update()
+    { 
+        return Result.Try(() => DirectoryInfo.GetFiles().Select(d => (IFile)new DotNetFile(d)));
     }
 
     public void Dispose()

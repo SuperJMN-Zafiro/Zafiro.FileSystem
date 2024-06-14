@@ -4,6 +4,6 @@ namespace Zafiro.FileSystem.DynamicData
 {
     public interface IFileSystem
     {
-        Task<Result<IRooted<DynamicDirectory>>> Get(ZafiroPath path);
+        Task<Result<IRooted<IDynamicDirectory>>> Get(ZafiroPath path);
     }
 }
