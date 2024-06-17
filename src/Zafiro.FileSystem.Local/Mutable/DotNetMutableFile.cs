@@ -32,4 +32,6 @@ public class DotNetMutableFile : IMutableFile
     {
         return Result.Try(() => DotnetFile.FileInfo.Delete());
     }
+
+    public bool IsHidden => (DotnetFile.FileInfo.Attributes & FileAttributes.Hidden) != 0;
 }

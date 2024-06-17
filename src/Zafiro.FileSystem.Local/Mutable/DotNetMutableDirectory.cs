@@ -69,4 +69,6 @@ public class DotNetMutableDirectory : IMutableDirectory
             .Map(fi => new DotNetDirectory(fi))
             .Map(file => (IMutableDirectory)new DotNetMutableDirectory(file));
     }
+
+    public bool IsHidden => (Directory.DirectoryInfo.Attributes & FileAttributes.Hidden) != 0;
 }

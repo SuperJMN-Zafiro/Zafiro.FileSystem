@@ -2,4 +2,5 @@
 
 public interface IMutableNode : INode
 {
+    public bool IsHidden { get; }
 }
