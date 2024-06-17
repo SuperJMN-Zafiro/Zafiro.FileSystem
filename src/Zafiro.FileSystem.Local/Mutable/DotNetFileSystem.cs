@@ -1,4 +1,5 @@
 using Zafiro.FileSystem.DynamicData;
+using Zafiro.FileSystem.Mutable;
 using IFileSystem = System.IO.Abstractions.IFileSystem;
 
 namespace Zafiro.FileSystem.Local.Mutable;
@@ -12,11 +13,11 @@ public class DotNetFileSystem : Zafiro.FileSystem.DynamicData.IFileSystem
         FileSystem = fileSystem;
     }
 
-    public Task<Result<IRooted<IDynamicDirectory>>> Get(ZafiroPath path)
+    public Task<Result<IRooted<IMutableDirectory>>> Get(ZafiroPath path)
     {
         return Task.FromResult(Result
             .Try(() => FileSystem.DirectoryInfo.New("/" + path))
-            .Map(d => new LocalDynamicDirectory(d))
-            .Map(directory => (IRooted<IDynamicDirectory>)new Rooted<IDynamicDirectory>(path, directory)));
+            .Map(d => new DotNetMutableDirectory(new DotNetDirectory(d)))
+            .Map(directory => (IRooted<IMutableDirectory>)new Rooted<IMutableDirectory>(path, directory)));
     }
 }
