@@ -5,12 +5,6 @@ using Zafiro.FileSystem.DynamicData;
 
 namespace Zafiro.FileSystem.Local.Mutable;
 
-public static class DynamicMixin
-{
-    public static IObservable<IChangeSet<IFile, string>> AllFiles(this IDynamicDirectory directory) => directory.Files.MergeChangeSets(directory.AllDirectories().MergeManyChangeSets(x => x.AllFiles()));
-    public static IObservable<IChangeSet<IDynamicDirectory, string>> AllDirectories(this IDynamicDirectory directory) => directory.Directories.MergeManyChangeSets(x => x.AllDirectories());
-}
-
 public class LocalDynamicDirectory : IDynamicDirectory, IDisposable
 {
     private readonly CompositeDisposable disposable = new();
