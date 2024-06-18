@@ -5,7 +5,6 @@ global using System.Reactive.Disposables;
 global using CSharpFunctionalExtensions;
 global using DynamicData;
 global using Zafiro.FileSystem.Core;
-global using Zafiro.FileSystem.Mutable.Mutable;
 global using Zafiro.FileSystem.Readonly;
 global using Result = CSharpFunctionalExtensions.Result;
 global using Directory = Zafiro.FileSystem.Readonly.Directory;

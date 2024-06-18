@@ -1,3 +1,5 @@
+using Zafiro.FileSystem.Dynamic;
+
 namespace Zafiro.FileSystem.Local.Tests;
 
 public class MutableFileTests

@@ -3,7 +3,7 @@ using DynamicData;
 using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Readonly;
 
-namespace Zafiro.FileSystem.DynamicData;
+namespace Zafiro.FileSystem.Dynamic;
 
 public interface IDynamicDirectory : INamed
 {

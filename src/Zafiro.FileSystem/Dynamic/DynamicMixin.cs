@@ -1,7 +1,7 @@
 using DynamicData;
 using Zafiro.FileSystem.Readonly;
 
-namespace Zafiro.FileSystem.DynamicData;
+namespace Zafiro.FileSystem.Dynamic;
 
 public static class DynamicMixin
 {

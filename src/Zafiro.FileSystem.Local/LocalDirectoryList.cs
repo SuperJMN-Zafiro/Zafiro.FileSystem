@@ -1,6 +1,6 @@
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Zafiro.FileSystem.DynamicData;
+using Zafiro.FileSystem.Dynamic;
 
 namespace Zafiro.FileSystem.Local;
 

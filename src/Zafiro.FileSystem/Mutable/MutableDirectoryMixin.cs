@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 
-namespace Zafiro.FileSystem.Mutable.Mutable;
+namespace Zafiro.FileSystem.Mutable;
 
 public static class MutableDirectoryMixin
 {

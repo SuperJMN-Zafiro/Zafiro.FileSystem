@@ -3,7 +3,7 @@ using CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Readonly;
 
-namespace Zafiro.FileSystem.Mutable.Mutable;
+namespace Zafiro.FileSystem.Mutable;
 
 public interface IMutableDirectory : IMutableNode, IAsyncDir
 {
