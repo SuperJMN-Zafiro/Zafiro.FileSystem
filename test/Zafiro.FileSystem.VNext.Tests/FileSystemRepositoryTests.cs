@@ -14,7 +14,7 @@ public class FileSystemRepositoryTests
 
         folder.Files.OnItemAdded(file => { }).Subscribe();
         
-        var result = await folder.AddOrUpdateFile(new[] { new File("Pepito.txt", "Hehehe") });
+        var result = await folder.AddOrUpdateFile([new File("Pepito.txt", "Hehehe")]);
         await Task.Delay(10000);
         result.Should().Succeed();
     }
