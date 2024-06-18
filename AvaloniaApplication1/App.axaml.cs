@@ -1,3 +1,4 @@
+using System;
 using System.IO.Abstractions;
 using Avalonia;
 using Avalonia.Controls;
@@ -5,6 +6,9 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using AvaloniaApplication1.ViewModels;
 using AvaloniaApplication1.Views;
+using CSharpFunctionalExtensions;
+using Zafiro.Avalonia.Dialogs;
+using Zafiro.Avalonia.Dialogs.Simple;
 using Zafiro.Avalonia.Mixins;
 using Zafiro.Avalonia.Notifications;
 using Zafiro.FileSystem.Local.Mutable;
@@ -27,7 +31,7 @@ public partial class App : Application
             mv =>
             {
                 var notificationService = new NotificationService(new WindowNotificationManager(TopLevel.GetTopLevel(mv)));
-                return new MainViewModel(new DotNetFileSystem(new FileSystem()), notificationService);
+                return new MainViewModel(new DotNetFileSystem(new FileSystem()), notificationService, new SimpleDesktopDialogService(Maybe<Action<ConfigureWindowContext>>.None));
             }, () => new MainWindow());
     }
 }
