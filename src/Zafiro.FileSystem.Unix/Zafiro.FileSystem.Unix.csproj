@@ -9,7 +9,8 @@
 	<Import Project="..\Common.props" />
 
 	<ItemGroup>
-		<ProjectReference Include="..\Zafiro.FileSystem.Lightweight\Zafiro.FileSystem.Lightweight.csproj" />
+	  <ProjectReference Include="..\..\..\Zafiro\src\Zafiro\Zafiro.csproj" />
+	  <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
 	</ItemGroup>
 
 </Project>
