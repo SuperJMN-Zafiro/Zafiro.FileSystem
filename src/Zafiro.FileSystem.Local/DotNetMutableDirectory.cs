@@ -13,7 +13,7 @@ public class DotNetMutableDirectory : IMutableDirectory
         Directory = directory;
     }
 
-    public string Name => Directory.Name;
+    public string Name => Directory.Name.Replace("\\", "");
 
     public Task<Result<IEnumerable<INode>>> Children()
     {
@@ -70,5 +70,16 @@ public class DotNetMutableDirectory : IMutableDirectory
             .Map(file => (IMutableDirectory)new DotNetMutableDirectory(file));
     }
 
-    public bool IsHidden => (Directory.DirectoryInfo.Attributes & FileAttributes.Hidden) != 0;
+    public bool IsHidden
+    {
+        get
+        {
+            if (Directory.DirectoryInfo.Parent == null)
+            {
+                return false;
+            }
+            
+            return (Directory.DirectoryInfo.Attributes & FileAttributes.Hidden) != 0;
+        }
+    }
 }
