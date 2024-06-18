@@ -1,6 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Serilog;
 using Zafiro.DataModel;
+using Zafiro.FileSystem.Core;
+using Zafiro.FileSystem.Readonly;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
 namespace Zafiro.FileSystem.SeaweedFS;

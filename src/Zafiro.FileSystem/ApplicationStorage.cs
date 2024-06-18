@@ -15,7 +15,7 @@ public class ApplicationStorage
                 return Result.Try(() =>
                 {
                     var isolatedStorageFileStream = new IsolatedStorageFileStream(path, FileMode.Open, store);
-                    return (Stream) isolatedStorageFileStream;
+                    return (Stream)isolatedStorageFileStream;
                 });
             });
     }

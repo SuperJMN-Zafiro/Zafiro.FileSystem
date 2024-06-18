@@ -2,6 +2,7 @@ using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
 using FluentAssertions;
 using Zafiro.Actions;
+using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Local;
 
 namespace Zafiro.FileSystem.Actions.Tests;

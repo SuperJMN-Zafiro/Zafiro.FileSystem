@@ -1,4 +1,6 @@
-﻿namespace Zafiro.FileSystem.Tests;
+﻿using Zafiro.FileSystem.Core;
+
+namespace Zafiro.FileSystem.Tests;
 
 public class PathTests
 {

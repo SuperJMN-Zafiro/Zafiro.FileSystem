@@ -1,4 +1,3 @@
-using Zafiro.FileSystem.Mutable.Mutable;
 using IFileSystem = System.IO.Abstractions.IFileSystem;
 
 namespace Zafiro.FileSystem.Local;

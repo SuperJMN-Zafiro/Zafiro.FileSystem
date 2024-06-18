@@ -1,6 +1,4 @@
-﻿using System.IO.Abstractions;
-
-namespace Zafiro.FileSystem.Local;
+﻿namespace Zafiro.FileSystem.Local;
 
 public class DotNetDirectory : IAsyncDir
 {

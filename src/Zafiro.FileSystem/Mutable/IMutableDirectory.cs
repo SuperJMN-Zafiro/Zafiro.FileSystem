@@ -1,5 +1,7 @@
 ﻿using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
+using Zafiro.FileSystem.Core;
+using Zafiro.FileSystem.Readonly;
 
 namespace Zafiro.FileSystem.Mutable.Mutable;
 

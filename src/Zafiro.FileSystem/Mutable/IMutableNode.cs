@@ -1,4 +1,6 @@
-﻿namespace Zafiro.FileSystem.Mutable.Mutable;
+﻿using Zafiro.FileSystem.Core;
+
+namespace Zafiro.FileSystem.Mutable.Mutable;
 
 public interface IMutableNode : INode
 {

@@ -1,4 +1,7 @@
-﻿namespace Zafiro.FileSystem.Unix;
+﻿using Zafiro.FileSystem.Core;
+using Zafiro.FileSystem.Readonly;
+
+namespace Zafiro.FileSystem.Unix;
 
 public class UnixDir : UnixNode, IDirectory
 {

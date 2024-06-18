@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Xunit;
+using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 using Zafiro.FileSystem.VNext.Tests;
 

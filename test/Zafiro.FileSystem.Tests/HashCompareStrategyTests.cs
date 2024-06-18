@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Threading;
+using Zafiro.FileSystem.Core;
 
 namespace Zafiro.FileSystem.Tests;
 

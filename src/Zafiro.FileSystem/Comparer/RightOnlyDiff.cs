@@ -1,4 +1,6 @@
-﻿namespace Zafiro.FileSystem.NewComparer;
+﻿using Zafiro.FileSystem.Core;
+
+namespace Zafiro.FileSystem.NewComparer;
 
 public record RightOnlyDiff : FileDiff
 {

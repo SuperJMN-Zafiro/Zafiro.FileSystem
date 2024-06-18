@@ -1,5 +1,7 @@
 using CSharpFunctionalExtensions;
 using DynamicData;
+using Zafiro.FileSystem.Core;
+using Zafiro.FileSystem.Readonly;
 
 namespace Zafiro.FileSystem.DynamicData;
 

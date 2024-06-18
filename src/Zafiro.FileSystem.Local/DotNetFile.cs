@@ -1,5 +1,4 @@
-﻿using System.IO.Abstractions;
-using Zafiro.DataModel;
+﻿using Zafiro.DataModel;
 
 namespace Zafiro.FileSystem.Local;
 
