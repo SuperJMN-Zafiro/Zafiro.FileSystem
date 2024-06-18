@@ -1,8 +1,8 @@
 using System.Reactive.Subjects;
 using Zafiro.CSharpFunctionalExtensions;
-using Zafiro.FileSystem.Mutable;
+using Zafiro.FileSystem.Mutable.Mutable;
 
-namespace Zafiro.FileSystem.Local.Mutable;
+namespace Zafiro.FileSystem.Local;
 
 public class DotNetMutableDirectory : IMutableDirectory
 {
@@ -36,7 +36,7 @@ public class DotNetMutableDirectory : IMutableDirectory
 
             throw new NotSupportedException();
         });
-        
+
         return mutableChildren;
     }
 

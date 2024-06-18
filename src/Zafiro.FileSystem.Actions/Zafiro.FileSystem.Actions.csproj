@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Zafiro.FileSystem.Mutable\Zafiro.FileSystem.Mutable.csproj" />
+      <ProjectReference Include="..\Zafiro.FileSystem.Mutable\Zafiro.FileSystem.Mutable.Delete.csproj" />
     </ItemGroup>
 
 </Project>

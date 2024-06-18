@@ -5,12 +5,12 @@ using System.Reactive.Linq;
 using DynamicData;
 using Zafiro.FileSystem.DynamicData;
 
-namespace Zafiro.FileSystem.Local.Mutable;
+namespace Zafiro.FileSystem.Local;
 
 public class LocalDirectoryList : IDisposable
 {
     public IDirectoryInfo DirectoryInfo { get; }
-    private readonly SourceCache<IDynamicDirectory,string> dirsCache;
+    private readonly SourceCache<IDynamicDirectory, string> dirsCache;
     private readonly CompositeDisposable disposable = new();
 
     public LocalDirectoryList(IDirectoryInfo directoryInfo)
@@ -43,7 +43,7 @@ public class LocalDirectoryList : IDisposable
         result.Tap(d => dirsCache.AddOrUpdate(new LocalDynamicDirectory(d)));
         return result;
     }
-    
+
     private IDisposable TimeBasedUpdater()
     {
         return Observable.Timer(TimeSpan.FromSeconds(2), scheduler: Scheduler)
@@ -56,7 +56,7 @@ public class LocalDirectoryList : IDisposable
     }
 
     private Result<IEnumerable<IDynamicDirectory>> Update()
-    { 
+    {
         return Result.Try(() => DirectoryInfo.GetDirectories().Select(d => (IDynamicDirectory)new LocalDynamicDirectory(d)));
     }
 

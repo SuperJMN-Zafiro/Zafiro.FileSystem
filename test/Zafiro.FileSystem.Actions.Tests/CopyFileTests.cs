@@ -3,7 +3,6 @@ using FluentAssertions;
 using Zafiro.Actions;
 using Zafiro.DataModel;
 using Zafiro.FileSystem.Local;
-using Zafiro.FileSystem.Local.Mutable;
 
 namespace Zafiro.FileSystem.Actions.Tests;
 

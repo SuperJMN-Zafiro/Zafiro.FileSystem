@@ -1,10 +1,9 @@
-using Zafiro.FileSystem.DynamicData;
-using Zafiro.FileSystem.Mutable;
+using Zafiro.FileSystem.Mutable.Mutable;
 using IFileSystem = System.IO.Abstractions.IFileSystem;
 
-namespace Zafiro.FileSystem.Local.Mutable;
+namespace Zafiro.FileSystem.Local;
 
-public class DotNetFileSystem : Zafiro.FileSystem.DynamicData.IFileSystem
+public class DotNetFileSystem : DynamicData.IFileSystem
 {
     public IFileSystem FileSystem { get; }
 

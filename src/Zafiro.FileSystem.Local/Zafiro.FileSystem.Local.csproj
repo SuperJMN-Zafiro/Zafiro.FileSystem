@@ -6,23 +6,11 @@
   </PropertyGroup>
   <Import Project="..\Common.props" />
   <ItemGroup>
-    <Compile Remove="Android\**" />
-    <EmbeddedResource Remove="Android\**" />
-    <None Remove="Android\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Extensions.cs" />
-    <Compile Remove="LinuxZafiroFileSystem.cs" />
-    <Compile Remove="LocalFileSystem.cs" />
-    <Compile Remove="WindowsZafiroFileSystem.cs" />
-    <Compile Remove="ZafiroFileSystemBase.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="TestableIO.System.IO.Abstractions" Version="19.2.69" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Zafiro.FileSystem.DynamicData\Zafiro.FileSystem.DynamicData.csproj" />
-    <ProjectReference Include="..\Zafiro.FileSystem.Mutable\Zafiro.FileSystem.Mutable.csproj" />
+    <ProjectReference Include="..\Zafiro.FileSystem.DynamicData\Zafiro.FileSystem.DynamicData.Delete.csproj" />
+    <ProjectReference Include="..\Zafiro.FileSystem.Mutable\Zafiro.FileSystem.Mutable.Delete.csproj" />
     <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
   </ItemGroup>
 </Project>

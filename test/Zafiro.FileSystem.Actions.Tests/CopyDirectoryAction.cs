@@ -1,7 +1,7 @@
 using CSharpFunctionalExtensions;
 using Zafiro.Actions;
 using Zafiro.CSharpFunctionalExtensions;
-using Zafiro.FileSystem.Mutable;
+using Zafiro.FileSystem.Mutable.Mutable;
 using Zafiro.Mixins;
 
 namespace Zafiro.FileSystem.Actions.Tests;

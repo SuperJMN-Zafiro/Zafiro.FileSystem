@@ -1,7 +1,7 @@
 using Zafiro.DataModel;
-using Zafiro.FileSystem.Mutable;
+using Zafiro.FileSystem.Mutable.Mutable;
 
-namespace Zafiro.FileSystem.Local.Mutable;
+namespace Zafiro.FileSystem.Local;
 
 public class DotNetMutableFile : IMutableFile
 {
@@ -13,7 +13,7 @@ public class DotNetMutableFile : IMutableFile
     }
 
     public string Name => DotnetFile.Name;
-    
+
     public async Task<Result> SetContents(IData data, CancellationToken cancellationToken)
     {
         using (var stream = DotnetFile.FileInfo.Create())

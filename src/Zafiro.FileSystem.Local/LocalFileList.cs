@@ -3,13 +3,14 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
+using Zafiro.FileSystem;
 
-namespace Zafiro.FileSystem.Local.Mutable;
+namespace Zafiro.FileSystem.Local;
 
 public class LocalFileList : IDisposable
 {
     public IDirectoryInfo DirectoryInfo { get; }
-    private readonly SourceCache<IFile,string> filesCache;
+    private readonly SourceCache<IFile, string> filesCache;
     private readonly CompositeDisposable disposable = new();
 
     public LocalFileList(IDirectoryInfo directoryInfo)
@@ -27,12 +28,12 @@ public class LocalFileList : IDisposable
     {
         return filesCache.Connect().DisposeMany();
     }
-    
+
     public Task<Result> AddOrUpdate(params IFile[] files)
     {
         return files.Select(AddOrUpdate).Combine();
     }
-    
+
     public async Task<Result> Delete(string name)
     {
         var result = Result.Try(() => DirectoryInfo.FileSystem.File.Delete(DirectoryInfo.FileSystem.Path.Combine(DirectoryInfo.FullName, name)));
@@ -48,7 +49,7 @@ public class LocalFileList : IDisposable
         result.Tap(() => filesCache.AddOrUpdate(file));
         return result;
     }
-    
+
     private IDisposable TimeBasedUpdater()
     {
         return Observable.Timer(TimeSpan.FromSeconds(2), scheduler: Scheduler)
@@ -61,7 +62,7 @@ public class LocalFileList : IDisposable
     }
 
     private Result<IEnumerable<IFile>> Update()
-    { 
+    {
         return Result.Try(() => DirectoryInfo.GetFiles().Select(d => (IFile)new DotNetFile(d)));
     }
 

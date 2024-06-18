@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Zafiro.DataModel;
 
-namespace Zafiro.FileSystem.Mutable;
+namespace Zafiro.FileSystem.Mutable.Mutable;
 
 public interface IMutableFile : IMutableNode
 {

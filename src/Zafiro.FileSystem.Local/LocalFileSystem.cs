@@ -1,27 +1,11 @@
-﻿using Zafiro.FileSystem.Local.Android;
-
 namespace Zafiro.FileSystem.Local;
 
-public static class LocalFileSystem
+public class LocalFileSystem(System.IO.Abstractions.IFileSystem fileSystem)
 {
-    public static IZafiroFileSystem Create()
+    public System.IO.Abstractions.IFileSystem FileSystem { get; } = fileSystem;
+
+    public LocalDynamicDirectory GetFolder(ZafiroPath path)
     {
-        if (OperatingSystem.IsWindows())
-        {
-            return new WindowsZafiroFileSystem(new System.IO.Abstractions.FileSystem());
-        }
-
-        if (OperatingSystem.IsLinux())
-        {
-            return new LinuxZafiroFileSystem(new System.IO.Abstractions.FileSystem());
-        }
-
-        if (OperatingSystem.IsAndroid())
-        {
-#if ANDROID
-            return new AndroidFileSystem(new System.IO.Abstractions.FileSystem());
-#endif
-        }
-        throw new NotSupportedException("The file system is not supported");
+        return new LocalDynamicDirectory(FileSystem.DirectoryInfo.New("/" + path));
     }
 }
