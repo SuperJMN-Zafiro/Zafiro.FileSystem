@@ -1,7 +1,6 @@
 using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Local;
 using Zafiro.FileSystem.Unix;
-using Directory = Zafiro.FileSystem.Readonly.Directory;
 
 namespace Zafiro.FileSystem.VNext.Tests;
 
