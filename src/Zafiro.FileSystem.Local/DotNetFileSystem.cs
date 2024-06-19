@@ -47,8 +47,8 @@ public class DotNetFileSystem : Mutable.IFileSystem
     {
         get
         {
-            var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            return OperatingSystem.IsWindows() ? FromWindows(folderPath) : folderPath;
+            var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            return OperatingSystem.IsWindows() ? FromWindows(folderPath) : folderPath[1..];
         }
     }
 
