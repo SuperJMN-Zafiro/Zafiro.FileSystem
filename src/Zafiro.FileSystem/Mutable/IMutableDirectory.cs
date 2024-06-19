@@ -11,4 +11,5 @@ public interface IMutableDirectory : IMutableNode, IAsyncDir
     Task<Result> AddOrUpdate(IFile data, ISubject<double>? progress = null);
     Task<Result<IMutableFile>> CreateFile(string name);
     Task<Result<IMutableDirectory>> CreateDirectory(string name);
+    Task<Result> Delete();
 }

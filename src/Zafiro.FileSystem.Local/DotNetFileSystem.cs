@@ -29,9 +29,8 @@ public class DotNetFileSystem : Mutable.IFileSystem
             if (path == ZafiroPath.Empty)
             {
                 var mutableDirectory = (IMutableDirectory)new WindowsRoot(FileSystem);
-                Result<IMutableDirectory> success = Result.Success(mutableDirectory);
                 IRooted<IMutableDirectory> pp = new Rooted<IMutableDirectory>(ZafiroPath.Empty, mutableDirectory);
-                return Task.FromResult<Result<IRooted<IMutableDirectory>>>(Result.Success(pp));
+                return Task.FromResult(Result.Success(pp));
             }
             
             return Task.FromResult(Result

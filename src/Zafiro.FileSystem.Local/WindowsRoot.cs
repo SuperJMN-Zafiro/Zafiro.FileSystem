@@ -44,4 +44,9 @@ public class WindowsRoot : IMutableDirectory
     {
         return Result.Failure<IMutableDirectory>("Cannot create directory here");
     }
+
+    public async Task<Result> Delete()
+    {
+        return Result.Failure("Cannot delete anything here");
+    }
 }

@@ -70,6 +70,11 @@ public class DotNetMutableDirectory : IMutableDirectory
             .Map(file => (IMutableDirectory)new DotNetMutableDirectory(file));
     }
 
+    public async Task<Result> Delete()
+    {
+        return Result.Try(() => Directory.DirectoryInfo.Delete());
+    }
+
     public bool IsHidden
     {
         get
