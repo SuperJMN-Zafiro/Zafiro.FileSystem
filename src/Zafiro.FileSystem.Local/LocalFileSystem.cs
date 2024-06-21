@@ -1,8 +1,8 @@
 namespace Zafiro.FileSystem.Local;
 
-public class LocalFileSystem(System.IO.Abstractions.IFileSystem fileSystem)
+public class LocalFileSystem(IFileSystem fileSystem)
 {
-    public System.IO.Abstractions.IFileSystem FileSystem { get; } = fileSystem;
+    public IFileSystem FileSystem { get; } = fileSystem;
 
     public LocalDynamicDirectory GetFolder(ZafiroPath path)
     {
