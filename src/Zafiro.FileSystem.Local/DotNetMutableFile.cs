@@ -5,18 +5,18 @@ namespace Zafiro.FileSystem.Local;
 
 public class DotNetMutableFile : IMutableFile
 {
-    public DotNetFile DotnetFile { get; }
+    public IFileInfo FileInfo { get; }
 
-    public DotNetMutableFile(DotNetFile dotnetFile)
+    public DotNetMutableFile(IFileInfo fileInfo)
     {
-        DotnetFile = dotnetFile;
+        FileInfo = fileInfo;
     }
 
-    public string Name => DotnetFile.Name;
+    public string Name => FileInfo.Name;
 
     public async Task<Result> SetContents(IData data, CancellationToken cancellationToken)
     {
-        using (var stream = DotnetFile.FileInfo.Create())
+        using (var stream = FileInfo.Create())
         {
             var dumpTo = await data.DumpTo(stream);
             return dumpTo;
@@ -25,13 +25,22 @@ public class DotNetMutableFile : IMutableFile
 
     public async Task<Result<IData>> GetContents()
     {
-        return DotnetFile;
+        return new FileInfoData(FileInfo);
     }
 
     public async Task<Result> Delete()
     {
-        return Result.Try(() => DotnetFile.FileInfo.Delete());
+        return Result.Try(() => FileInfo.Delete());
     }
 
-    public bool IsHidden => (DotnetFile.FileInfo.Attributes & FileAttributes.Hidden) != 0;
+    public bool IsHidden => (FileInfo.Attributes & FileAttributes.Hidden) != 0;
+    public async Task<Result> Create()
+    {
+        return Result.Try(() =>
+        {
+            using (FileInfo.Create())
+            {
+            }
+        });
+    }
 }

@@ -3,11 +3,11 @@ using IFileSystem = System.IO.Abstractions.IFileSystem;
 
 namespace Zafiro.FileSystem.Local;
 
-public class DotNetFileSystem : Mutable.IFileSystem
+public class DotNetMutableFileSystem : Mutable.IMutableFileSystem
 {
     public IFileSystem FileSystem { get; }
 
-    public DotNetFileSystem(IFileSystem fileSystem)
+    public DotNetMutableFileSystem(IFileSystem fileSystem)
     {
         FileSystem = fileSystem;
     }

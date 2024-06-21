@@ -19,17 +19,17 @@ public class CopyDirectoryAction
 
     public static async Task<Result<IEnumerable<IFileAction>>> CreateTasks(IDirectory source, IMutableDirectory destination)
     {
-        return await destination.CreateDirectory(source.Name)
+        return await destination.CreateSubdirectory(source.Name)
             .Bind(async directory =>
             {
                 var copyAllFiles = await source
                     .Files()
-                    .Select(file => directory.CreateFile(file.Name).Map(f => (IFileAction)new CopyFileAction(file, f)))
+                    .Select(file => directory.Get(file.Name).Map(f => (IFileAction)new CopyFileAction(file, f)))
                     .Combine();
 
                 var copyAllDirs = await source
                     .Directories()
-                    .Select(d => directory.CreateDirectory(d.Name)
+                    .Select(d => directory.CreateSubdirectory(d.Name)
                         .Bind(f => CreateTasks(d, f)))
                     .Combine()
                     .Map(x => x.Flatten());

@@ -22,7 +22,11 @@ public class WindowsRoot : IMutableDirectory
     }
 
     public bool IsHidden => false;
-    
+    public async Task<Result> Create()
+    {
+        return Result.Failure("Cannot create the root");
+    }
+
     public async Task<Result<IEnumerable<IMutableNode>>> MutableChildren()
     {
         return Result.Try(() =>
@@ -35,12 +39,12 @@ public class WindowsRoot : IMutableDirectory
         return Result.Failure("Cannot create directory here");
     }
 
-    public async Task<Result<IMutableFile>> CreateFile(string name)
+    public async Task<Result<IMutableFile>> Get(string name)
     {
         return Result.Failure<IMutableFile>("Cannot create directory here");
     }
 
-    public async Task<Result<IMutableDirectory>> CreateDirectory(string name)
+    public async Task<Result<IMutableDirectory>> CreateSubdirectory(string name)
     {
         return Result.Failure<IMutableDirectory>("Cannot create directory here");
     }

@@ -3,7 +3,7 @@ using Zafiro.FileSystem.Core;
 
 namespace Zafiro.FileSystem.Mutable;
 
-public interface IFileSystem
+public interface IMutableFileSystem
 {
     Task<Result<IRooted<IMutableDirectory>>> Get(ZafiroPath path);
     ZafiroPath InitialPath { get; }

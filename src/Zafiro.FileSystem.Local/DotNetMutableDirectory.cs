@@ -31,7 +31,7 @@ public class DotNetMutableDirectory : IMutableDirectory
 
             if (x is DotNetFile f)
             {
-                return new DotNetMutableFile(f);
+                return new DotNetMutableFile(f.FileInfo);
             }
 
             throw new NotSupportedException();
@@ -49,23 +49,16 @@ public class DotNetMutableDirectory : IMutableDirectory
         }
     }
 
-    public async Task<Result<IMutableFile>> CreateFile(string name)
+    public async Task<Result<IMutableFile>> Get(string name)
     {
         var path = Directory.DirectoryInfo.FileSystem.Path.Combine(Directory.DirectoryInfo.FullName, name);
         return Result.Try(() => Directory.DirectoryInfo.FileSystem.FileInfo.New(path))
-            .TapTry(fi =>
-            {
-                var fileSystemStream = fi.Create();
-                fileSystemStream.Dispose();
-            })
-            .Map(fi => new DotNetFile(fi))
             .Map(file => (IMutableFile)new DotNetMutableFile(file));
     }
 
-    public async Task<Result<IMutableDirectory>> CreateDirectory(string name)
+    public async Task<Result<IMutableDirectory>> CreateSubdirectory(string name)
     {
         return Result.Try(() => Directory.DirectoryInfo.CreateSubdirectory(name))
-            .TapTry(fi => fi.Create())
             .Map(fi => new DotNetDirectory(fi))
             .Map(file => (IMutableDirectory)new DotNetMutableDirectory(file));
     }
@@ -86,5 +79,10 @@ public class DotNetMutableDirectory : IMutableDirectory
             
             return (Directory.DirectoryInfo.Attributes & FileAttributes.Hidden) != 0;
         }
+    }
+
+    public async Task<Result> Create()
+    {
+        return Result.Try(() => Directory.DirectoryInfo.Create());
     }
 }

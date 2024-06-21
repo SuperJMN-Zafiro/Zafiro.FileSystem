@@ -12,7 +12,7 @@ public class CopyFileTests
     public async Task CopyFileTask()
     {
         var fs = new System.IO.Abstractions.FileSystem();
-        var dotNetMutableFile = new DotNetMutableFile(new DotNetFile(fs.FileInfo.New("/home/jmn/Escritorio/Pepito.txt")));
+        var dotNetMutableFile = new DotNetMutableFile(fs.FileInfo.New("/home/jmn/Escritorio/Pepito.txt"));
 
         var task = new CopyFileAction(new StringData("Hola"), dotNetMutableFile);
         var observer = new Subject<LongProgress>();
