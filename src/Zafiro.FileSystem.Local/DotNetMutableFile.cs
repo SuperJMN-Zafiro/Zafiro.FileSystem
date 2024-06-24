@@ -14,13 +14,11 @@ public class DotNetMutableFile : IMutableFile
 
     public string Name => FileInfo.Name;
 
-    public async Task<Result> SetContents(IData data, CancellationToken cancellationToken)
+    public Task<Result> SetContents(IData data, CancellationToken cancellationToken)
     {
-        using (var stream = FileInfo.Create())
-        {
-            var dumpTo = await data.DumpTo(stream);
-            return dumpTo;
-        }
+        var result = Result.Try(() => FileInfo.Create());
+
+        return result.Using(data.DumpTo);
     }
 
     public async Task<Result<IData>> GetContents()
