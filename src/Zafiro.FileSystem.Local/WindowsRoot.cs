@@ -18,7 +18,8 @@ public class WindowsRoot : IMutableDirectory
     
     public Task<Result<IEnumerable<INode>>> Children()
     {
-        return MutableChildren().MapEach(n => (INode)n);
+        Func<IMutableNode, INode> selector = n => (INode)n;
+        return FunctionalMixin.ManyMap(MutableChildren(), selector);
     }
 
     public bool IsHidden => false;

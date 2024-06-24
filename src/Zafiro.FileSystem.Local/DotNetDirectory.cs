@@ -30,4 +30,9 @@ public class DotNetDirectory : IAsyncDir
     }
 
     public string Name => DirectoryInfo.Name;
+
+    public override string? ToString()
+    {
+        return DirectoryInfo.ToString();
+    }
 }

@@ -22,7 +22,7 @@ public class DotNetMutableDirectory : IMutableDirectory
 
     public Task<Result<IEnumerable<IMutableNode>>> MutableChildren()
     {
-        var mutableChildren = Directory.Children().MapEach(x =>
+        Func<INode, IMutableNode> selector = x =>
         {
             if (x is DotNetDirectory d)
             {
@@ -35,7 +35,8 @@ public class DotNetMutableDirectory : IMutableDirectory
             }
 
             throw new NotSupportedException();
-        });
+        };
+        var mutableChildren = FunctionalMixin.ManyMap(Directory.Children(), selector);
 
         return mutableChildren;
     }
@@ -84,5 +85,10 @@ public class DotNetMutableDirectory : IMutableDirectory
     public async Task<Result> Create()
     {
         return Result.Try(() => Directory.DirectoryInfo.Create());
+    }
+
+    public override string? ToString()
+    {
+        return Directory.ToString();
     }
 }
