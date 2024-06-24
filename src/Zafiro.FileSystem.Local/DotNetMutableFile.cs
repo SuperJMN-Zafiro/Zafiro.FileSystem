@@ -18,7 +18,7 @@ public class DotNetMutableFile : IMutableFile
     {
         var result = Result.Try(() => FileInfo.Create());
 
-        return result.Using(data.DumpTo);
+        return result.Using(stream => data.DumpTo(stream, cancellationToken: cancellationToken));
     }
 
     public async Task<Result<IData>> GetContents()

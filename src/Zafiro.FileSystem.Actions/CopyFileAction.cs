@@ -27,7 +27,7 @@ public class CopyFileAction : IFileAction
 
     public IObservable<LongProgress> Progress => progress.AsObservable();
 
-    public async Task<Result> Execute(CancellationToken cancellationToken = default)
+    public async Task<Result> Execute(CancellationToken cancellationToken = default, IScheduler? scheduler = null)
     {
         var progressObserver = new Subject<long>();
         using var longProgressSubscription = progressObserver.Select(l => new LongProgress(l, Source.Length)).Subscribe(progress);
