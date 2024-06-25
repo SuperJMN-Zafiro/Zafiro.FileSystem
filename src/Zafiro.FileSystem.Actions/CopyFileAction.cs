@@ -33,7 +33,7 @@ public class CopyFileAction : IFileAction
         using var longProgressSubscription = progressObserver.Select(l => new LongProgress(l, Source.Length)).Subscribe(progress);
         using (new ProgressWatcher(Source, progressObserver))
         {
-            var result = await Destination.SetContents(Source, cancellationToken);
+            var result = await Destination.SetContents(Source, cancellationToken, TaskPoolScheduler.Default).ConfigureAwait(false);
             return result;
         }
     }

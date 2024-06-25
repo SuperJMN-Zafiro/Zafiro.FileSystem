@@ -12,7 +12,7 @@ public class DotNetMutableFileSystem : Mutable.IMutableFileSystem
         FileSystem = fileSystem;
     }
 
-    public Task<Result<IRooted<IMutableDirectory>>> Get(ZafiroPath path)
+    public Task<Result<IRooted<IMutableDirectory>>> GetDirectory(ZafiroPath path)
     {
         if (OperatingSystem.IsLinux())
         {
@@ -40,6 +40,21 @@ public class DotNetMutableFileSystem : Mutable.IMutableFileSystem
         }
         
         throw new NotSupportedException("Only supported OSes are Windows and Linux for now");
+    }
+
+    public Task<Result<IRooted<IMutableFile>>> GetFile(ZafiroPath path)
+    {
+        if (OperatingSystem.IsLinux())
+        {
+            var translatedPath =  "/" + path;
+
+            return Task.FromResult(Result
+                .Try(() => FileSystem.FileInfo.New(translatedPath))
+                .Map(d => new DotNetMutableFile(d))
+                .Map(directory => (IRooted<IMutableFile>)new Rooted<IMutableFile>(path, directory)));
+        }
+
+        return Task.FromResult(Result.Failure<IRooted<IMutableFile>>("Not implemented"));
     }
 
     public ZafiroPath InitialPath

@@ -1,3 +1,4 @@
+using System.Reactive.Concurrency;
 using Zafiro.DataModel;
 using Zafiro.FileSystem.Mutable;
 
@@ -14,11 +15,11 @@ public class DotNetMutableFile : IMutableFile
 
     public string Name => FileInfo.Name;
 
-    public Task<Result> SetContents(IData data, CancellationToken cancellationToken)
+    public Task<Result> SetContents(IData data, CancellationToken cancellationToken, IScheduler? scheduler)
     {
         var result = Result.Try(() => FileInfo.Create());
 
-        return result.Using(stream => data.DumpTo(stream, cancellationToken: cancellationToken));
+        return result.Using(stream => data.DumpTo(stream, scheduler: scheduler, cancellationToken: cancellationToken));
     }
 
     public async Task<Result<IData>> GetContents()
