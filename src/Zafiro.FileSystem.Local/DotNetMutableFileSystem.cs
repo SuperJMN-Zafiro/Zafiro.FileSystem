@@ -54,6 +54,14 @@ public class DotNetMutableFileSystem : Mutable.IMutableFileSystem
                 .Map(directory => (IRooted<IMutableFile>)new Rooted<IMutableFile>(path, directory)));
         }
 
+        if (OperatingSystem.IsWindows())
+        {
+            return Task.FromResult(Result
+                .Try(() => FileSystem.FileInfo.New(path))
+                .Map(d => new DotNetMutableFile(d))
+                .Map(directory => (IRooted<IMutableFile>)new Rooted<IMutableFile>(path, directory)));
+        }
+
         return Task.FromResult(Result.Failure<IRooted<IMutableFile>>("Not implemented"));
     }
 

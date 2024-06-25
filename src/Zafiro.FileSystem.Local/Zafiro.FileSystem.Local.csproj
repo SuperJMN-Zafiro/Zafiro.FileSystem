@@ -9,8 +9,6 @@
     <PackageReference Include="TestableIO.System.IO.Abstractions" Version="19.2.69" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Zafiro.FileSystem.DynamicData\Zafiro.FileSystem.DynamicData.Delete.csproj" />
-    <ProjectReference Include="..\Zafiro.FileSystem.Mutable\Zafiro.FileSystem.Mutable.Delete.csproj" />
     <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
   </ItemGroup>
 </Project>

@@ -25,7 +25,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Zafiro.FileSystem.Local\Zafiro.FileSystem.Local.csproj" />
     <ProjectReference Include="..\..\src\Zafiro.FileSystem.Unix\Zafiro.FileSystem.Unix.csproj" />
-    <ProjectReference Include="..\..\src\Zafiro.FileSystem.DynamicData\Zafiro.FileSystem.DynamicData.Delete.csproj" />
   </ItemGroup>
 
   <ItemGroup>

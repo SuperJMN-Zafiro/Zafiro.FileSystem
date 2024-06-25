@@ -14,8 +14,4 @@
 		<PackageReference Include="DynamicData" Version="8.4.1" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Zafiro.FileSystem.Mutable\Zafiro.FileSystem.Mutable.Delete.csproj" />
-	</ItemGroup>
-
 </Project>
