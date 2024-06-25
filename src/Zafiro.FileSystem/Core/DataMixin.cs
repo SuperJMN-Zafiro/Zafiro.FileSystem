@@ -22,6 +22,13 @@ public static class DataMixin
         var chuckResults = chunkedDump.Combine();
         return chuckResults;
     }
+    
+    public static Task<Result> DumpTo2(this IData data, Stream stream, IScheduler? scheduler = null, CancellationToken cancellationToken = default)
+    {
+        return ChunkedDump(data, stream, cancellationToken: cancellationToken, scheduler: scheduler).ToList()
+            .Select(list => list.Combine())
+            .ToTask(cancellationToken);
+    }
 
     public static async Task<Result> DumpTo(this IData data, string path, IScheduler? scheduler = null,
         CancellationToken cancellationToken = default)
