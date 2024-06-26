@@ -7,22 +7,23 @@ namespace Zafiro.FileSystem.Local;
 
 public class WindowsRoot : IMutableDirectory
 {
-    public IFileSystem FileSystem { get; }
-
     public WindowsRoot(IFileSystem fileSystem)
     {
         FileSystem = fileSystem;
     }
 
+    public IFileSystem FileSystem { get; }
+
     public string Name { get; } = "<root>";
-    
+
     public Task<Result<IEnumerable<INode>>> Children()
     {
-        Func<IMutableNode, INode> selector = n => (INode)n;
-        return FunctionalMixin.ManyMap(MutableChildren(), selector);
+        Func<IMutableNode, INode> selector = n => n;
+        return MutableChildren().ManyMap(selector);
     }
 
     public bool IsHidden => false;
+
     public async Task<Result> Create()
     {
         return Result.Failure("Cannot create the root");

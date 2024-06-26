@@ -5,7 +5,6 @@ namespace Zafiro.FileSystem.Local;
 public class DotNetFile : IFile
 {
     private readonly IFileInfo fileInfo;
-    public FileInfoData FileInfoData { get; }
 
     public DotNetFile(IFileInfo fileInfo)
     {
@@ -14,11 +13,16 @@ public class DotNetFile : IFile
         this.fileInfo = fileInfo;
     }
 
+    public FileInfoData FileInfoData { get; }
+
     public IFileInfo FileInfo { get; }
 
     public string Name => fileInfo.Name;
     public IObservable<byte[]> Bytes => FileInfoData.Bytes;
     public long Length => FileInfoData.Length;
 
-    public override string ToString() => fileInfo.ToString() ?? "";
+    public override string ToString()
+    {
+        return fileInfo.ToString() ?? "";
+    }
 }

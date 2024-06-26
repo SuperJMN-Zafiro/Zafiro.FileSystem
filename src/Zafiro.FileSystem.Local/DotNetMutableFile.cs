@@ -6,12 +6,12 @@ namespace Zafiro.FileSystem.Local;
 
 public class DotNetMutableFile : IMutableFile
 {
-    public IFileInfo FileInfo { get; }
-
     public DotNetMutableFile(IFileInfo fileInfo)
     {
         FileInfo = fileInfo;
     }
+
+    public IFileInfo FileInfo { get; }
 
     public string Name => FileInfo.Name;
 
@@ -19,7 +19,7 @@ public class DotNetMutableFile : IMutableFile
     {
         var result = Result.Try(() => FileInfo.Create());
 
-        return result.Using(stream => data.DumpTo(stream, scheduler: scheduler, cancellationToken: cancellationToken));
+        return result.Using(stream => data.DumpTo(stream, scheduler, cancellationToken));
     }
 
     public async Task<Result<IData>> GetContents()
@@ -33,6 +33,7 @@ public class DotNetMutableFile : IMutableFile
     }
 
     public bool IsHidden => (FileInfo.Attributes & FileAttributes.Hidden) != 0;
+
     public async Task<Result> Create()
     {
         return Result.Try(() =>
