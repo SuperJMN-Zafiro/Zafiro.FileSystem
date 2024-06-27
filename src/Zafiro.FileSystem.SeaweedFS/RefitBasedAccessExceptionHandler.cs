@@ -2,6 +2,7 @@
 using CSharpFunctionalExtensions;
 using Refit;
 using Serilog;
+using Zafiro.FileSystem.Core;
 
 namespace Zafiro.FileSystem.SeaweedFS;
 

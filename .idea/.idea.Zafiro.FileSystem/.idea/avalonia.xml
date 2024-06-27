@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="../Zafiro.Avalonia.FileExplorer/src/Zafiro.Avalonia.FileExplorer.NextGen/Core/Views/DirectoryContentsView.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="../Zafiro.Avalonia.FileExplorer/src/Zafiro.Avalonia.FileExplorer.NextGen/Core/Views/FileExplorerView.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="../Zafiro.Avalonia.FileExplorer/src/Zafiro.Avalonia.FileExplorer.NextGen/Core/Views/ToolBarView.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="../Zafiro.Avalonia.FileExplorer/src/Zafiro.Avalonia.FileExplorer.NextGen/Styles.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="../Zafiro.Avalonia.FileExplorer/src/Zafiro.Avalonia.FileExplorer.NextGen/Views/DirectoryContentsView.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="../Zafiro.Avalonia.FileExplorer/src/Zafiro.Avalonia.FileExplorer.NextGen/Views/DirectoryItemView.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="../Zafiro.Avalonia.FileExplorer/src/Zafiro.Avalonia.FileExplorer.NextGen/Views/FileExplorerView.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="../Zafiro.Avalonia.FileExplorer/src/Zafiro.Avalonia.FileExplorer.NextGen/Views/FileItemView.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="../Zafiro.Avalonia.FileExplorer/src/Zafiro.Avalonia.FileExplorer.NextGen/Views/PathNavigator.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="../Zafiro.Avalonia.FileExplorer/src/Zafiro.Avalonia.FileExplorer.NextGen/Views/ToolBarView.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="AvaloniaApplication1/App.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="AvaloniaApplication1/Views/MainView.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="AvaloniaApplication1/Views/MainWindow.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

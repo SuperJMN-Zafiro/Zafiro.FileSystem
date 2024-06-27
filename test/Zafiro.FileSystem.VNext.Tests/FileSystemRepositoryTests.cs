@@ -1,29 +1,21 @@
-using System.IO.Abstractions.TestingHelpers;
+using DynamicData;
+using Zafiro.FileSystem.Local;
 
 namespace Zafiro.FileSystem.VNext.Tests;
 
 public class FileSystemRepositoryTests
 {
     [Fact]
-    public async Task Create_new_file()
+    public async Task DDTest()
     {
-        var mockFileSystem = new MockFileSystem();
-        var fs = new FileSystemRepository(mockFileSystem);
-        var file = await fs.AddOrUpdate("c:/Subdir", new File("Test1.txt", "Contenido"));
-        file.Should().Succeed();
-        mockFileSystem.GetFile("C:\\Subdir\\Test1.txt").TextContents.Should().Be("Contenido");
-    }
+        var fs = new LocalFileSystem(new System.IO.Abstractions.FileSystem());
+        var folder = fs.GetFolder("home/jmn/Escritorio");
+
+
+        folder.Files.OnItemAdded(file => { }).Subscribe();
         
-    [Fact]
-    public async Task Update_file()
-    {
-        var mockFileSystem = new MockFileSystem(new Dictionary<string, MockFileData>()
-        {
-            ["C:\\Subdir\\Test1.txt"] = new MockFileData("Contenido"),
-        });
-        var fs = new FileSystemRepository(mockFileSystem);
-        var file = await fs.AddOrUpdate("c:/Subdir", new File("Test1.txt", "Nuevo contenido"));
-        file.Should().Succeed();
-        mockFileSystem.GetFile("C:\\Subdir\\Test1.txt").TextContents.Should().Be("Nuevo contenido");
+        var result = await folder.AddOrUpdateFile([new File("Pepito.txt", "Hehehe")]);
+        await Task.Delay(10000);
+        result.Should().Succeed();
     }
 }

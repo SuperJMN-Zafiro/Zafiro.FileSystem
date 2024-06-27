@@ -1,4 +1,6 @@
-﻿namespace Zafiro.FileSystem.Unix;
+﻿using Zafiro.FileSystem.Core;
+
+namespace Zafiro.FileSystem.Unix;
 
 public abstract class UnixNode(string name) : INode
 {

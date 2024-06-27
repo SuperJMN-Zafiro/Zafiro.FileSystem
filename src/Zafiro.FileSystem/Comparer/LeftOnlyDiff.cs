@@ -1,10 +1,12 @@
-﻿namespace Zafiro.FileSystem.Comparer;
+﻿using Zafiro.FileSystem.Core;
+
+namespace Zafiro.FileSystem.Comparer;
 
 public record LeftOnlyDiff : FileDiff
 {
-    public IZafiroFile Left { get; }
+    public IRootedFile Left { get; }
 
-    public LeftOnlyDiff(IZafiroFile left)
+    public LeftOnlyDiff(IRootedFile left)
     {
         Left = left;
     }

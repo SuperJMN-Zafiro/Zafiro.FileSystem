@@ -1,6 +1,6 @@
+using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Local;
 using Zafiro.FileSystem.Unix;
-using Directory = Zafiro.FileSystem.Directory;
 
 namespace Zafiro.FileSystem.VNext.Tests;
 
@@ -23,6 +23,6 @@ public class DirectoryTests
     {
         var maybeDir = await DotNetDirectory.From("C:/Users/JMN/Desktop", new System.IO.Abstractions.FileSystem());
         var dir = await maybeDir
-            .Bind(d => d.ToLightweight());
+            .Bind(d => d.ToDirectory());
     }
 }

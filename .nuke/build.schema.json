@@ -8,7 +8,10 @@
       "properties": {
         "Configuration": {
           "type": "string",
-          "description": "configuration"
+          "enum": [
+            "Debug",
+            "Release"
+          ]
         },
         "Continue": {
           "type": "boolean",

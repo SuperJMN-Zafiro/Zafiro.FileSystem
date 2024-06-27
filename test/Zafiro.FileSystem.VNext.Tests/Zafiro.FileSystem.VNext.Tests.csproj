@@ -25,7 +25,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Zafiro.FileSystem.Local\Zafiro.FileSystem.Local.csproj" />
     <ProjectReference Include="..\..\src\Zafiro.FileSystem.Unix\Zafiro.FileSystem.Unix.csproj" />
-    <ProjectReference Include="..\..\src\Zafiro.FileSystem.VNext\Zafiro.FileSystem.VNext.csproj" />
   </ItemGroup>
 
   <ItemGroup>
