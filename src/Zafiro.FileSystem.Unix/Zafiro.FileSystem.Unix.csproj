@@ -6,11 +6,10 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
-	<Import Project="..\Common.props" />
-
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Zafiro\src\Zafiro\Zafiro.csproj" />
 	  <ProjectReference Include="..\Zafiro.FileSystem\Zafiro.FileSystem.csproj" />
 	</ItemGroup>
+
+	<Import Project="..\Common.props" />
 
 </Project>
