@@ -2,7 +2,7 @@ using System.Reactive.Subjects;
 using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Mutable;
 
-namespace Zafiro.FileSystem.Local;
+namespace Zafiro.FileSystem.Local.Mutable;
 
 public class DotNetMutableDirectory : IMutableDirectory
 {
@@ -26,7 +26,7 @@ public class DotNetMutableDirectory : IMutableDirectory
         {
             if (x is DotNetDirectory d)
             {
-                return (IMutableNode)new DotNetMutableDirectory(d);
+                return new DotNetMutableDirectory(d);
             }
 
             if (x is DotNetFile f)
@@ -36,7 +36,8 @@ public class DotNetMutableDirectory : IMutableDirectory
 
             throw new NotSupportedException();
         };
-        var mutableChildren = FunctionalMixin.ManyMap(Directory.Children(), selector);
+        
+        var mutableChildren = Directory.Children().ManyMap(selector);
 
         return mutableChildren;
     }

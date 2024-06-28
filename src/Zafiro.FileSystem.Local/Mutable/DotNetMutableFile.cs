@@ -2,7 +2,7 @@ using System.Reactive.Concurrency;
 using Zafiro.DataModel;
 using Zafiro.FileSystem.Mutable;
 
-namespace Zafiro.FileSystem.Local;
+namespace Zafiro.FileSystem.Local.Mutable;
 
 public class DotNetMutableFile : IMutableFile
 {
