@@ -1,4 +1,5 @@
 using Zafiro.FileSystem.Dynamic;
+using Zafiro.FileSystem.Local.Mutable;
 
 namespace Zafiro.FileSystem.Local.Tests;
 

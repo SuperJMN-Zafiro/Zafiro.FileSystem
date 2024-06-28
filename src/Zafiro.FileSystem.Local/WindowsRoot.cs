@@ -1,5 +1,6 @@
 using System.Reactive.Subjects;
 using Zafiro.CSharpFunctionalExtensions;
+using Zafiro.FileSystem.Local.Mutable;
 using Zafiro.FileSystem.Mutable;
 using IFileSystem = System.IO.Abstractions.IFileSystem;
 

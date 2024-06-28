@@ -5,7 +5,7 @@ namespace Zafiro.FileSystem.Mutable;
 
 public interface IMutableFileSystem
 {
-    Task<Result<IRooted<IMutableDirectory>>> GetDirectory(ZafiroPath path);
-    Task<Result<IRooted<IMutableFile>>> GetFile(ZafiroPath path);
+    Task<Result<IMutableDirectory>> GetDirectory(ZafiroPath path);
+    Task<Result<IMutableFile>> GetFile(ZafiroPath path);
     ZafiroPath InitialPath { get; }
 }
