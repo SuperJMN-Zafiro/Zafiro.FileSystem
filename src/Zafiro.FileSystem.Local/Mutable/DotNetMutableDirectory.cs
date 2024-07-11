@@ -1,4 +1,3 @@
-using System.Reactive.Subjects;
 using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Mutable;
 
@@ -40,22 +39,6 @@ public class DotNetMutableDirectory : IMutableDirectory
         var mutableChildren = Directory.Children().ManyMap(selector);
 
         return mutableChildren;
-    }
-
-    public Task<Result> AddOrUpdate(IFile data, ISubject<double>? progress = null)
-    {
-        var path = Directory.DirectoryInfo.FileSystem.Path.Combine(Directory.DirectoryInfo.FullName, data.Name);
-        using (var stream = Directory.DirectoryInfo.FileSystem.File.Create(path))
-        {
-            return data.DumpTo(stream);
-        }
-    }
-
-    public async Task<Result<IMutableFile>> Get(string name)
-    {
-        var path = Directory.DirectoryInfo.FileSystem.Path.Combine(Directory.DirectoryInfo.FullName, name);
-        return Result.Try(() => Directory.DirectoryInfo.FileSystem.FileInfo.New(path))
-            .Map(file => (IMutableFile)new DotNetMutableFile(file));
     }
 
     public async Task<Result<IMutableDirectory>> CreateSubdirectory(string name)

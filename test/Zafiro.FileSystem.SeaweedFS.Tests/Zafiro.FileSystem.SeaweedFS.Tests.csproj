@@ -22,7 +22,6 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Zafiro.FileSystem.SeaweedFS\Zafiro.FileSystem.SeaweedFS.csproj" />
-		<ProjectReference Include="..\Zafiro.FileSystem.VNext.Tests\Zafiro.FileSystem.VNext.Tests.csproj" />
+	  <ProjectReference Include="..\..\src\Zafiro.FileSystem.SeaweedFS\Zafiro.FileSystem.SeaweedFS.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,4 +1,3 @@
-using System.Reactive.Subjects;
 using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Local.Mutable;
 using Zafiro.FileSystem.Mutable;
@@ -35,16 +34,6 @@ public class WindowsRoot : IMutableDirectory
         return Result.Try(() =>
             FileSystem.DriveInfo.GetDrives().Select(driveInfo => driveInfo.RootDirectory)
                 .Select(info => (IMutableNode)new DotNetMutableDirectory(new DotNetDirectory(info))));
-    }
-
-    public async Task<Result> AddOrUpdate(IFile data, ISubject<double>? progress = null)
-    {
-        return Result.Failure("Cannot create directory here");
-    }
-
-    public async Task<Result<IMutableFile>> Get(string name)
-    {
-        return Result.Failure<IMutableFile>("Cannot create directory here");
     }
 
     public async Task<Result<IMutableDirectory>> CreateSubdirectory(string name)

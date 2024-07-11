@@ -27,7 +27,7 @@ public class SeaweedFSClient : ISeaweedFS
         });
     }
 
-    public async Task<RootDirectory> GetContents(string directoryPath, CancellationToken cancellationToken = default)
+    public async Task<Result<RootDirectory>> GetContents(string directoryPath, CancellationToken cancellationToken = default)
     {
         var contents = await inner.GetContents(directoryPath, cancellationToken);
         var files = contents.Entries?.OfType<FileMetadata>() ?? Enumerable.Empty<FileMetadata>();
@@ -44,35 +44,35 @@ public class SeaweedFSClient : ISeaweedFS
         return contents;
     }
 
-    public Task Upload(string path, Stream stream, CancellationToken cancellationToken = default)
+    public Task<Result> Upload(string path, Stream stream, CancellationToken cancellationToken = default)
     {
-        return inner.Upload(path, stream, cancellationToken);
+        return Result.Try(() => inner.Upload(path, stream, cancellationToken));
     }
 
-    public Task CreateFolder(string directoryPath, CancellationToken cancellationToken = default)
+    public Task<Result> CreateFolder(string directoryPath, CancellationToken cancellationToken = default)
     {
         var finalFolder = directoryPath == "/" ? directoryPath : directoryPath[1..];
-        return inner.CreateFolder(finalFolder, cancellationToken);
+        return Result.Try(() => inner.CreateFolder(finalFolder, cancellationToken));
     }
 
-    public Task DeleteFolder(string directoryPath, CancellationToken cancellationToken = default)
+    public Task<Result> DeleteFolder(string directoryPath, CancellationToken cancellationToken = default)
     {
-        return inner.DeleteFolder(directoryPath, cancellationToken);
+        return Result.Try(() => inner.DeleteFolder(directoryPath, cancellationToken));
     }
 
-    public Task<Stream> GetFileContents(string filePath, CancellationToken cancellationToken = default)
+    public Task<Result<Stream>> GetFileContents(string filePath, CancellationToken cancellationToken = default)
     {
-        return httpClient.GetStreamAsync(filePath, cancellationToken);
+        return Result.Try(() => httpClient.GetStreamAsync(filePath, cancellationToken));
     }
 
-    public Task DeleteFile(string filePath, CancellationToken cancellationToken = default)
+    public Task<Result> DeleteFile(string filePath, CancellationToken cancellationToken = default)
     {
         fileMetadatas.Remove(filePath);
 
-        return inner.DeleteFile(filePath, cancellationToken);
+        return Result.Try(() => inner.DeleteFile(filePath, cancellationToken));
     }
 
-    public async Task<FileMetadata> GetFileMetadata(string path, CancellationToken cancellationToken = default)
+    public async Task<Result<FileMetadata>> GetFileMetadata(string path, CancellationToken cancellationToken = default)
     {
         if (fileMetadatas.Get(path) is FileMetadata metadata)
         {
@@ -82,11 +82,11 @@ public class SeaweedFSClient : ISeaweedFS
         return await inner.GetFileMetadata(path, cancellationToken);
     }
 
-    public async Task<bool> PathExists(string path)
+    public async Task<Result<bool>> PathExists(string path)
     {
         try
         {
-            await GetFileMetadata(path);
+            return await GetFileMetadata(path).Map(_ => true);
         }
         catch (ApiException e)
         {
