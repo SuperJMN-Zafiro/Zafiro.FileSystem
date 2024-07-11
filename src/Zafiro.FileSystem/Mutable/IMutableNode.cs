@@ -6,5 +6,6 @@ namespace Zafiro.FileSystem.Mutable;
 public interface IMutableNode : INode
 {
     public bool IsHidden { get; }
+    public Task<Result<bool>> Exists();
     public Task<Result> Create();
 }

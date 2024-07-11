@@ -66,6 +66,11 @@ public class DotNetMutableDirectory : IMutableDirectory
         }
     }
 
+    public Task<Result<bool>> Exists()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Result> Create()
     {
         return Result.Try(() => Directory.DirectoryInfo.Create());

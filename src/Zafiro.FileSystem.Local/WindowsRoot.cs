@@ -24,6 +24,11 @@ public class WindowsRoot : IMutableDirectory
 
     public bool IsHidden => false;
 
+    public async Task<Result<bool>> Exists()
+    {
+        return true;
+    }
+
     public async Task<Result> Create()
     {
         return Result.Failure("Cannot create the root");

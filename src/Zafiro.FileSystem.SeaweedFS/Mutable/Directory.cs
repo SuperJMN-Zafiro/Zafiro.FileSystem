@@ -21,7 +21,12 @@ public class Directory : IMutableDirectory
     public Task<Result<IEnumerable<INode>>> Children() => Inner.Children();
 
     public bool IsHidden => false;
-    
+
+    public Task<Result<bool>> Exists()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Result> Create()
     {
         return SeaweedFS.CreateFolder(Inner.Path);

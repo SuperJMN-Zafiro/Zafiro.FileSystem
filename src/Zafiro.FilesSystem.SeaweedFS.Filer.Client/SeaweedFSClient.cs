@@ -6,6 +6,10 @@ using Refit;
 
 namespace Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
+public class SutFactory
+{
+}
+
 public class SeaweedFSClient : ISeaweedFS
 {
     private readonly HttpClient httpClient;
@@ -72,14 +76,14 @@ public class SeaweedFSClient : ISeaweedFS
         return Result.Try(() => inner.DeleteFile(filePath, cancellationToken));
     }
 
-    public async Task<Result<FileMetadata>> GetFileMetadata(string path, CancellationToken cancellationToken = default)
+    public Task<Result<FileMetadata>> GetFileMetadata(string path, CancellationToken cancellationToken = default)
     {
         if (fileMetadatas.Get(path) is FileMetadata metadata)
         {
-            return metadata;
+            return Task.FromResult(Result.Success(metadata));
         }
 
-        return await inner.GetFileMetadata(path, cancellationToken);
+        return Result.Try(() => inner.GetFileMetadata(path, cancellationToken));
     }
 
     public async Task<Result<bool>> PathExists(string path)

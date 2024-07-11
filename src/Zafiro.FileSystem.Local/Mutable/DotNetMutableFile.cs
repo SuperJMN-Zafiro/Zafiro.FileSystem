@@ -34,6 +34,11 @@ public class DotNetMutableFile : IMutableFile
 
     public bool IsHidden => (FileInfo.Attributes & FileAttributes.Hidden) != 0;
 
+    public Task<Result<bool>> Exists()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Result> Create()
     {
         return Result.Try(() =>
