@@ -1,26 +1,27 @@
 ﻿using CSharpFunctionalExtensions;
+using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Core;
+using Zafiro.FileSystem.Mutable;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 using ClientDirectory = Zafiro.FileSystem.SeaweedFS.Filer.Client.Directory;
-using ILogger = Serilog.ILogger;
 
 namespace Zafiro.FileSystem.SeaweedFS;
 
-public class SeaweedFSDirectory : IAsyncDir
+public class SeaweedFSDirectory : IMutableDirectory
 {
-    private SeaweedFSDirectory(string path, ISeaweedFS seaweedFS)
+    private SeaweedFSDirectory(ZafiroPath path, ISeaweedFS seaweedFS)
     {
         SeaweedFS = seaweedFS;
         Path = path;
     }
 
-    public string Path { get; }
+    public ZafiroPath Path { get; }
     public ISeaweedFS SeaweedFS { get; }
-    public string Name => Path[Path.LastIndexOf("/")..];
+    public string Name => Path.Name();
 
     public Task<Result<IEnumerable<INode>>> Children()
     {
-        return SeaweedFS.GetContents(Path, CancellationToken.None).Bind(GetContents);
+        return MutableChildren().ManyMap(node => (INode)node);
     }
 
     public static async Task<Result<SeaweedFSDirectory>> From(string path, ISeaweedFS seaweedFSClient)
@@ -28,17 +29,43 @@ public class SeaweedFSDirectory : IAsyncDir
         return new SeaweedFSDirectory(path, seaweedFSClient);
     }
 
-    private Task<Result<IEnumerable<INode>>> GetContents(RootDirectory directory)
+    private Task<Result<IEnumerable<IMutableNode>>> DirectoryToNodes(RootDirectory directory)
     {
         var entries = directory.Entries ?? new List<BaseEntry>();
-        return entries.Select(entry =>
+        return AsyncResultExtensionsLeftOperand.Combine(entries.Select(entry =>
         {
             return entry switch
             {
-                ClientDirectory dir => Task.FromResult(Result.Success<INode>(new SeaweedFSDirectory(dir.FullPath[1..], SeaweedFS))),
-                FileMetadata file => SeaweedFSFile.From(file.FullPath[1..], SeaweedFS).Map(fsFile => (INode)fsFile),
+                ClientDirectory dir => Task.FromResult(Result.Success<IMutableNode>(new SeaweedFSDirectory(dir.FullPath[1..], SeaweedFS))),
+                FileMetadata file => SeaweedFSFile.From(file.FullPath[1..], SeaweedFS).Map(fsFile => (IMutableNode)fsFile),
                 _ => throw new ArgumentOutOfRangeException(nameof(entry))
             };
-        }).Combine();
+        }));
+    }
+
+    public bool IsHidden => false;
+    public Task<Result<bool>> Exists()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Result> Create()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Result<IEnumerable<IMutableNode>>> MutableChildren()
+    {
+        return SeaweedFS.GetContents(Path, CancellationToken.None).Bind(DirectoryToNodes);
+    }
+
+    public Task<Result<IMutableDirectory>> CreateSubdirectory(string name)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Result> Delete()
+    {
+        throw new NotImplementedException();
     }
 }

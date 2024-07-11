@@ -1,30 +1,18 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Reactive.Concurrency;
+using CSharpFunctionalExtensions;
 using Zafiro.DataModel;
 using Zafiro.FileSystem.Core;
-using Zafiro.FileSystem.Readonly;
+using Zafiro.FileSystem.Mutable;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
 namespace Zafiro.FileSystem.SeaweedFS;
 
-public class SeaweedFSFile : IFile
+public class SeaweedFSFile(ZafiroPath path, ISeaweedFS seaweedFS) : IMutableFile
 {
-    public string Path { get; }
-    public Data Data { get; }
+    public ZafiroPath Path { get; } = path;
+    public ISeaweedFS SeaweedFS { get; } = seaweedFS;
 
-    public SeaweedFSFile()
-    {
-    }
-
-    private SeaweedFSFile(string path, Data data)
-    {
-        Path = path;
-        Data = data;
-    }
-
-    public FileMetadata File { get; }
-    public IObservable<byte[]> Bytes => Data.Bytes;
-    public long Length => Data.Length;
-    public string Name => ((ZafiroPath) File.FullPath).Name();
+    public string Name => Path.Name();
 
     public static Task<Result<SeaweedFSFile>> From(string path, ISeaweedFS seaweedFS)
     {
@@ -33,8 +21,43 @@ public class SeaweedFSFile : IFile
 
         return from metadata in fileMetadataResult
             from contentStream in contentStreamResult
-            select new SeaweedFSFile(path, new Data(ReactiveData.Chunked(() => contentStream), metadata.FileSize));
+            select new SeaweedFSFile(path, seaweedFS);
     }
 
-    public override string ToString() => File.FullPath;
+    public override string ToString() => Path;
+    public bool IsHidden => false;
+    public Task<Result<bool>> Exists()
+    {
+        var exists = SeaweedFS.GetFileMetadata(Path)
+            .Match(
+                _ => Result.Success(true), 
+                err =>
+                {
+                    if (err.Contains("404"))
+                        return Result.Success(false);
+                    else
+                        return Result.Failure<bool>(err);
+                });
+        return exists;
+    }
+
+    public Task<Result> Create()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Result> SetContents(IData data, CancellationToken cancellationToken = default, IScheduler? scheduler = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Result<IData>> GetContents()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Result> Delete()
+    {
+        throw new NotImplementedException();
+    }
 }
