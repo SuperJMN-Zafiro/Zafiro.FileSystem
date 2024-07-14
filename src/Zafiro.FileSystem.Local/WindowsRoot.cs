@@ -50,4 +50,6 @@ public class WindowsRoot : IMutableDirectory
     {
         return Result.Failure("Cannot delete anything here");
     }
+
+    public IObservable<Result<IEnumerable<IMutableNode>>> ChildrenProp { get; }
 }

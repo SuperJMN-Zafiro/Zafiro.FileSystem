@@ -18,6 +18,8 @@ public class DirectoryTests
     
     [Theory]
     [InlineData("Juegos/ROMs")]
+    [InlineData("Juegos/ROMs/Gameboy")]
+    [InlineData("Juegos/ROMs/3DS")]
     [InlineData("Juegos")]
     public async Task Children_should_succeed(string path)
     {

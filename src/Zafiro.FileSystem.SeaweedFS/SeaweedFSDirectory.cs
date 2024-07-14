@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Reactive.Linq;
+using CSharpFunctionalExtensions;
 using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Mutable;
@@ -53,6 +54,8 @@ public class SeaweedFSDirectory : IMutableDirectory
     {
         throw new NotImplementedException();
     }
+
+    public IObservable<Result<IEnumerable<IMutableNode>>> ChildrenProp => Observable.FromAsync(ct => SeaweedFS.GetContents(Path, ct).Bind(DirectoryToNodes));
 
     public Task<Result<IEnumerable<IMutableNode>>> MutableChildren()
     {

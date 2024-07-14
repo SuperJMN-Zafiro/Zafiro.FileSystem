@@ -53,6 +53,8 @@ public class DotNetMutableDirectory : IMutableDirectory
         return Result.Try(() => Directory.DirectoryInfo.Delete());
     }
 
+    public IObservable<Result<IEnumerable<IMutableNode>>> ChildrenProp { get; }
+
     public bool IsHidden
     {
         get
