@@ -20,7 +20,7 @@ public class DotNetMutableFileSystem : IMutableFileSystem
 
             return Task.FromResult(Result
                 .Try(() => FileSystem.DirectoryInfo.New(translatedPath))
-                .Map(d => (IMutableDirectory)new DotNetMutableDirectory(new DotNetDirectory(d))));
+                .Map(d => (IMutableDirectory)new DotNetMutableDirectory(d)));
         }
 
         if (OperatingSystem.IsWindows())
@@ -33,7 +33,7 @@ public class DotNetMutableFileSystem : IMutableFileSystem
             
             return Task.FromResult(Result
                 .Try(() => FileSystem.DirectoryInfo.New(path))
-                .Map(d => (IMutableDirectory)new DotNetMutableDirectory(new DotNetDirectory(d))));
+                .Map(d => (IMutableDirectory)new DotNetMutableDirectory(d)));
         }
         
         throw new NotSupportedException("Only supported OSes are Windows and Linux for now");

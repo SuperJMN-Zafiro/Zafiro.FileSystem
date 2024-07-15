@@ -1,3 +1,4 @@
+using System.Reactive.Linq;
 using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Local.Mutable;
 using Zafiro.FileSystem.Mutable;
@@ -16,12 +17,6 @@ public class WindowsRoot : IMutableDirectory
 
     public string Name { get; } = "<root>";
 
-    public Task<Result<IEnumerable<INode>>> Children()
-    {
-        Func<IMutableNode, INode> selector = n => n;
-        return MutableChildren().ManyMap(selector);
-    }
-
     public bool IsHidden => false;
 
     public async Task<Result<bool>> Exists()
@@ -34,13 +29,6 @@ public class WindowsRoot : IMutableDirectory
         return Result.Failure("Cannot create the root");
     }
 
-    public async Task<Result<IEnumerable<IMutableNode>>> MutableChildren()
-    {
-        return Result.Try(() =>
-            FileSystem.DriveInfo.GetDrives().Select(driveInfo => driveInfo.RootDirectory)
-                .Select(info => (IMutableNode)new DotNetMutableDirectory(new DotNetDirectory(info))));
-    }
-
     public async Task<Result<IMutableDirectory>> CreateSubdirectory(string name)
     {
         return Result.Failure<IMutableDirectory>("Cannot create directory here");
@@ -51,5 +39,14 @@ public class WindowsRoot : IMutableDirectory
         return Result.Failure("Cannot delete anything here");
     }
 
-    public IObservable<Result<IEnumerable<IMutableNode>>> ChildrenProp { get; }
+    public IObservable<Result<IEnumerable<IMutableNode>>> ChildrenProp
+    {
+        get
+        {
+            var result = Result.Try(() =>
+                FileSystem.DriveInfo.GetDrives().Select(driveInfo => driveInfo.RootDirectory)
+                    .Select(info => (IMutableNode)new DotNetMutableDirectory(info)));
+            return Observable.Return(result);
+        }
+    }
 }

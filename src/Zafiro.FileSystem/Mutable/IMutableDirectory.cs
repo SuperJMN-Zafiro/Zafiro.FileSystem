@@ -3,9 +3,8 @@ using Zafiro.FileSystem.Core;
 
 namespace Zafiro.FileSystem.Mutable;
 
-public interface IMutableDirectory : IMutableNode, IAsyncDir
+public interface IMutableDirectory : IMutableNode
 {
-    Task<Result<IEnumerable<IMutableNode>>> MutableChildren();
     Task<Result<IMutableDirectory>> CreateSubdirectory(string name);
     Task<Result> Delete();
     IObservable<Result<IEnumerable<IMutableNode>>> ChildrenProp { get; }
