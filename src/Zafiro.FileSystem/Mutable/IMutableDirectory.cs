@@ -7,5 +7,5 @@ public interface IMutableDirectory : IMutableNode
 {
     Task<Result<IMutableDirectory>> CreateSubdirectory(string name);
     Task<Result> Delete();
-    IObservable<Result<IEnumerable<IMutableNode>>> ChildrenProp { get; }
+    IObservable<Result<IEnumerable<IMutableNode>>> Children { get; }
 }

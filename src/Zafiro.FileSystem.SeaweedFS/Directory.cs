@@ -20,11 +20,6 @@ public class Directory : IMutableDirectory
     public ISeaweedFS SeaweedFS { get; }
     public string Name => Path.Name();
 
-    public Task<Result<IEnumerable<INode>>> Children()
-    {
-        return MutableChildren().ManyMap(node => (INode)node);
-    }
-
     public static async Task<Result<Directory>> From(string path, ISeaweedFS seaweedFSClient)
     {
         return new Directory(path, seaweedFSClient);
@@ -55,7 +50,7 @@ public class Directory : IMutableDirectory
         throw new NotImplementedException();
     }
 
-    public IObservable<Result<IEnumerable<IMutableNode>>> ChildrenProp => Observable.FromAsync(ct => SeaweedFS.GetContents(Path, ct).Bind(DirectoryToNodes));
+    public IObservable<Result<IEnumerable<IMutableNode>>> Children => Observable.FromAsync(ct => SeaweedFS.GetContents(Path, ct).Bind(DirectoryToNodes));
 
     public Task<Result<IEnumerable<IMutableNode>>> MutableChildren()
     {

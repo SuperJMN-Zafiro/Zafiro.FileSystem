@@ -25,7 +25,7 @@ public class Directory : IMutableDirectory
         return Result.Try(() => DirectoryInfo.Delete());
     }
 
-    public IObservable<Result<IEnumerable<IMutableNode>>> ChildrenProp
+    public IObservable<Result<IEnumerable<IMutableNode>>> Children
     {
         get
         {

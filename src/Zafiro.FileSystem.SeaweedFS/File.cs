@@ -58,6 +58,6 @@ public class File(ZafiroPath path, ISeaweedFS seaweedFS) : IMutableFile
 
     public Task<Result> Delete()
     {
-        throw new NotImplementedException();
+        return SeaweedFS.DeleteFile(Path);
     }
 }
