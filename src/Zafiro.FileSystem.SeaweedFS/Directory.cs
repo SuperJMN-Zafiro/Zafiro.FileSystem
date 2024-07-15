@@ -1,6 +1,5 @@
 ﻿using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
-using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Mutable;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
@@ -55,6 +54,11 @@ public class Directory : IMutableDirectory
         var contents = await SeaweedFS.GetContents(Path, ct);
         return await contents.Bind(DirectoryToNodes);
     });
+
+    public Task<Result<IMutableFile>> GetFile(string entryName)
+    {
+        return Task.FromResult<Result<IMutableFile>>(new File(Path.Combine(entryName), SeaweedFS));
+    }
 
     public Task<Result<IMutableDirectory>> CreateSubdirectory(string name)
     {

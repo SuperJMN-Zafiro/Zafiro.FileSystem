@@ -48,4 +48,9 @@ public class WindowsRoot : IMutableDirectory
             return Observable.Return(result);
         }
     }
+
+    public Task<Result<IMutableFile>> GetFile(string entryName)
+    {
+        return Task.FromResult(Result.Failure<IMutableFile>("Cannot obtaine a file on root"));
+    }
 }

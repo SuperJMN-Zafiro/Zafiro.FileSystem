@@ -41,6 +41,11 @@ public class Directory : IMutableDirectory
         }
     }
 
+    public Task<Result<IMutableFile>> GetFile(string entryName)
+    {
+        return Task.FromResult<Result<IMutableFile>>(new File(DirectoryInfo.FileSystem.FileInfo.New(entryName)));
+    }
+
     public bool IsHidden
     {
         get

@@ -1,9 +1,11 @@
 ﻿using System.Reactive.Concurrency;
 using CSharpFunctionalExtensions;
+using MoreLinq.Extensions;
 using Zafiro.DataModel;
 using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Mutable;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
+using Zafiro.Reactive;
 
 namespace Zafiro.FileSystem.SeaweedFS;
 
@@ -48,7 +50,7 @@ public class File(ZafiroPath path, ISeaweedFS seaweedFS) : IMutableFile
 
     public Task<Result> SetContents(IData data, CancellationToken cancellationToken = default, IScheduler? scheduler = null)
     {
-        throw new NotImplementedException();
+        return SeaweedFS.Upload(Path, data.Bytes.ToStream(), cancellationToken);
     }
 
     public Task<Result<IData>> GetContents()
