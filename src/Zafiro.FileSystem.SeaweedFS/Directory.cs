@@ -8,9 +8,9 @@ using ClientDirectory = Zafiro.FileSystem.SeaweedFS.Filer.Client.Directory;
 
 namespace Zafiro.FileSystem.SeaweedFS;
 
-public class SeaweedFSDirectory : IMutableDirectory
+public class Directory : IMutableDirectory
 {
-    private SeaweedFSDirectory(ZafiroPath path, ISeaweedFS seaweedFS)
+    private Directory(ZafiroPath path, ISeaweedFS seaweedFS)
     {
         SeaweedFS = seaweedFS;
         Path = path;
@@ -25,9 +25,9 @@ public class SeaweedFSDirectory : IMutableDirectory
         return MutableChildren().ManyMap(node => (INode)node);
     }
 
-    public static async Task<Result<SeaweedFSDirectory>> From(string path, ISeaweedFS seaweedFSClient)
+    public static async Task<Result<Directory>> From(string path, ISeaweedFS seaweedFSClient)
     {
-        return new SeaweedFSDirectory(path, seaweedFSClient);
+        return new Directory(path, seaweedFSClient);
     }
 
     private Task<Result<IEnumerable<IMutableNode>>> DirectoryToNodes(RootDirectory directory)
@@ -37,8 +37,8 @@ public class SeaweedFSDirectory : IMutableDirectory
         {
             return entry switch
             {
-                ClientDirectory dir => Task.FromResult(Result.Success<IMutableNode>(new SeaweedFSDirectory(dir.FullPath[1..], SeaweedFS))),
-                FileMetadata file => SeaweedFSFile.From(file.FullPath[1..], SeaweedFS).Map(fsFile => (IMutableNode)fsFile),
+                ClientDirectory dir => Task.FromResult(Result.Success<IMutableNode>(new Directory(dir.FullPath[1..], SeaweedFS))),
+                FileMetadata file => File.From(file.FullPath[1..], SeaweedFS).Map(fsFile => (IMutableNode)fsFile),
                 _ => throw new ArgumentOutOfRangeException(nameof(entry))
             };
         }));

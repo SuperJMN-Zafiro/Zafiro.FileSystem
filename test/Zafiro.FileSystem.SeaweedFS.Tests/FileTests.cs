@@ -10,7 +10,7 @@ public class FileTests
     public async Task Retrieving_directory_should_succeed(string path)
     {
         var seaweedFSClient = SutFactory.Create();
-        var result = await SeaweedFSFile.From(path, seaweedFSClient);
+        var result = await File.From(path, seaweedFSClient);
         result.Should().Succeed();
     }
     
@@ -18,14 +18,14 @@ public class FileTests
     public async Task Retrieving_inexistent_fails()
     {
         var seaweedFSClient = SutFactory.Create();
-        var result = await SeaweedFSFile.From("Inexistent", seaweedFSClient);
+        var result = await File.From("Inexistent", seaweedFSClient);
         result.Should().Fail();
     }
     
     [Fact]
     public async Task Inexistent_file_should_not_exist()
     {
-        var sut = new SeaweedFS.SeaweedFSFile("Inexistent.txt", SutFactory.Create());
+        var sut = new SeaweedFS.File("Inexistent.txt", SutFactory.Create());
         var result = await sut.Exists();
         result.Should().SucceedWith(false);
     }
@@ -33,7 +33,7 @@ public class FileTests
     [Fact]
     public async Task Existent_file_should_exist()
     {
-        var sut = new SeaweedFSFile("file.txt", SutFactory.Create());
+        var sut = new File("file.txt", SutFactory.Create());
         var result = await sut.Exists();
         result.Should().SucceedWith(true);
     }
@@ -41,7 +41,7 @@ public class FileTests
     [Fact]
     public async Task Content_lenght_should_be_greater_than_zero()
     {
-        var sut = new SeaweedFSFile("file.txt", SutFactory.Create());
+        var sut = new File("file.txt", SutFactory.Create());
         var result = await sut.GetContents();
         result.Should().Succeed().And.Subject.Value.Length.Should().BeGreaterThan(0);
     }

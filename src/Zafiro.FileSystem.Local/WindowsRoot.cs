@@ -1,6 +1,5 @@
 using System.Reactive.Linq;
 using Zafiro.CSharpFunctionalExtensions;
-using Zafiro.FileSystem.Local.Mutable;
 using Zafiro.FileSystem.Mutable;
 using IFileSystem = System.IO.Abstractions.IFileSystem;
 
@@ -45,7 +44,7 @@ public class WindowsRoot : IMutableDirectory
         {
             var result = Result.Try(() =>
                 FileSystem.DriveInfo.GetDrives().Select(driveInfo => driveInfo.RootDirectory)
-                    .Select(info => (IMutableNode)new DotNetMutableDirectory(info)));
+                    .Select(info => (IMutableNode)new Directory(info)));
             return Observable.Return(result);
         }
     }

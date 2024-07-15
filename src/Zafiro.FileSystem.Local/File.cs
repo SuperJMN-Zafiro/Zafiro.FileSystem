@@ -2,11 +2,11 @@ using System.Reactive.Concurrency;
 using Zafiro.DataModel;
 using Zafiro.FileSystem.Mutable;
 
-namespace Zafiro.FileSystem.Local.Mutable;
+namespace Zafiro.FileSystem.Local;
 
-public class DotNetMutableFile : IMutableFile
+public class File : IMutableFile
 {
-    public DotNetMutableFile(IFileInfo fileInfo)
+    public File(IFileInfo fileInfo)
     {
         FileInfo = fileInfo;
     }

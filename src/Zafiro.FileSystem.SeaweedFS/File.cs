@@ -7,21 +7,21 @@ using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
 namespace Zafiro.FileSystem.SeaweedFS;
 
-public class SeaweedFSFile(ZafiroPath path, ISeaweedFS seaweedFS) : IMutableFile
+public class File(ZafiroPath path, ISeaweedFS seaweedFS) : IMutableFile
 {
     public ZafiroPath Path { get; } = path;
     public ISeaweedFS SeaweedFS { get; } = seaweedFS;
 
     public string Name => Path.Name();
 
-    public static Task<Result<SeaweedFSFile>> From(string path, ISeaweedFS seaweedFS)
+    public static Task<Result<File>> From(string path, ISeaweedFS seaweedFS)
     {
         var fileMetadataResult = seaweedFS.GetFileMetadata(path);
         var contentStreamResult = seaweedFS.GetFileContents(path, CancellationToken.None);
 
         return from metadata in fileMetadataResult
             from contentStream in contentStreamResult
-            select new SeaweedFSFile(path, seaweedFS);
+            select new File(path, seaweedFS);
     }
 
     public override string ToString() => Path;
