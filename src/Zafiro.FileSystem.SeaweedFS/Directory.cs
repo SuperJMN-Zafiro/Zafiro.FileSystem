@@ -50,20 +50,20 @@ public class Directory : IMutableDirectory
         throw new NotImplementedException();
     }
 
-    public IObservable<Result<IEnumerable<IMutableNode>>> Children => Observable.FromAsync(ct => SeaweedFS.GetContents(Path, ct).Bind(DirectoryToNodes));
-
-    public Task<Result<IEnumerable<IMutableNode>>> MutableChildren()
+    public IObservable<Result<IEnumerable<IMutableNode>>> Children => Observable.FromAsync(async ct =>
     {
-        return SeaweedFS.GetContents(Path, CancellationToken.None).Bind(DirectoryToNodes);
-    }
+        var contents = await SeaweedFS.GetContents(Path, ct);
+        return await contents.Bind(DirectoryToNodes);
+    });
 
     public Task<Result<IMutableDirectory>> CreateSubdirectory(string name)
     {
-        throw new NotImplementedException();
+        var directoryPath = Path.Combine(name);
+        return SeaweedFS.CreateFolder(directoryPath).Map(() => (IMutableDirectory)new Directory(directoryPath, SeaweedFS));
     }
 
     public Task<Result> Delete()
     {
-        throw new NotImplementedException();
+        return SeaweedFS.DeleteFolder(Path);
     }
 }
