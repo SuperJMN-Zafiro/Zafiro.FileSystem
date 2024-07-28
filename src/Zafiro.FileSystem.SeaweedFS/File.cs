@@ -1,6 +1,9 @@
-﻿using System.Reactive.Concurrency;
+﻿using System.Net;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using MoreLinq.Extensions;
+using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.DataModel;
 using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Mutable;
@@ -55,7 +58,9 @@ public class File(ZafiroPath path, ISeaweedFS seaweedFS) : IMutableFile
 
     public Task<Result<IData>> GetContents()
     {
-        throw new NotImplementedException();
+        return from metadata in SeaweedFS.GetFileMetadata(Path)
+            from f in SeaweedFS.GetFileContents(Path)
+            select (IData)new Data(f.ReadToEndObservable(), metadata.FileSize);
     }
 
     public Task<Result> Delete()
