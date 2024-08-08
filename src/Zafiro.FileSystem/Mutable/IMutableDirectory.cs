@@ -5,8 +5,9 @@ namespace Zafiro.FileSystem.Mutable;
 
 public interface IMutableDirectory : IMutableNode
 {
-    Task<Result<IMutableDirectory>> CreateSubdirectory(string name);
-    Task<Result> Delete();
+    Task<Result> DeleteFile(string name);
+    Task<Result> DeleteSubdirectory(string name);
     IObservable<Result<IEnumerable<IMutableNode>>> Children { get; }
-    Task<Result<IMutableFile>> GetFile(string entryName);
+    Task<Result<IMutableFile>> CreateFile(string entryName);
+    Task<Result<IMutableDirectory>> CreateSubdirectory(string name);
 }

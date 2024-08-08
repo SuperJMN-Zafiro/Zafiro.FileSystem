@@ -58,7 +58,7 @@ public class SeaweedFSClient : ISeaweedFS
         return Result.Try(() => inner.CreateFolder(directoryPath, cancellationToken));
     }
 
-    public Task<Result> DeleteFolder(string directoryPath, CancellationToken cancellationToken = default)
+    public Task<Result> DeleteDirectory(string directoryPath, CancellationToken cancellationToken = default)
     {
         return Result.Try(() => inner.DeleteFolder(directoryPath, cancellationToken));
     }

@@ -9,7 +9,7 @@ public interface ISeaweedFS
     Task<Result> CreateFolder(string directoryPath, CancellationToken cancellationToken = default);
     Task<Result<Stream>> GetFileContents(string filePath, CancellationToken cancellationToken = default);
     Task<Result> DeleteFile(string filePath, CancellationToken cancellationToken = default);
-    Task<Result> DeleteFolder(string directoryPath, CancellationToken cancellationToken = default);
+    Task<Result> DeleteDirectory(string directoryPath, CancellationToken cancellationToken = default);
     Task<Result<FileMetadata>> GetFileMetadata(string path, CancellationToken cancellationToken = default);
     Task<Result<bool>> PathExists(string path);
 }

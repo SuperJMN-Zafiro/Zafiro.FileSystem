@@ -20,9 +20,26 @@ public class Directory : IMutableDirectory
             .Map(directoryInfo => (IMutableDirectory)new Directory(directoryInfo));
     }
 
-    public async Task<Result> Delete()
+    public async Task<Result> DeleteFile(string name)
     {
-        return Result.Try(() => DirectoryInfo.Delete());
+        var filePath = DirectoryInfo.FileSystem.Path.Combine(DirectoryInfo.FullName, name);
+        var file = DirectoryInfo.FileSystem.FileInfo.New(filePath);
+        
+        return Result.Try(() =>
+        {
+            file.Delete();
+        });
+    }
+
+    public async Task<Result> DeleteSubdirectory(string name)
+    {
+        var dirPath = DirectoryInfo.FileSystem.Path.Combine(DirectoryInfo.FullName, name);
+        var dir = DirectoryInfo.FileSystem.DirectoryInfo.New(dirPath);
+        
+        return Result.Try(() =>
+        {
+            dir.Delete();
+        });
     }
 
     public IObservable<Result<IEnumerable<IMutableNode>>> Children
@@ -41,9 +58,11 @@ public class Directory : IMutableDirectory
         }
     }
 
-    public Task<Result<IMutableFile>> GetFile(string entryName)
+    public Task<Result<IMutableFile>> CreateFile(string entryName)
     {
-        return Task.FromResult<Result<IMutableFile>>(new File(DirectoryInfo.FileSystem.FileInfo.New(entryName)));
+        var fs = DirectoryInfo.FileSystem;
+        var file = new File(fs.FileInfo.New(fs.Path.Combine(DirectoryInfo.FullName, entryName)));
+        return Task.FromResult<Result<IMutableFile>>(file);
     }
 
     public bool IsHidden

@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using Zafiro.CSharpFunctionalExtensions;
+using Zafiro.DataModel;
 using Zafiro.FileSystem.Readonly;
 using File = Zafiro.FileSystem.Readonly.File;
 
@@ -16,5 +17,11 @@ public static class MutableMixin
     public static Task<Result<IFile>> AsReadOnly(this IMutableFile file)
     {
         return file.GetContents().Map(data => (IFile)new File(file.Name, data));
+    }
+
+    public static Task<Result> CreateFileWithContents(this IMutableDirectory directory, string name, IData data)
+    {
+        return directory.CreateFile(name)
+            .Bind(f => f.SetContents(data));
     }
 }

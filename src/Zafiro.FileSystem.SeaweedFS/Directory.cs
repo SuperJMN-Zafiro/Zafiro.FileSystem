@@ -39,23 +39,14 @@ public class Directory : IMutableDirectory
     }
 
     public bool IsHidden => false;
-    public Task<Result<bool>> Exists()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Result> Create()
-    {
-        throw new NotImplementedException();
-    }
-
+   
     public IObservable<Result<IEnumerable<IMutableNode>>> Children => Observable.FromAsync(async ct =>
     {
         var contents = await SeaweedFS.GetContents(Path, ct);
         return await contents.Bind(DirectoryToNodes);
     });
 
-    public Task<Result<IMutableFile>> GetFile(string entryName)
+    public Task<Result<IMutableFile>> CreateFile(string entryName)
     {
         return Task.FromResult<Result<IMutableFile>>(new File(Path.Combine(entryName), SeaweedFS));
     }
@@ -66,8 +57,13 @@ public class Directory : IMutableDirectory
         return SeaweedFS.CreateFolder(directoryPath).Map(() => (IMutableDirectory)new Directory(directoryPath, SeaweedFS));
     }
 
-    public Task<Result> Delete()
+    public Task<Result> DeleteFile(string name)
     {
-        return SeaweedFS.DeleteFolder(Path);
+        return SeaweedFS.DeleteFile(Path.Combine(name));
+    }
+
+    public Task<Result> DeleteSubdirectory(string name)
+    {
+        return SeaweedFS.DeleteDirectory(Path.Combine(name));
     }
 }

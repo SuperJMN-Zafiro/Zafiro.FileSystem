@@ -18,24 +18,19 @@ public class WindowsRoot : IMutableDirectory
 
     public bool IsHidden => false;
 
-    public async Task<Result<bool>> Exists()
-    {
-        return true;
-    }
-
-    public async Task<Result> Create()
-    {
-        return Result.Failure("Cannot create the root");
-    }
-
     public async Task<Result<IMutableDirectory>> CreateSubdirectory(string name)
     {
-        return Result.Failure<IMutableDirectory>("Cannot create directory here");
+        return Result.Failure<IMutableDirectory>("Can't create subdirectories here");
     }
 
-    public async Task<Result> Delete()
+    public async Task<Result> DeleteFile(string name)
     {
-        return Result.Failure("Cannot delete anything here");
+        return Result.Failure<IMutableDirectory>("Can't delete files here");
+    }
+
+    public async Task<Result> DeleteSubdirectory(string name)
+    {
+        return Result.Failure<IMutableDirectory>("Can't delete subdirectories from root");
     }
 
     public IObservable<Result<IEnumerable<IMutableNode>>> Children
@@ -49,8 +44,8 @@ public class WindowsRoot : IMutableDirectory
         }
     }
 
-    public Task<Result<IMutableFile>> GetFile(string entryName)
+    public async Task<Result<IMutableFile>> CreateFile(string entryName)
     {
-        return Task.FromResult(Result.Failure<IMutableFile>("Cannot obtaine a file on root"));
+        return Result.Failure<IMutableFile>("Can't create files in root");
     }
 }

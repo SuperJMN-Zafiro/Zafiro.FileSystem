@@ -1,28 +1,17 @@
-using Zafiro.FileSystem.Dynamic;
-using Zafiro.FileSystem.Local.Mutable;
+using Zafiro.DataModel;
+using Zafiro.FileSystem.Mutable;
 
 namespace Zafiro.FileSystem.Local.Tests;
 
 public class MutableFileTests
 {
     [Fact]
-    public async Task Test()
+    public async Task Create_new_file_with_contents()
     {
         var fs = new System.IO.Abstractions.FileSystem();
         var directoryInfo = fs.DirectoryInfo.New("/home/jmn/Escritorio");
-        var directory = new DotNetDirectory(directoryInfo);
-        var mutableDir = new DotNetMutableDirectory(directory);
-        var result = await mutableDir.AddOrUpdate(new File("Hola.txt", "SDD"));
+        IMutableDirectory directory = new Directory(directoryInfo);
+        var result = await directory.CreateFileWithContents("Hola.txt", (StringData)"hola tío");
         result.Should().Succeed();
-    }
-
-    [Fact]
-    public async Task WatchHierarchy()
-    {
-        var fs = new System.IO.Abstractions.FileSystem();
-        var directoryInfo = fs.DirectoryInfo.New("/home/jmn/Escritorio");
-        var directory = new LocalDynamicDirectory(directoryInfo);
-        directory.AllFiles().Subscribe(set => { });
-        await Task.Delay(20000);
     }
 }
