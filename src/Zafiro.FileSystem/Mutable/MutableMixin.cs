@@ -1,6 +1,8 @@
+using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.DataModel;
+using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Readonly;
 using File = Zafiro.FileSystem.Readonly.File;
 
@@ -23,5 +25,19 @@ public static class MutableMixin
     {
         return directory.CreateFile(name)
             .Bind(f => f.SetContents(data));
+    }
+
+    public static IObservable<Result<Maybe<IMutableFile>>> GetFile(this IMutableDirectory directory, ZafiroPath path)
+    {
+        return directory.Files().Map(files => files.TryFirst(x => x.Name == path.Name()));
+    }
+
+    public static Task<Result<IMutableFile>> GetFile(this IMutableFileSystem fileSystem, ZafiroPath path)
+    {
+        return path.Parent()
+            .ToResult($"Cannot get the directory of path '{path}")
+            .Map(fileSystem.GetDirectory)
+            .Bind(async dir => await dir.Files())
+            .Bind(nodes => nodes.TryFirst(x => x.Name == path.Name()).ToResult($"Not found: {path}"));
     }
 }
