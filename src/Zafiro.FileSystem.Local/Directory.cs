@@ -3,13 +3,29 @@ using Zafiro.FileSystem.Mutable;
 
 namespace Zafiro.FileSystem.Local;
 
-public class Directory : IMutableDirectory
+public class Directory : IMutableDirectory, IDisposable
 {
+    private readonly CompositeDisposable disposables = new();
     public IDirectoryInfo DirectoryInfo { get; }
+    private readonly SourceCache<IMutableNode, string> childrenCache = new(x => x.GetKey());
 
     public Directory(IDirectoryInfo directoryInfo)
     {
         DirectoryInfo = directoryInfo;
+    }
+
+    private IObservable<long> Updater()
+    {
+        return Observable
+            .Timer(TimeSpan.FromSeconds(4))
+            .Do(l => TryUpdate())
+            .Repeat()
+            .StartWith();
+    }
+
+    private void TryUpdate()
+    {
+        GetNodes().Tap(nodes => childrenCache.EditDiff(nodes, (a, b) => a.GetKey() == b.GetKey()));
     }
 
     public string Name => DirectoryInfo.Name.Replace("\\", "");
@@ -17,7 +33,8 @@ public class Directory : IMutableDirectory
     public async Task<Result<IMutableDirectory>> CreateSubdirectory(string name)
     {
         return Result.Try(() => DirectoryInfo.CreateSubdirectory(name))
-            .Map(directoryInfo => (IMutableDirectory)new Directory(directoryInfo));
+            .Map(directoryInfo => (IMutableDirectory)new Directory(directoryInfo))
+            .Tap(d => childrenCache.AddOrUpdate(d));
     }
 
     public async Task<Result> DeleteFile(string name)
@@ -28,7 +45,8 @@ public class Directory : IMutableDirectory
         return Result.Try(() =>
         {
             file.Delete();
-        });
+        })
+        .Tap(() => childrenCache.Remove(name));
     }
 
     public async Task<Result> DeleteSubdirectory(string name)
@@ -39,30 +57,40 @@ public class Directory : IMutableDirectory
         return Result.Try(() =>
         {
             dir.Delete();
-        });
+        })
+        .Tap(() => childrenCache.Remove(name + "/"));
     }
 
     public IObservable<IChangeSet<IMutableNode, string>> Children
     {
         get
         {
-            var childrenProp = Result.Try(() =>
-            {
-                var files = DirectoryInfo.GetFiles().Select(info => (IMutableNode)new File(info));
-                var dirs = DirectoryInfo.GetDirectories().Select(x => (IMutableNode)new Directory(x));
-                var nodes = files.Concat(dirs);
-                return nodes;
-            });
+            var observable = childrenCache
+                .Connect()
+                .DisposeMany();
             
-            return childrenProp.Value.ToObservable().ToObservableChangeSet(x => x.Name);
+            TryUpdate();
+            Updater().Subscribe().DisposeWith(disposables);
+            return observable;
         }
+    }
+
+    private Result<IEnumerable<IMutableNode>> GetNodes()
+    {
+        return Result.Try(() =>
+        {
+            var files = DirectoryInfo.GetFiles().Select(info => (IMutableNode)new File(info));
+            var dirs = DirectoryInfo.GetDirectories().Select(x => (IMutableNode)new Directory(x));
+            var nodes = files.Concat(dirs);
+            return nodes;
+        });
     }
 
     public Task<Result<IMutableFile>> CreateFile(string entryName)
     {
         var fs = DirectoryInfo.FileSystem;
         var file = new File(fs.FileInfo.New(fs.Path.Combine(DirectoryInfo.FullName, entryName)));
-        return Task.FromResult<Result<IMutableFile>>(file);
+        return Task.FromResult<Result<IMutableFile>>(file).Tap(f => childrenCache.AddOrUpdate(f));
     }
 
     public bool IsHidden
@@ -81,5 +109,11 @@ public class Directory : IMutableDirectory
     public override string? ToString()
     {
         return DirectoryInfo.ToString();
+    }
+
+    public void Dispose()
+    {
+        disposables.Dispose();
+        childrenCache.Dispose();
     }
 }

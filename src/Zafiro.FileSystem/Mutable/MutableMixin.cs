@@ -48,4 +48,14 @@ public static class MutableMixin
             .Map(fileSystem.GetDirectory)
             .Bind(dir => dir.GetFile(path.Name()).ToResult($"Not found {path.Name()}"));
     }
+
+    public static string GetKey(this IMutableNode node)
+    {
+        return node switch
+        {
+            IMutableDirectory mutableDirectory => mutableDirectory.Name + "/",
+            IMutableFile mutableFile => mutableFile.Name,
+            _ => throw new ArgumentOutOfRangeException(nameof(node))
+        };
+    }
 }
