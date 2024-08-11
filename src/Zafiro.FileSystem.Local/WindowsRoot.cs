@@ -33,14 +33,14 @@ public class WindowsRoot : IMutableDirectory
         return Result.Failure<IMutableDirectory>("Can't delete subdirectories from root");
     }
 
-    public IObservable<Result<IEnumerable<IMutableNode>>> Children
+    public IObservable<IChangeSet<IMutableNode, string>> Children
     {
         get
         {
             var result = Result.Try(() =>
                 FileSystem.DriveInfo.GetDrives().Select(driveInfo => driveInfo.RootDirectory)
                     .Select(info => (IMutableNode)new Directory(info)));
-            return Observable.Return(result);
+            return result.Value.ToObservable().ToObservableChangeSet(x => x.Name);
         }
     }
 

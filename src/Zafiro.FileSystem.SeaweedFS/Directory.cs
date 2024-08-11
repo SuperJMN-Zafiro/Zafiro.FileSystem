@@ -1,5 +1,8 @@
 ﻿using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using CSharpFunctionalExtensions;
+using DynamicData;
+using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Mutable;
 using Zafiro.FileSystem.SeaweedFS.Filer.Client;
@@ -40,11 +43,17 @@ public class Directory : IMutableDirectory
 
     public bool IsHidden => false;
    
-    public IObservable<Result<IEnumerable<IMutableNode>>> Children => Observable.FromAsync(async ct =>
+    public IObservable<IChangeSet<IMutableNode, string>> Children
     {
-        var contents = await SeaweedFS.GetContents(Path, ct);
-        return await contents.Bind(DirectoryToNodes);
-    });
+        get
+        {
+            return Observable.FromAsync(async ct => await SeaweedFS.GetContents(Path, ct))
+                .Successes()
+                .SelectMany(x => DirectoryToNodes(x))
+                .Successes()
+                .ToObservableChangeSet(x => x.Name);
+        }
+    }
 
     public Task<Result<IMutableFile>> CreateFile(string entryName)
     {

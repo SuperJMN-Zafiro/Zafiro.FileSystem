@@ -42,7 +42,7 @@ public class Directory : IMutableDirectory
         });
     }
 
-    public IObservable<Result<IEnumerable<IMutableNode>>> Children
+    public IObservable<IChangeSet<IMutableNode, string>> Children
     {
         get
         {
@@ -54,7 +54,7 @@ public class Directory : IMutableDirectory
                 return nodes;
             });
             
-            return Observable.Return(childrenProp);
+            return childrenProp.Value.ToObservable().ToObservableChangeSet(x => x.Name);
         }
     }
 
@@ -76,16 +76,6 @@ public class Directory : IMutableDirectory
             
             return (DirectoryInfo.Attributes & FileAttributes.Hidden) != 0;
         }
-    }
-
-    public Task<Result<bool>> Exists()
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Result> Create()
-    {
-        return Result.Try(() => DirectoryInfo.Create());
     }
 
     public override string? ToString()
