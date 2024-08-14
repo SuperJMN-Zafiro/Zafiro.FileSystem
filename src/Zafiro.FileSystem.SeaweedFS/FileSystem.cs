@@ -18,11 +18,6 @@ public class FileSystem : IMutableFileSystem
     {
         return Directory.From(path, SeaweedFS).Map(s => (IMutableDirectory)s);
     }
-
-    public Task<Result<IMutableFile>> GetFile(ZafiroPath path)
-    {
-        return File.From(path, SeaweedFS).Map(file => (IMutableFile)new File(file.Name, SeaweedFS));
-    }
-
+    
     public ZafiroPath InitialPath => ZafiroPath.Empty;
 }

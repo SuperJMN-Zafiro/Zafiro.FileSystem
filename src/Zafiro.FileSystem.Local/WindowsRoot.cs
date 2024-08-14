@@ -1,5 +1,4 @@
 using System.Reactive.Linq;
-using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.FileSystem.Mutable;
 using IFileSystem = System.IO.Abstractions.IFileSystem;
 
@@ -14,13 +13,20 @@ public class WindowsRoot : IMutableDirectory
 
     public IFileSystem FileSystem { get; }
 
-    public string Name { get; } = "<root>";
+    public string Name => "<root>";
 
     public bool IsHidden => false;
 
     public async Task<Result<IMutableDirectory>> CreateSubdirectory(string name)
     {
         return Result.Failure<IMutableDirectory>("Can't create subdirectories here");
+    }
+
+    public async Task<Result<IEnumerable<IMutableNode>>> GetChildren(CancellationToken cancellationToken = default)
+    {
+        return Result.Try(() =>
+            FileSystem.DriveInfo.GetDrives().Select(driveInfo => driveInfo.RootDirectory)
+                .Select(info => (IMutableNode)new Directory(info)));
     }
 
     public async Task<Result> DeleteFile(string name)
@@ -33,16 +39,10 @@ public class WindowsRoot : IMutableDirectory
         return Result.Failure<IMutableDirectory>("Can't delete subdirectories from root");
     }
 
-    public IObservable<IChangeSet<IMutableNode, string>> Children
-    {
-        get
-        {
-            var result = Result.Try(() =>
-                FileSystem.DriveInfo.GetDrives().Select(driveInfo => driveInfo.RootDirectory)
-                    .Select(info => (IMutableNode)new Directory(info)));
-            return result.Value.ToObservable().ToObservableChangeSet(x => x.Name);
-        }
-    }
+    public IObservable<IMutableFile> FileCreated { get; } = Observable.Never<IMutableFile>();
+    public IObservable<IMutableDirectory> DirectoryCreated { get; } = Observable.Never<IMutableDirectory>();
+    public IObservable<string> FileDeleted { get; } = Observable.Never<string>();
+    public IObservable<string> DirectoryDeleted { get; } = Observable.Never<string>();
 
     public async Task<Result<IMutableFile>> CreateFile(string entryName)
     {

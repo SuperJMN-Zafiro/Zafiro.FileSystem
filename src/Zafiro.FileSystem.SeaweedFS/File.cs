@@ -19,16 +19,6 @@ public class File(ZafiroPath path, ISeaweedFS seaweedFS) : IMutableFile
 
     public string Name => Path.Name();
 
-    public static Task<Result<File>> From(string path, ISeaweedFS seaweedFS)
-    {
-        var fileMetadataResult = seaweedFS.GetFileMetadata(path);
-        var contentStreamResult = seaweedFS.GetFileContents(path, CancellationToken.None);
-
-        return from metadata in fileMetadataResult
-            from contentStream in contentStreamResult
-            select new File(path, seaweedFS);
-    }
-
     public override string ToString() => Path;
     public bool IsHidden => false;
     public Task<Result<bool>> Exists()

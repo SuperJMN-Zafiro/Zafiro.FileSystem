@@ -50,7 +50,7 @@ public class Directory : DirectoryBase
         });
     }
 
-    protected override Result<IEnumerable<IMutableNode>> GetChildren()
+    public override async Task<Result<IEnumerable<IMutableNode>>> GetChildren(CancellationToken cancellationToken = default)
     {
         return Result.Try(() =>
         {

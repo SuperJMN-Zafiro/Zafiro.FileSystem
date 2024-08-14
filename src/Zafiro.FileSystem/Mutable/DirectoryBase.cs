@@ -1,82 +1,60 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
 using DynamicData;
 
 namespace Zafiro.FileSystem.Mutable;
 
-public abstract class DirectoryBase : IMutableDirectory, IDisposable
+public abstract class DirectoryBase : IMutableDirectory
 {
+    private readonly Subject<IMutableDirectory> directoryCreated = new();
+    private readonly Subject<string> directoryDeleted = new();
     private readonly CompositeDisposable disposables = new();
-    private readonly SourceCache<IMutableNode, string> childrenCache = new(x => x.GetKey());
+    private readonly Subject<IMutableFile> fileCreated = new();
+    private readonly Subject<string> fileDeleted = new();
 
-    private IObservable<long> Updater()
-    {
-        return Observable
-            .Timer(TimeSpan.FromSeconds(4))
-            .Do(l => TryUpdate())
-            .Repeat()
-            .StartWith();
-    }
-
-    private void TryUpdate()
-    {
-        GetChildren().Tap(nodes => childrenCache.EditDiff(nodes, (a, b) => a.GetKey() == b.GetKey()));
-    }
+    public IObservable<IMutableFile> FileCreated => fileCreated.AsObservable();
+    public IObservable<IMutableDirectory> DirectoryCreated => directoryCreated.AsObservable();
+    public IObservable<string> FileDeleted => fileDeleted.AsObservable();
+    public IObservable<string> DirectoryDeleted => directoryDeleted.AsObservable();
 
     public abstract string Name { get; }
 
     public Task<Result<IMutableDirectory>> CreateSubdirectory(string name)
     {
         return CreateSubdirectoryCore(name)
-            .Tap(d => childrenCache.AddOrUpdate(d));
+            .Tap(d => directoryCreated.OnNext(d));
     }
-
-    protected abstract Task<Result<IMutableDirectory>> CreateSubdirectoryCore(string name);
 
     public Task<Result> DeleteFile(string name)
     {
-        return DeleteFileCore(name).Tap(() => childrenCache.Remove(name));
+        return DeleteFileCore(name)
+            .Tap(() => fileDeleted.OnNext(name));
     }
-
-    protected abstract Task<Result> DeleteFileCore(string name);
 
     public Task<Result> DeleteSubdirectory(string name)
     {
         return DeleteSubdirectoryCore(name)
-            .Tap(() => childrenCache.Remove(name + "/"));
+            .Tap(() => directoryDeleted.OnNext(name));
     }
-
-    protected abstract Task<Result> DeleteSubdirectoryCore(string name);
-
-    public IObservable<IChangeSet<IMutableNode, string>> Children
-    {
-        get
-        {
-            var observable = childrenCache
-                .Connect()
-                .DisposeMany();
-            
-            TryUpdate();
-            Updater().Subscribe().DisposeWith(disposables);
-            return observable;
-        }
-    }
-
-    protected abstract Result<IEnumerable<IMutableNode>> GetChildren();
 
     public Task<Result<IMutableFile>> CreateFile(string entryName)
     {
-        return CreateFileCore(entryName).Tap(f => childrenCache.AddOrUpdate(f));
+        return CreateFileCore(entryName)
+            .Tap(f => fileCreated.OnNext(f));
     }
-
-    protected abstract Task<Result<IMutableFile>> CreateFileCore(string entryName);
 
     public abstract bool IsHidden { get; }
 
-    public void Dispose()
-    {
-        disposables.Dispose();
-        childrenCache.Dispose();
-    }
+
+    protected abstract Task<Result<IMutableDirectory>> CreateSubdirectoryCore(string name);
+
+    protected abstract Task<Result> DeleteFileCore(string name);
+
+    protected abstract Task<Result> DeleteSubdirectoryCore(string name);
+
+    public abstract Task<Result<IEnumerable<IMutableNode>>> GetChildren(CancellationToken cancellationToken = default);
+
+    protected abstract Task<Result<IMutableFile>> CreateFileCore(string entryName);
 }

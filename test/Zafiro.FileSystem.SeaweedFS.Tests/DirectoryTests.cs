@@ -27,14 +27,14 @@ public class DirectoryTests
     public async Task Children_should_succeed(string path)
     {
         var seaweedFSClient = SutFactory.Create();
-        var result = await Directory.From(path, seaweedFSClient).Map(x => x.Children.ToCollection().ToList().ToTask());
+        var result = await Directory.From(path, seaweedFSClient).Bind(x => x.GetChildren());
         result.Should().Succeed().And.Subject.Value.Should().NotBeEmpty();
     }
     
     [Fact]
     public async Task Directory_contents()
     {
-        var result = await Directory.From("file", SutFactory.Create()).Map(directory => directory.Children.ToCollection().ToTask());
+        var result = await Directory.From("file", SutFactory.Create()).Bind(directory => directory.GetChildren());
         result.Should().Succeed().And.Subject.Value.Should().NotBeEmpty();
     }
 }

@@ -1,4 +1,6 @@
+using CSharpFunctionalExtensions;
 using Xunit;
+using Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
 namespace Zafiro.FileSystem.SeaweedFS.Tests;
 
@@ -10,7 +12,7 @@ public class FileTests
     public async Task Retrieving_directory_should_succeed(string path)
     {
         var seaweedFSClient = SutFactory.Create();
-        var result = await File.From(path, seaweedFSClient);
+        var result = (Result<File>)(File)new File(path, seaweedFSClient);
         result.Should().Succeed();
     }
     
@@ -18,7 +20,7 @@ public class FileTests
     public async Task Retrieving_inexistent_fails()
     {
         var seaweedFSClient = SutFactory.Create();
-        var result = await File.From("Inexistent", seaweedFSClient);
+        var result = (Result<File>)(File)new File("Inexistent", seaweedFSClient);
         result.Should().Fail();
     }
     
