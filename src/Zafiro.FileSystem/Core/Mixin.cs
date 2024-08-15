@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Zafiro.FileSystem.Mutable;
 using Zafiro.FileSystem.Readonly;
 using Zafiro.Reactive;
 using Directory = Zafiro.FileSystem.Readonly.Directory;
@@ -62,18 +63,9 @@ public static class Mixin
         return rootedFile.Path.Combine(rootedFile.Value.Name);
     }
 
-    public static Task<Result<IDirectory>> ToDirectory(this IAsyncDir asyncDir)
+    public static Task<Result<IDirectory>> ToDirectory(this IMutableDirectory asyncDir)
     {
-        return asyncDir.Children()
-            .Map(nodes => nodes.ToList())
-            .Bind(async nodes =>
-            {
-                var dirs = nodes.OfType<IAsyncDir>();
-                var files = nodes.OfType<IFile>().Cast<INode>();
-                var dirResult = await dirs.Select(ToDirectory).Combine();
-                return dirResult.Map(d => d.Concat(files));
-            })
-            .Map(enumerable => (IDirectory)new Directory(asyncDir.Name, enumerable));
+        return asyncDir.GetChildren().Map(nodes => (IDirectory)new Directory(asyncDir.Name, nodes));
     }
 
     public static Stream ToStream(this IFile file)
