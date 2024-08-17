@@ -1,6 +1,4 @@
-using System.Reactive.Subjects;
-using Zafiro.CSharpFunctionalExtensions;
-using Zafiro.FileSystem.Local.Mutable;
+using System.Reactive.Linq;
 using Zafiro.FileSystem.Mutable;
 using IFileSystem = System.IO.Abstractions.IFileSystem;
 
@@ -15,45 +13,39 @@ public class WindowsRoot : IMutableDirectory
 
     public IFileSystem FileSystem { get; }
 
-    public string Name { get; } = "<root>";
-
-    public Task<Result<IEnumerable<INode>>> Children()
-    {
-        Func<IMutableNode, INode> selector = n => n;
-        return MutableChildren().ManyMap(selector);
-    }
+    public string Name => "<root>";
 
     public bool IsHidden => false;
 
-    public async Task<Result> Create()
+    public async Task<Result<IMutableDirectory>> CreateSubdirectory(string name)
     {
-        return Result.Failure("Cannot create the root");
+        return Result.Failure<IMutableDirectory>("Can't create subdirectories here");
     }
 
-    public async Task<Result<IEnumerable<IMutableNode>>> MutableChildren()
+    public async Task<Result<IEnumerable<IMutableNode>>> GetChildren(CancellationToken cancellationToken = default)
     {
         return Result.Try(() =>
             FileSystem.DriveInfo.GetDrives().Select(driveInfo => driveInfo.RootDirectory)
-                .Select(info => (IMutableNode)new DotNetMutableDirectory(new DotNetDirectory(info))));
+                .Select(info => (IMutableNode)new Directory(info)));
     }
 
-    public async Task<Result> AddOrUpdate(IFile data, ISubject<double>? progress = null)
+    public async Task<Result> DeleteFile(string name)
     {
-        return Result.Failure("Cannot create directory here");
+        return Result.Failure<IMutableDirectory>("Can't delete files here");
     }
 
-    public async Task<Result<IMutableFile>> Get(string name)
+    public async Task<Result> DeleteSubdirectory(string name)
     {
-        return Result.Failure<IMutableFile>("Cannot create directory here");
+        return Result.Failure<IMutableDirectory>("Can't delete subdirectories from root");
     }
 
-    public async Task<Result<IMutableDirectory>> CreateSubdirectory(string name)
-    {
-        return Result.Failure<IMutableDirectory>("Cannot create directory here");
-    }
+    public IObservable<IMutableFile> FileCreated { get; } = Observable.Never<IMutableFile>();
+    public IObservable<IMutableDirectory> DirectoryCreated { get; } = Observable.Never<IMutableDirectory>();
+    public IObservable<string> FileDeleted { get; } = Observable.Never<string>();
+    public IObservable<string> DirectoryDeleted { get; } = Observable.Never<string>();
 
-    public async Task<Result> Delete()
+    public async Task<Result<IMutableFile>> CreateFile(string entryName)
     {
-        return Result.Failure("Cannot delete anything here");
+        return Result.Failure<IMutableFile>("Can't create files in root");
     }
 }

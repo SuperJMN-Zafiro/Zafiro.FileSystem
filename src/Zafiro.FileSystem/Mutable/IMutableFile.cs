@@ -8,5 +8,4 @@ public interface IMutableFile : IMutableNode
 {
     Task<Result> SetContents(IData data, CancellationToken cancellationToken = default, IScheduler? scheduler = null);
     Task<Result<IData>> GetContents();
-    Task<Result> Delete();
 }

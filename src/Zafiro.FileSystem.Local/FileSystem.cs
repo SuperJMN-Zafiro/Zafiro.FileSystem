@@ -1,15 +1,15 @@
 using Zafiro.FileSystem.Mutable;
 using IFileSystem = System.IO.Abstractions.IFileSystem;
 
-namespace Zafiro.FileSystem.Local.Mutable;
+namespace Zafiro.FileSystem.Local;
 
-public class DotNetMutableFileSystem : IMutableFileSystem
+public class FileSystem : IMutableFileSystem
 {
-    public IFileSystem FileSystem { get; }
+    public IFileSystem Inner { get; }
 
-    public DotNetMutableFileSystem(IFileSystem fileSystem)
+    public FileSystem(IFileSystem inner)
     {
-        FileSystem = fileSystem;
+        Inner = inner;
     }
 
     public Task<Result<IMutableDirectory>> GetDirectory(ZafiroPath path)
@@ -19,21 +19,21 @@ public class DotNetMutableFileSystem : IMutableFileSystem
             var translatedPath =  "/" + path;
 
             return Task.FromResult(Result
-                .Try(() => FileSystem.DirectoryInfo.New(translatedPath))
-                .Map(d => (IMutableDirectory)new DotNetMutableDirectory(new DotNetDirectory(d))));
+                .Try(() => Inner.DirectoryInfo.New(translatedPath))
+                .Map(d => (IMutableDirectory)new Directory(d)));
         }
 
         if (OperatingSystem.IsWindows())
         {
             if (path == ZafiroPath.Empty)
             {
-                var mutableDirectory = (IMutableDirectory)new WindowsRoot(FileSystem);
+                var mutableDirectory = (IMutableDirectory)new WindowsRoot(Inner);
                 return Task.FromResult(Result.Success(mutableDirectory));
             }
             
             return Task.FromResult(Result
-                .Try(() => FileSystem.DirectoryInfo.New(path))
-                .Map(d => (IMutableDirectory)new DotNetMutableDirectory(new DotNetDirectory(d))));
+                .Try(() => Inner.DirectoryInfo.New(path))
+                .Map(d => (IMutableDirectory)new Directory(d)));
         }
         
         throw new NotSupportedException("Only supported OSes are Windows and Linux for now");
@@ -46,15 +46,15 @@ public class DotNetMutableFileSystem : IMutableFileSystem
             var translatedPath =  "/" + path;
 
             return Task.FromResult(Result
-                .Try(() => FileSystem.FileInfo.New(translatedPath))
-                .Map(d =>  (IMutableFile)new DotNetMutableFile(d)));
+                .Try(() => Inner.FileInfo.New(translatedPath))
+                .Map(d =>  (IMutableFile)new File(d)));
         }
 
         if (OperatingSystem.IsWindows())
         {
             return Task.FromResult(Result
-                .Try(() => FileSystem.FileInfo.New(path))
-                .Map(d => (IMutableFile)new DotNetMutableFile(d)));
+                .Try(() => Inner.FileInfo.New(path))
+                .Map(d => (IMutableFile)new File(d)));
 
         }
 

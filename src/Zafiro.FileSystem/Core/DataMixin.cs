@@ -15,15 +15,8 @@ public static class DataMixin
     {
         return data.Bytes.DumpTo(stream, cancellationToken: cancellationToken, scheduler: scheduler);
     }
-
-    public static async Task<Result> DumpTo(this IData data, Stream stream, IScheduler? scheduler = null, CancellationToken cancellationToken = default)
-    {
-        var chunkedDump = await ChunkedDump(data, stream, cancellationToken: cancellationToken, scheduler: scheduler).ToList().ToTask(cancellationToken).ConfigureAwait(false);
-        var chuckResults = chunkedDump.Combine();
-        return chuckResults;
-    }
     
-    public static Task<Result> DumpTo2(this IData data, Stream stream, IScheduler? scheduler = null, CancellationToken cancellationToken = default)
+    public static Task<Result> DumpTo(this IData data, Stream stream, IScheduler? scheduler = null, CancellationToken cancellationToken = default)
     {
         return ChunkedDump(data, stream, cancellationToken: cancellationToken, scheduler: scheduler).ToList()
             .Select(list => list.Combine())

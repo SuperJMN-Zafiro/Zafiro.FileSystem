@@ -2,11 +2,11 @@ using System.Reactive.Concurrency;
 using Zafiro.DataModel;
 using Zafiro.FileSystem.Mutable;
 
-namespace Zafiro.FileSystem.Local.Mutable;
+namespace Zafiro.FileSystem.Local;
 
-public class DotNetMutableFile : IMutableFile
+public class File : IMutableFile
 {
-    public DotNetMutableFile(IFileInfo fileInfo)
+    public File(IFileInfo fileInfo)
     {
         FileInfo = fileInfo;
     }
@@ -34,6 +34,11 @@ public class DotNetMutableFile : IMutableFile
 
     public bool IsHidden => (FileInfo.Attributes & FileAttributes.Hidden) != 0;
 
+    public Task<Result<bool>> Exists()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Result> Create()
     {
         return Result.Try(() =>
@@ -43,4 +48,7 @@ public class DotNetMutableFile : IMutableFile
             }
         });
     }
+
+    public IObservable<byte[]> Bytes { get; }
+    public long Length { get; }
 }

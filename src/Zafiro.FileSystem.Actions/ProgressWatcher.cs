@@ -14,21 +14,16 @@ public class ProgressWatcher : IData, IDisposable
         Source = source;
         ProgressObserver = progressObserver;
         
-        long total = 0;
+        long written = 0;
         var bytes = Source.Bytes
             .Do(bytes =>
             {
-                total += bytes.Length;
-                ProgressObserver.OnNext(total);
+                written += bytes.Length;
+                ProgressObserver.OnNext(written);
             });
         
         subscription = bytes.Subscribe(_ => { }, onCompleted: () => ProgressObserver.OnCompleted());
         Bytes = bytes;
-    }
-
-    private void Add(int number)
-    {
-        ProgressObserver.OnNext(number);
     }
 
     public IObservable<byte[]> Bytes { get; }

@@ -4,12 +4,12 @@ namespace Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
 public interface ISeaweedFS
 {
-    Task<RootDirectory> GetContents(string directoryPath, CancellationToken cancellationToken = default);
-    Task Upload(string path, Stream stream, CancellationToken cancellationToken = default);
-    Task CreateFolder(string directoryPath, CancellationToken cancellationToken = default);
-    Task<Stream> GetFileContents(string filePath, CancellationToken cancellationToken = default);
-    Task DeleteFile(string filePath, CancellationToken cancellationToken = default);
-    Task DeleteFolder(string directoryPath, CancellationToken cancellationToken = default);
-    Task<FileMetadata> GetFileMetadata(string path, CancellationToken cancellationToken = default);
-    Task<bool> PathExists(string path);
+    Task<Result<RootDirectory>> GetContents(string directoryPath, CancellationToken cancellationToken = default);
+    Task<Result> Upload(string path, Stream stream, CancellationToken cancellationToken = default);
+    Task<Result> CreateFolder(string directoryPath, CancellationToken cancellationToken = default);
+    Task<Result<Stream>> GetFileContents(string filePath, CancellationToken cancellationToken = default);
+    Task<Result> DeleteFile(string filePath, CancellationToken cancellationToken = default);
+    Task<Result> DeleteDirectory(string directoryPath, CancellationToken cancellationToken = default);
+    Task<Result<FileMetadata>> GetFileMetadata(string path, CancellationToken cancellationToken = default);
+    Task<Result<bool>> PathExists(string path);
 }
