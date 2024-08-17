@@ -18,7 +18,6 @@ public static class MutableMixin
     public static Task<Result<IEnumerable<IMutableFile>>> Files(this IMutableDirectory directory) =>
         directory.GetChildren().Map(nodes => nodes.OfType<IMutableFile>());
     
-    
     public static Task<Result<IEnumerable<IMutableDirectory>>> Directories(this IMutableDirectory directory) =>
         directory.GetChildren().Map(nodes => nodes.OfType<IMutableDirectory>());
     

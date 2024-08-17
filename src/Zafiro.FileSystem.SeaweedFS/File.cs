@@ -1,9 +1,5 @@
-﻿using System.Net;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
+﻿using System.Reactive.Concurrency;
 using CSharpFunctionalExtensions;
-using MoreLinq.Extensions;
-using Zafiro.CSharpFunctionalExtensions;
 using Zafiro.DataModel;
 using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Mutable;
@@ -18,28 +14,7 @@ public class File(ZafiroPath path, ISeaweedFS seaweedFS) : IMutableFile
     public ISeaweedFS SeaweedFS { get; } = seaweedFS;
 
     public string Name => Path.Name();
-
-    public override string ToString() => Path;
     public bool IsHidden => false;
-    public Task<Result<bool>> Exists()
-    {
-        var exists = SeaweedFS.GetFileMetadata(Path)
-            .Match(
-                _ => Result.Success(true), 
-                err =>
-                {
-                    if (err.Contains("404"))
-                        return Result.Success(false);
-                    else
-                        return Result.Failure<bool>(err);
-                });
-        return exists;
-    }
-
-    public Task<Result> Create()
-    {
-        throw new NotImplementedException();
-    }
 
     public Task<Result> SetContents(IData data, CancellationToken cancellationToken = default, IScheduler? scheduler = null)
     {
@@ -53,8 +28,25 @@ public class File(ZafiroPath path, ISeaweedFS seaweedFS) : IMutableFile
             select (IData)new Data(f.ReadToEndObservable(), metadata.FileSize);
     }
 
-    public Task<Result> Delete()
+    public override string ToString()
     {
-        return SeaweedFS.DeleteFile(Path);
+        return Path;
+    }
+
+    public Task<Result<bool>> Exists()
+    {
+        var exists = SeaweedFS.GetFileMetadata(Path)
+            .Match(
+                _ => Result.Success(true),
+                err =>
+                {
+                    if (err.Contains("404"))
+                    {
+                        return Result.Success(false);
+                    }
+                    
+                    return Result.Failure<bool>(err);
+                });
+        return exists;
     }
 }

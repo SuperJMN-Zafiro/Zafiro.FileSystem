@@ -25,6 +25,7 @@ public class DirectoryWatcher
     public IDisposable StartWatching()
     {
         return Children()
+            .Select(x => x.Where(node => !node.IsHidden))
             .Do(nodes => childrenCache.EditDiff(nodes, (a, b) => a.GetKey() == b.GetKey()))
             .Subscribe()
             .DisposeWith(disposable);

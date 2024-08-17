@@ -64,4 +64,9 @@ public class Directory : DirectoryBase
     {
         return SeaweedFS.DeleteDirectory(Path.Combine(name));
     }
+
+    public override string ToString()
+    {
+        return Path;
+    }
 }
