@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zafiro.FileSystem.Actions",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4D7A6398-C07A-4856-9573-CBBE59F7CCC7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zafiro.FilesSystem.SeaweedFS.Tests", "test\Zafiro.FilesSystem.SeaweedFS.Tests\Zafiro.FilesSystem.SeaweedFS.Tests.csproj", "{F12AD71F-AA79-4EB4-AD98-AE8BDF4F7F47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{45D21A0B-51D2-4D99-A56B-E00DF42FB879}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45D21A0B-51D2-4D99-A56B-E00DF42FB879}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45D21A0B-51D2-4D99-A56B-E00DF42FB879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F12AD71F-AA79-4EB4-AD98-AE8BDF4F7F47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F12AD71F-AA79-4EB4-AD98-AE8BDF4F7F47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F12AD71F-AA79-4EB4-AD98-AE8BDF4F7F47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F12AD71F-AA79-4EB4-AD98-AE8BDF4F7F47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,5 +79,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{ADD7D636-ED3D-4630-AE6F-AD9DAAF8C2EF} = {4D7A6398-C07A-4856-9573-CBBE59F7CCC7}
 		{3325AEAA-B19E-4BFD-9E25-D700C2A0689F} = {4D7A6398-C07A-4856-9573-CBBE59F7CCC7}
+		{F12AD71F-AA79-4EB4-AD98-AE8BDF4F7F47} = {4D7A6398-C07A-4856-9573-CBBE59F7CCC7}
 	EndGlobalSection
 EndGlobal

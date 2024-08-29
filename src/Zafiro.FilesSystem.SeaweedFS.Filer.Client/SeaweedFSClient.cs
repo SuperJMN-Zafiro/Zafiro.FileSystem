@@ -31,21 +31,24 @@ public class SeaweedFSClient : ISeaweedFS
         });
     }
 
-    public async Task<Result<RootDirectory>> GetContents(string directoryPath, CancellationToken cancellationToken = default)
+    public Task<Result<RootDirectory>> GetContents(string directoryPath, CancellationToken cancellationToken = default)
     {
-        var contents = await inner.GetContents(directoryPath, cancellationToken);
-        var files = contents.Entries?.OfType<FileMetadata>() ?? Enumerable.Empty<FileMetadata>();
-
-        foreach (var file in files)
+        return Result.Try(async () =>
         {
-            var policy = new CacheItemPolicy
-            {
-                AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5),
-            };
-            fileMetadatas.Add(file.FullPath.StartsWith("/") ? file.FullPath[1..] : file.FullPath, file, policy);
-        }
+            var contents = await inner.GetContents(directoryPath, cancellationToken);
+            var files = contents.Entries?.OfType<FileMetadata>() ?? [];
 
-        return contents;
+            foreach (var file in files)
+            {
+                var policy = new CacheItemPolicy
+                {
+                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5),
+                };
+                fileMetadatas.Add(file.FullPath.StartsWith("/") ? file.FullPath[1..] : file.FullPath, file, policy);
+            }
+
+            return contents;
+        });
     }
 
     public Task<Result> Upload(string path, Stream stream, CancellationToken cancellationToken = default)
