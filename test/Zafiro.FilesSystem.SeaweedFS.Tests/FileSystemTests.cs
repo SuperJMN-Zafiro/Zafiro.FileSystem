@@ -19,7 +19,7 @@ public class FileSystemTests
     public async Task GetContents()
     {
         var fs = new FileSystem.SeaweedFS.FileSystem(new SeaweedFSClient(new HttpClient(){ BaseAddress = new Uri("http://192.168.1.29:8888")}));
-        var result = await fs.GetDirectory("eBooks").Map(x => x.ToDirectory());
+        var result = await fs.GetDirectory("Juegos").Map(x => x.ToDirectory());
         result.Should().Succeed();
     }
 }

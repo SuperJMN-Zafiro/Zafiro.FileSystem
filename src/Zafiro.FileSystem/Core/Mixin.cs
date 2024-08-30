@@ -19,12 +19,12 @@ public static class Mixin
         var files = directory
             .Files()
             .Map(files => files.Select(f => f.AsReadOnly()))
-            .Combine();
+            .CombineInOrder();
 
         var subDirs = directory
             .Directories()
             .Map(dirs => dirs.Select(f => f.ToDirectory()))
-            .Combine();
+            .CombineInOrder();
 
         return from file in files
             from subdir in subDirs

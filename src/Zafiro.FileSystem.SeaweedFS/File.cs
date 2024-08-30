@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using Zafiro.DataModel;
 using Zafiro.FileSystem.Core;
@@ -23,9 +24,19 @@ public class File(ZafiroPath path, ISeaweedFS seaweedFS) : IMutableFile
 
     public Task<Result<IData>> GetContents()
     {
-        return from metadata in SeaweedFS.GetFileMetadata(Path)
-            from f in SeaweedFS.GetFileContents(Path)
-            select (IData)new Data(f.ReadToEndObservable(), metadata.FileSize);
+        return seaweedFS.GetFileMetadata(Path).Map(GetData);
+    }
+
+    private IData GetData(FileMetadata metadata)
+    {
+        var obs = Observable.FromAsync(
+            () => SeaweedFS.GetFileContents(Path)).Select(result =>
+        {
+            var observable = result.Match<IObservable<byte[]>, Stream>(stream => stream.ReadToEndObservable(), s => Observable.Throw<byte[]>(new Exception(s)));
+            return observable;
+        });
+        
+        return new Data(obs.SelectMany(observable => observable), metadata.FileSize);
     }
 
     public override string ToString()

@@ -6,10 +6,6 @@ using Refit;
 
 namespace Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
-public class SutFactory
-{
-}
-
 public class SeaweedFSClient : ISeaweedFS
 {
     private readonly HttpClient httpClient;

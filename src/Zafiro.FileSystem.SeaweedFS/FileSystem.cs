@@ -16,7 +16,7 @@ public class FileSystem : IMutableFileSystem
     
     public Task<Result<IMutableDirectory>> GetDirectory(ZafiroPath path)
     {
-        return Directory.From(path, SeaweedFS).Map(s => (IMutableDirectory)s);
+        return Directory.From(path, SeaweedFS).Map(IMutableDirectory (s) => s);
     }
     
     public ZafiroPath InitialPath => ZafiroPath.Empty;
