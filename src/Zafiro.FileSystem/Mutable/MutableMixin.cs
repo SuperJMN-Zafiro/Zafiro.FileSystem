@@ -9,18 +9,26 @@ namespace Zafiro.FileSystem.Mutable;
 
 public static class MutableMixin
 {
-    public static IObservable<IChangeSet<IMutableFile, string>> Files(this IObservable<IChangeSet<IMutableNode, string>> children) =>
-        children.Filter(x => x is IMutableFile).Cast(node => (IMutableFile)node);
-    
-    public static IObservable<IChangeSet<IMutableDirectory, string>> Directories(this IObservable<IChangeSet<IMutableNode, string>> children) =>
-        children.Filter(x => x is IMutableDirectory).Cast(node => (IMutableDirectory)node);
-    
-    public static Task<Result<IEnumerable<IMutableFile>>> Files(this IMutableDirectory directory) =>
-        directory.GetChildren().Map(nodes => nodes.OfType<IMutableFile>());
-    
-    public static Task<Result<IEnumerable<IMutableDirectory>>> Directories(this IMutableDirectory directory) =>
-        directory.GetChildren().Map(nodes => nodes.OfType<IMutableDirectory>());
-    
+    public static IObservable<IChangeSet<IMutableFile, string>> Files(this IObservable<IChangeSet<IMutableNode, string>> children)
+    {
+        return children.Filter(x => x is IMutableFile).Cast(node => (IMutableFile)node);
+    }
+
+    public static IObservable<IChangeSet<IMutableDirectory, string>> Directories(this IObservable<IChangeSet<IMutableNode, string>> children)
+    {
+        return children.Filter(x => x is IMutableDirectory).Cast(node => (IMutableDirectory)node);
+    }
+
+    public static Task<Result<IEnumerable<IMutableFile>>> Files(this IMutableDirectory directory)
+    {
+        return directory.GetChildren().Map(nodes => nodes.OfType<IMutableFile>());
+    }
+
+    public static Task<Result<IEnumerable<IMutableDirectory>>> Directories(this IMutableDirectory directory)
+    {
+        return directory.GetChildren().Map(nodes => nodes.OfType<IMutableDirectory>());
+    }
+
     public static Task<Result<IFile>> AsReadOnly(this IMutableFile file)
     {
         return file.GetContents().Map(data => (IFile)new File(file.Name, data));

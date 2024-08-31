@@ -8,9 +8,9 @@ namespace Zafiro.FileSystem.SeaweedFS.Filer.Client;
 
 public class SeaweedFSClient : ISeaweedFS
 {
+    private readonly MemoryCache fileMetadatas = new("metadatas");
     private readonly HttpClient httpClient;
     private readonly ISeaweedApi inner;
-    private readonly MemoryCache fileMetadatas = new MemoryCache("metadatas");
 
     public SeaweedFSClient(HttpClient httpClient)
     {
@@ -21,9 +21,9 @@ public class SeaweedFSClient : ISeaweedFS
             {
                 Converters =
                 {
-                    new FileSystemEntryConverter(),
-                },
-            }),
+                    new FileSystemEntryConverter()
+                }
+            })
         });
     }
 
@@ -38,7 +38,7 @@ public class SeaweedFSClient : ISeaweedFS
             {
                 var policy = new CacheItemPolicy
                 {
-                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5),
+                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5)
                 };
                 fileMetadatas.Add(file.FullPath.StartsWith("/") ? file.FullPath[1..] : file.FullPath, file, policy);
             }

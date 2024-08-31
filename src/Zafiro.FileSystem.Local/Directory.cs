@@ -18,7 +18,10 @@ public class Directory : DirectoryBase
     {
         get
         {
-            if (DirectoryInfo.Parent == null) return false;
+            if (DirectoryInfo.Parent == null)
+            {
+                return false;
+            }
 
             return (DirectoryInfo.Attributes & FileAttributes.Hidden) != 0;
         }

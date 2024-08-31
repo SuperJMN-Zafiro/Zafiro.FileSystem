@@ -12,5 +12,9 @@ public class Directory : IDirectory
 
     public string Name { get; }
     public IEnumerable<INode> Children { get; }
-    public override string ToString() => Name;
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }

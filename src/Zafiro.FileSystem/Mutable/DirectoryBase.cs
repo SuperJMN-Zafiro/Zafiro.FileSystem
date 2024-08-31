@@ -2,7 +2,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CSharpFunctionalExtensions;
-using DynamicData;
 
 namespace Zafiro.FileSystem.Mutable;
 
@@ -47,14 +46,14 @@ public abstract class DirectoryBase : IMutableDirectory
 
     public abstract bool IsHidden { get; }
 
+    public abstract Task<Result<IEnumerable<IMutableNode>>> GetChildren(CancellationToken cancellationToken = default);
+
 
     protected abstract Task<Result<IMutableDirectory>> CreateSubdirectoryCore(string name);
 
     protected abstract Task<Result> DeleteFileCore(string name);
 
     protected abstract Task<Result> DeleteSubdirectoryCore(string name);
-
-    public abstract Task<Result<IEnumerable<IMutableNode>>> GetChildren(CancellationToken cancellationToken = default);
 
     protected abstract Task<Result<IMutableFile>> CreateFileCore(string entryName);
 }

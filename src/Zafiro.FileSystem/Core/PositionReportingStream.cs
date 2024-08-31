@@ -34,7 +34,10 @@ public class PositionReportingStream : Stream, IObservable<long>
         }
     }
 
-    public IDisposable Subscribe(IObserver<long> observer) => positionSubject.Subscribe(observer);
+    public IDisposable Subscribe(IObserver<long> observer)
+    {
+        return positionSubject.Subscribe(observer);
+    }
 
     public override void Flush()
     {

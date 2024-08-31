@@ -9,7 +9,7 @@ namespace Zafiro.FileSystem.Mutable;
 public class DirectoryWatcher
 {
     private readonly SourceCache<IMutableNode, string> childrenCache = new(x => x.GetKey());
-    private CompositeDisposable disposable = new();
+    private readonly CompositeDisposable disposable = new();
 
     public DirectoryWatcher(IMutableDirectory directory)
     {
@@ -21,6 +21,10 @@ public class DirectoryWatcher
 
         Items = childrenCache.Connect();
     }
+
+    public IObservable<IChangeSet<IMutableNode, string>> Items { get; }
+
+    public IMutableDirectory Directory { get; }
 
     public IDisposable StartWatching()
     {
@@ -45,10 +49,6 @@ public class DirectoryWatcher
 
         return results.Successes();
     }
-    
-    public IObservable<IChangeSet<IMutableNode,string>> Items { get; }
-
-    public IMutableDirectory Directory { get; }
 
     public void Dispose()
     {

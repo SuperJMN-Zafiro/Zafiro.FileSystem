@@ -15,7 +15,7 @@ public static class DataMixin
     {
         return data.Bytes.DumpTo(stream, cancellationToken: cancellationToken, scheduler: scheduler);
     }
-    
+
     public static Task<Result> DumpTo(this IData data, Stream stream, IScheduler? scheduler = null, CancellationToken cancellationToken = default)
     {
         return ChunkedDump(data, stream, cancellationToken: cancellationToken, scheduler: scheduler).ToList()
@@ -28,7 +28,7 @@ public static class DataMixin
     {
         using (var stream = File.Open(path, FileMode.Create))
         {
-            return await data.DumpTo(stream, scheduler: scheduler, cancellationToken: cancellationToken);
+            return await data.DumpTo(stream, scheduler, cancellationToken);
         }
     }
 

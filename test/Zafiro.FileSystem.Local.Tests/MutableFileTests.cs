@@ -11,7 +11,7 @@ public class MutableFileTests
         var fs = new System.IO.Abstractions.FileSystem();
         var directoryInfo = fs.DirectoryInfo.New("/home/jmn/Escritorio");
         IMutableDirectory directory = new Directory(directoryInfo);
-        var result = await directory.CreateFileWithContents("Hola.txt", (StringData)"hola tío");
+        var result = await directory.CreateFileWithContents("Hola.txt", Data.FromString("hola tío"));
         result.Should().Succeed();
     }
 }

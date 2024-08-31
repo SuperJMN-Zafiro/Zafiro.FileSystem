@@ -11,9 +11,9 @@ namespace Zafiro.FileSystem.Actions;
 public class CopyFileAction : IFileAction
 {
     private readonly BehaviorSubject<LongProgress> progress;
+    private readonly IScheduler? progressScheduler;
     private readonly TimeSpan? readTimeout;
     private readonly IScheduler? timeoutScheduler;
-    private readonly IScheduler? progressScheduler;
 
     public CopyFileAction(IData source, IMutableFile destination)
     {
@@ -33,7 +33,7 @@ public class CopyFileAction : IFileAction
         using var longProgressSubscription = progressObserver.Select(l => new LongProgress(l, Source.Length)).Subscribe(progress);
         using (new ProgressWatcher(Source, progressObserver))
         {
-            var result = await Destination.SetContents(Source, cancellationToken, TaskPoolScheduler.Default).ConfigureAwait(false);
+            var result = await Destination.SetContents(Source, TaskPoolScheduler.Default, cancellationToken).ConfigureAwait(false);
             return result;
         }
     }

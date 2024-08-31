@@ -16,10 +16,26 @@ public class ObservableFileSystem : IObservableFileSystem
     }
 
     public IObservable<FileSystemChange> Changed => changed.AsObservable();
-    public Task<Result<bool>> ExistFile(ZafiroPath path) => fs.ExistFile(path);
-    public Task<Result> DeleteFile(ZafiroPath path) => fs.DeleteFile(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.FileDeleted)));
-    public Task<Result> DeleteDirectory(ZafiroPath path) => fs.DeleteDirectory(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.DirectoryDeleted)));
-    public Task<Result<Stream>> GetFileData(ZafiroPath path) => fs.GetFileData(path);
+
+    public Task<Result<bool>> ExistFile(ZafiroPath path)
+    {
+        return fs.ExistFile(path);
+    }
+
+    public Task<Result> DeleteFile(ZafiroPath path)
+    {
+        return fs.DeleteFile(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.FileDeleted)));
+    }
+
+    public Task<Result> DeleteDirectory(ZafiroPath path)
+    {
+        return fs.DeleteDirectory(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.DirectoryDeleted)));
+    }
+
+    public Task<Result<Stream>> GetFileData(ZafiroPath path)
+    {
+        return fs.GetFileData(path);
+    }
 
     public Task<Result> SetFileData(ZafiroPath path, Stream stream, CancellationToken cancellationToken)
     {
@@ -35,7 +51,10 @@ public class ObservableFileSystem : IObservableFileSystem
             .Tap(() => NotifyFileCreate(path));
     }
 
-    public IObservable<byte> GetFileContents(ZafiroPath path) => fs.GetFileContents(path);
+    public IObservable<byte> GetFileContents(ZafiroPath path)
+    {
+        return fs.GetFileContents(path);
+    }
 
     public async Task<Result> SetFileContents(ZafiroPath path, IObservable<byte> bytes, CancellationToken cancellationToken)
     {
@@ -47,14 +66,45 @@ public class ObservableFileSystem : IObservableFileSystem
             .ConfigureAwait(false);
     }
 
-    public Task<Result> CreateDirectory(ZafiroPath path) => fs.CreateDirectory(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.DirectoryCreated)));
-    public Task<Result<FileProperties>> GetFileProperties(ZafiroPath path) => fs.GetFileProperties(path);
-    public Task<Result<IDictionary<HashMethod, byte[]>>> GetHashes(ZafiroPath path) => fs.GetHashes(path);
-    public Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path) => fs.GetDirectoryProperties(path);
-    public Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path, CancellationToken ct = default) => fs.GetFilePaths(path, ct);
-    public Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path, CancellationToken ct = default) => fs.GetDirectoryPaths(path, ct);
-    public Task<Result<bool>> ExistDirectory(ZafiroPath path) => fs.ExistDirectory(path);
-    public Task<Result<bool>> ExistsDirectory(ZafiroPath path) => fs.ExistDirectory(path);
+    public Task<Result> CreateDirectory(ZafiroPath path)
+    {
+        return fs.CreateDirectory(path).Tap(() => changed.OnNext(new FileSystemChange(path, Change.DirectoryCreated)));
+    }
+
+    public Task<Result<FileProperties>> GetFileProperties(ZafiroPath path)
+    {
+        return fs.GetFileProperties(path);
+    }
+
+    public Task<Result<IDictionary<HashMethod, byte[]>>> GetHashes(ZafiroPath path)
+    {
+        return fs.GetHashes(path);
+    }
+
+    public Task<Result<DirectoryProperties>> GetDirectoryProperties(ZafiroPath path)
+    {
+        return fs.GetDirectoryProperties(path);
+    }
+
+    public Task<Result<IEnumerable<ZafiroPath>>> GetFilePaths(ZafiroPath path, CancellationToken ct = default)
+    {
+        return fs.GetFilePaths(path, ct);
+    }
+
+    public Task<Result<IEnumerable<ZafiroPath>>> GetDirectoryPaths(ZafiroPath path, CancellationToken ct = default)
+    {
+        return fs.GetDirectoryPaths(path, ct);
+    }
+
+    public Task<Result<bool>> ExistDirectory(ZafiroPath path)
+    {
+        return fs.ExistDirectory(path);
+    }
+
+    public Task<Result<bool>> ExistsDirectory(ZafiroPath path)
+    {
+        return fs.ExistDirectory(path);
+    }
 
     private void NotifyFileCreate(ZafiroPath path)
     {

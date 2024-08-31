@@ -1,5 +1,4 @@
 ﻿using System.Reactive.Concurrency;
-using System.Reactive.Linq;
 using CSharpFunctionalExtensions;
 using Zafiro.DataModel;
 using Zafiro.FileSystem.Core;
@@ -17,26 +16,19 @@ public class File(ZafiroPath path, ISeaweedFS seaweedFS) : IMutableFile
     public string Name => Path.Name();
     public bool IsHidden => false;
 
-    public Task<Result> SetContents(IData data, CancellationToken cancellationToken = default, IScheduler? scheduler = null)
+    public Task<Result> SetContents(IData data, IScheduler? scheduler = null, CancellationToken cancellationToken = default)
     {
         return SeaweedFS.Upload(Path, data.Bytes.ToStream(), cancellationToken);
     }
 
     public Task<Result<IData>> GetContents()
     {
-        return seaweedFS.GetFileMetadata(Path).Map(GetData);
+        return SeaweedFS.GetFileMetadata(Path).Bind(GetData);
     }
 
-    private IData GetData(FileMetadata metadata)
+    private Result<IData> GetData(FileMetadata metadata)
     {
-        var obs = Observable.FromAsync(
-            () => SeaweedFS.GetFileContents(Path)).Select(result =>
-        {
-            var observable = result.Match<IObservable<byte[]>, Stream>(stream => stream.ReadToEndObservable(), s => Observable.Throw<byte[]>(new Exception(s)));
-            return observable;
-        });
-        
-        return new Data(obs.SelectMany(observable => observable), metadata.FileSize);
+        return Data.FromStream(() => SeaweedFS.GetFileContents(Path), metadata.FileSize);
     }
 
     public override string ToString()
@@ -55,7 +47,7 @@ public class File(ZafiroPath path, ISeaweedFS seaweedFS) : IMutableFile
                     {
                         return Result.Success(false);
                     }
-                    
+
                     return Result.Failure<bool>(err);
                 });
         return exists;

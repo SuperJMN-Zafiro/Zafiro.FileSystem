@@ -4,10 +4,6 @@ namespace Zafiro.FileSystem.Readonly;
 
 public class File : IFile
 {
-    public File(string name, string data) : this(name, new StringData(data))
-    {
-    }
-
     public File(string name, IData data)
     {
         Name = name;
@@ -19,5 +15,8 @@ public class File : IFile
     public IObservable<byte[]> Bytes => Data.Bytes;
     public long Length => Data.Length;
 
-    public override string ToString() => Name;
+    public override string ToString()
+    {
+        return Name;
+    }
 }

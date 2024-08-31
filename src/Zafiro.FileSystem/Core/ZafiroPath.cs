@@ -27,6 +27,8 @@ public sealed class ZafiroPath : ValueObject
 
     public string Path => string.Join(ChunkSeparator, RouteFragments);
 
+    private string DebuggerDisplay => RouteFragments.Any() ? Path : "<root>";
+
     public static implicit operator ZafiroPath(string[] chunks)
     {
         return new ZafiroPath(chunks);
@@ -76,6 +78,4 @@ public sealed class ZafiroPath : ValueObject
     {
         return path.Split(ChunkSeparator).ToArray();
     }
-
-    private string DebuggerDisplay => RouteFragments.Any() ? Path : "<root>";
 }

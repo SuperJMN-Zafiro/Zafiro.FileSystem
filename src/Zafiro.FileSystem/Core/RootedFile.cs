@@ -18,5 +18,8 @@ public class RootedFile : IRootedFile
     public IObservable<byte[]> Bytes => File.Bytes;
     public long Length => File.Length;
 
-    public override string ToString() => this.FullPath();
+    public override string ToString()
+    {
+        return this.FullPath();
+    }
 }

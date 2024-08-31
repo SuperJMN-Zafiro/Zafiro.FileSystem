@@ -19,7 +19,7 @@ public class UnixFile : UnixNode, IFile
         Properties = properties.GetValueOrDefault(UnixFileProperties.RegularFileProperties);
     }
 
-    public UnixFile(string name) : this(name, new ByteArrayData(Array.Empty<byte>()), Maybe<UnixFileProperties>.None)
+    public UnixFile(string name) : this(name, DataModel.Data.FromByteArray(Array.Empty<byte>()), Maybe<UnixFileProperties>.None)
     {
     }
 

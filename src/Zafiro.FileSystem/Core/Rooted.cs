@@ -1,5 +1,3 @@
-using System.Reflection.Metadata;
-
 namespace Zafiro.FileSystem.Core;
 
 public record Rooted<T> : IRooted<T>
@@ -16,5 +14,8 @@ public record Rooted<T> : IRooted<T>
 
 public record Rooted
 {
-    public static Rooted<T> Create<T>(ZafiroPath path, T value) => new(path, value);
+    public static Rooted<T> Create<T>(ZafiroPath path, T value)
+    {
+        return new Rooted<T>(path, value);
+    }
 }

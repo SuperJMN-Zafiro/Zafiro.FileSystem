@@ -5,10 +5,6 @@ namespace Zafiro.FileSystem.Core;
 
 public class ZafiroDirectory : IZafiroDirectory
 {
-    public ZafiroPath Path { get; }
-    public IFileSystemRoot FileSystem { get; }
-    public Task<Result<DirectoryProperties>> Properties => FileSystem.GetDirectoryProperties(Path);
-
     public ZafiroDirectory(ZafiroPath path, IFileSystemRoot fileSystemRoot)
     {
         Path = path;
@@ -16,12 +12,36 @@ public class ZafiroDirectory : IZafiroDirectory
         Changed = fileSystemRoot.Changed.Where(change => change.Path.Parent() == Path);
     }
 
+    public ZafiroPath Path { get; }
+    public IFileSystemRoot FileSystem { get; }
+    public Task<Result<DirectoryProperties>> Properties => FileSystem.GetDirectoryProperties(Path);
+
     public IObservable<FileSystemChange> Changed { get; }
-    public Task<Result> Create() => FileSystem.CreateDirectory(Path);
-    public Task<Result<IEnumerable<IZafiroFile>>> GetFiles() => FileSystem.GetFiles(Path);
-    public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories() => FileSystem.GetDirectories(Path);
-    public Task<Result> Delete() => FileSystem.DeleteDirectory(Path);
+
+    public Task<Result> Create()
+    {
+        return FileSystem.CreateDirectory(Path);
+    }
+
+    public Task<Result<IEnumerable<IZafiroFile>>> GetFiles()
+    {
+        return FileSystem.GetFiles(Path);
+    }
+
+    public Task<Result<IEnumerable<IZafiroDirectory>>> GetDirectories()
+    {
+        return FileSystem.GetDirectories(Path);
+    }
+
+    public Task<Result> Delete()
+    {
+        return FileSystem.DeleteDirectory(Path);
+    }
+
     public Task<Result<bool>> Exists => FileSystem.ExistDirectory(Path);
 
-    public override string ToString() => $"{Path}";
+    public override string ToString()
+    {
+        return $"{Path}";
+    }
 }

@@ -28,7 +28,7 @@ public static class Mixin
 
         return from file in files
             from subdir in subDirs
-            select  (IDirectory)new Directory(directory.Name, file.Concat(subdir.Cast<INode>()));
+            select (IDirectory)new Directory(directory.Name, file.Concat(subdir.Cast<INode>()));
     }
 
     public static Stream ToStream(this IFile file)
