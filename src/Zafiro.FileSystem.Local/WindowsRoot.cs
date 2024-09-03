@@ -29,6 +29,18 @@ public class WindowsRoot : IMutableDirectory
                 .Select(info => (IMutableNode)new Directory(info)));
     }
 
+    public async Task<Result<bool>> HasFile(string name)
+    {
+        return false;
+    }
+
+    public Task<Result<bool>> HasSubdirectory(string name)
+    {
+        return GetChildren()
+            .Bind(nodes => nodes.TryFirst(x => x.Name == name)
+                .Match(_ => Result.Success(true), () => false));
+    }
+
     public async Task<Result> DeleteFile(string name)
     {
         return Result.Failure<IMutableDirectory>("Can't delete files here");

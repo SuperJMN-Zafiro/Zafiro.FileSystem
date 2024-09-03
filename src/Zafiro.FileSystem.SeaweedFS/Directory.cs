@@ -54,6 +54,16 @@ public class Directory : DirectoryBase
         return SeaweedFS.GetContents(Path, cancellationToken).Map(DirectoryToNodes);
     }
 
+    public override Task<Result<bool>> HasFile(string name)
+    {
+        return SeaweedFS.PathExists(Path.Combine(name));
+    }
+
+    public override Task<Result<bool>> HasSubdirectory(string name)
+    {
+        return SeaweedFS.PathExists(Path.Combine(name));
+    }
+
     protected override Task<Result<IMutableDirectory>> CreateSubdirectoryCore(string name)
     {
         var directoryPath = Path.Combine(name);

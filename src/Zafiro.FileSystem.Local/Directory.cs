@@ -27,6 +27,15 @@ public class Directory : DirectoryBase
         }
     }
 
+    public override async Task<Result<bool>> HasSubdirectory(string name)
+    {
+        return Result.Try(() =>
+        {
+            var fs = DirectoryInfo.FileSystem;
+            return DirectoryInfo.FileSystem.Directory.Exists(fs.Path.Combine(DirectoryInfo.FullName, name));
+        });
+    }
+
     protected override async Task<Result<IMutableDirectory>> CreateSubdirectoryCore(string name)
     {
         return Result.Try(() => DirectoryInfo.CreateSubdirectory(name))
@@ -61,6 +70,15 @@ public class Directory : DirectoryBase
             var dirs = DirectoryInfo.GetDirectories().Select(x => (IMutableNode)new Directory(x));
             var nodes = files.Concat(dirs);
             return nodes;
+        });
+    }
+
+    public override async Task<Result<bool>> HasFile(string name)
+    {
+        return Result.Try(() =>
+        {
+            var fs = DirectoryInfo.FileSystem;
+            return DirectoryInfo.FileSystem.File.Exists(fs.Path.Combine(DirectoryInfo.FullName, name));
         });
     }
 

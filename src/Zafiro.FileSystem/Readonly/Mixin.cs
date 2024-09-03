@@ -1,8 +1,8 @@
-﻿using Zafiro.FileSystem.Readonly;
+﻿using Zafiro.FileSystem.Core;
 
-namespace Zafiro.FileSystem.Core;
+namespace Zafiro.FileSystem.Readonly;
 
-public static class LightMixin
+public static class Mixin
 {
     public static IEnumerable<IFile> Files(this IDirectory directory)
     {
@@ -12,6 +12,11 @@ public static class LightMixin
     public static IEnumerable<IRootedFile> RootedFiles(this IDirectory directory)
     {
         return directory.RootedFilesRelativeTo(ZafiroPath.Empty);
+    }
+    
+    public static IEnumerable<IFile> AllFiles(this IDirectory directory)
+    {
+        return directory.Files().Concat(directory.Directories().SelectMany(d => d.AllFiles()));
     }
 
     public static IEnumerable<IRootedFile> RootedFilesRelativeTo(this IDirectory directory, ZafiroPath path)

@@ -47,7 +47,8 @@ public abstract class DirectoryBase : IMutableDirectory
     public abstract bool IsHidden { get; }
 
     public abstract Task<Result<IEnumerable<IMutableNode>>> GetChildren(CancellationToken cancellationToken = default);
-
+    public abstract Task<Result<bool>> HasFile(string name);
+    public abstract Task<Result<bool>> HasSubdirectory(string name);
 
     protected abstract Task<Result<IMutableDirectory>> CreateSubdirectoryCore(string name);
 

@@ -39,6 +39,12 @@ public static class MutableMixin
         return directory.CreateFile(name)
             .Bind(f => f.SetContents(data));
     }
+    
+    public static Task<Result> CreateFileWithContents(this IMutableDirectory directory, IFile file)
+    {
+        return directory.CreateFile(file.Name)
+            .Bind(f => f.SetContents(file));
+    }
 
     public static Task<Result<IMutableFile>> GetFile(this IMutableDirectory directory, ZafiroPath path)
     {

@@ -13,4 +13,6 @@ public interface IMutableDirectory : IMutableNode
     Task<Result<IMutableFile>> CreateFile(string entryName);
     Task<Result<IMutableDirectory>> CreateSubdirectory(string name);
     Task<Result<IEnumerable<IMutableNode>>> GetChildren(CancellationToken cancellationToken = default);
+    Task<Result<bool>> HasFile(string name);
+    Task<Result<bool>> HasSubdirectory(string name);
 }
