@@ -1,4 +1,8 @@
-﻿using Zafiro.FileSystem.Core;
+﻿using CSharpFunctionalExtensions;
+using Serilog;
+using Zafiro.FileSystem.Core;
+using Zafiro.FileSystem.Mutable;
+using Zafiro.Misc;
 
 namespace Zafiro.FileSystem.Readonly;
 
@@ -30,5 +34,24 @@ public static class Mixin
     public static IEnumerable<IDirectory> Directories(this IDirectory directory)
     {
         return directory.Children.OfType<IDirectory>();
+    }
+
+    public static Task<Result> CopyAndPreserveExisting(this IFile file, IMutableDirectory output, Maybe<ILogger> logger)
+    {
+        var name = StringUtil.GetNewName(
+            file.Name, 
+            name => output.HasFile(name)
+                .TapIf(exists => exists, () => logger.Execute(l => l.Warning("Filename '{Name}' exists. Choosing a new one.", name)))
+                .Map(x => !x),
+            (s, i) =>
+            {
+                var zafiroPath = (ZafiroPath)s;
+                var newName = zafiroPath.NameWithoutExtension() + "_conflict_" + i + "." + zafiroPath.Extension();
+                return newName;
+            });
+        
+        return name
+            .Tap(n => logger.Execute(l => l.Debug("Copying file {File} to {Name}", file, n)) )
+            .Bind(finalName => output.CreateFileWithContents(finalName, file));        
     }
 }

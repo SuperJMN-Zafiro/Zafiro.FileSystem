@@ -1,3 +1,4 @@
+using System.Reactive.Concurrency;
 using CSharpFunctionalExtensions;
 using DynamicData;
 using Zafiro.DataModel;
@@ -34,10 +35,10 @@ public static class MutableMixin
         return file.GetContents().Map(data => (IFile)new File(file.Name, data));
     }
 
-    public static Task<Result> CreateFileWithContents(this IMutableDirectory directory, string name, IData data)
+    public static Task<Result> CreateFileWithContents(this IMutableDirectory directory, string name, IData data, IScheduler? scheduler = null, CancellationToken cancellationToken = default)
     {
         return directory.CreateFile(name)
-            .Bind(f => f.SetContents(data));
+            .Bind(f => f.SetContents(data, scheduler: scheduler, cancellationToken));
     }
     
     public static Task<Result> CreateFileWithContents(this IMutableDirectory directory, IFile file)
