@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Reactive.Concurrency;
+using CSharpFunctionalExtensions;
 using Serilog;
 using Zafiro.FileSystem.Core;
 using Zafiro.FileSystem.Mutable;
@@ -36,7 +37,7 @@ public static class Mixin
         return directory.Children.OfType<IDirectory>();
     }
 
-    public static Task<Result> CopyAndPreserveExisting(this IFile file, IMutableDirectory output, Maybe<ILogger> logger)
+    public static Task<Result> SafeCopy(this IFile file, IMutableDirectory output, Maybe<ILogger> logger, IScheduler? scheduler, CancellationToken cancellationToken)
     {
         var name = StringUtil.GetNewName(
             file.Name, 
@@ -52,6 +53,6 @@ public static class Mixin
         
         return name
             .Tap(n => logger.Execute(l => l.Debug("Copying file {File} to {Name}", file, n)) )
-            .Bind(finalName => output.CreateFileWithContents(finalName, file));        
+            .Bind(finalName => output.CreateFileWithContents(finalName, file, scheduler: scheduler, cancellationToken));        
     }
 }
